@@ -1,8 +1,13 @@
 import {defineStore} from "pinia";
 import axios from "axios";
+import {createPersistedState} from "pinia-plugin-persistedstate";
 
 export const useExampleStore = defineStore("example", {
     state: () => ({}),
+    //persist하게 할거면 사용
+    persist: {
+        storage: sessionStorage,
+    },
     actions: {
         async getExample(context) {
             const response = await axios
