@@ -8,11 +8,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <AdminNavbar v-if="route.path.includes('Admin')"></AdminNavbar>
-  <Navbar v-else></Navbar>
   <router-view></router-view>
-  <AdminFooter v-if="route.path.includes('Admin')"></AdminFooter>
-  <Footer v-else></Footer>
 </template>
 
 <style scoped>
