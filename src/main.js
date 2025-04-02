@@ -6,6 +6,9 @@ import {createPinia} from "pinia";
 import axios from "axios";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
+import 'bootstrap/dist/css/bootstrap.min.css'; // ✅ 기본 CSS 추가
+import 'bootstrap';
+
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App);
