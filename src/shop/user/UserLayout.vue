@@ -4,7 +4,7 @@ import UserNavbar from "./component/UserNavbar.vue";
 </script>
 
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid d-flex" style="min-width: 1200px;">
       <UserNavbar></UserNavbar>
       <div class="content">
         <router-view></router-view>
@@ -15,7 +15,6 @@ import UserNavbar from "./component/UserNavbar.vue";
 
 <style scoped>
 .content {
-  margin-left: 350px; /* 사이드바 공간 확보 */
   padding: 20px;
   width: 100%;
 }

@@ -3,7 +3,11 @@
 </script>
 
 <template>
-  <div>Hi</div>
+  <div class="container">
+    <div>
+      <p>개인정보확인</p>
+    </div>
+  </div>
 </template>
 
 <style scoped>
