@@ -34,8 +34,8 @@
               </div>
 
               <div class="d-flex align-items-center">
-                <input type="checkbox" class="form-check-input me-4" v-model="item.checked" />
-                <img :src="item.image" alt="상품" class="me-4" width="80" height="120" />
+                <input type="checkbox" class="form-check-input me-4" v-model="item.checked"/>
+                <img :src="item.image" alt="상품" class="me-4" width="80" height="120"/>
                 <div class="flex-grow-1">
                   <p class="text-muted mb-3">{{ item.deliveryTime }} · {{ item.price }}원</p>
                   <div class="btn-group btn-group-sm">
@@ -62,7 +62,7 @@
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex align-items-center">
                   <!-- 패키지 그룹 전체 선택 체크박스 -->
-                  <input type="checkbox" class="form-check-input me-2" v-model="group.checked" />
+                  <input type="checkbox" class="form-check-input me-2" v-model="group.checked"/>
                   <h5 class="fw-bold mb-0">[{{ group.name }}]</h5>
                 </div>
                 <button class="btn btn-sm btn-outline-danger" @click="removePackageGroup(gIdx)">삭제</button>
@@ -76,7 +76,7 @@
               >
                 <div class="d-flex align-items-center">
                   <!-- 개별 체크박스 제거 -->
-                  <img :src="item.image" alt="상품" class="me-4" width="80" height="120" />
+                  <img :src="item.image" alt="상품" class="me-4" width="80" height="120"/>
                   <div class="flex-grow-1">
                     <h5 class="mb-2">{{ item.name }}</h5>
                     <p class="text-muted mb-3">{{ item.deliveryTime }} · {{ item.price }}원</p>
@@ -110,13 +110,17 @@
           <p class="mb-2 fw-bold fs-5">주문 예산 금액</p>
           <p class="mb-2 fs-6">상품 금액: <span class="float-end">{{ totalPrice }}원</span></p>
           <p class="mb-2 text-danger fs-6">할인 금액: <span class="float-end">-800원</span></p>
-          <hr />
+          <hr/>
           <p class="fw-bold fs-5">총 금액: <span class="float-end">{{ totalPrice - 800 }}원</span></p>
 
           <!-- 상품 선택이 없을 경우 안내 문구 -->
           <p v-if="selectedCount === 0" class="text-muted text-center mt-3">장바구니가 비어 있습니다.</p>
 
-          <button class="btn btn-primary w-100 mt-4 py-2 fs-5" :disabled="selectedCount === 0">
+          <button
+              class="btn btn-primary w-100 mt-4 py-2 fs-5"
+              :disabled="selectedCount === 0"
+              @click="goToPayment"
+          >
             구매하기 ({{ selectedCount }})
           </button>
         </div>
@@ -126,6 +130,8 @@
 </template>
 
 <script>
+
+
 export default {
   data() {
     return {
@@ -191,6 +197,11 @@ export default {
     },
     removePackageGroup(index) {
       this.packageGroups.splice(index, 1);
+    }
+    ,
+    goToPayment() {
+      // Vue Router를 이용하여 결제 페이지로 이동
+      this.$router.push({name: 'subscription'});
     }
   }
 };

@@ -60,7 +60,7 @@ const routes = [
             // 장바구니 페이지
             { path: 'cart', component: Cart },
             // 구독 확정 페이지 (결제 페이지)
-            { path: 'subscription', component: Subscription },
+            { path: 'subscription', name : 'subscription',component: Subscription },
             // 구독 완료 페이지
             { path: 'subscription/end', component: SubscriptionEnd },
             // 반납 신청 페이지
