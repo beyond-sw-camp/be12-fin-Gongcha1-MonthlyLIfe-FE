@@ -7,28 +7,32 @@ const menus = [
 
 <template>
   <header class="w-100">
-  <!-- 검정 헤더 -->
-  <div class="bg-dark text-white py-1 w-100">
-    <div class="d-flex justify-content-end small px-4">
-      <div class="me-3">헬로+</div>
-      <div class="me-3">고객지원</div>
-      <div class="me-3">마이헬로</div>
-      <font-awesome-icon icon="magnifying-glass" class="text-white me-2 py-1" />
-    </div>
-  </div>
-
-  <!-- 로고 + 메뉴 -->
-  <nav class="bg-white border-bottom w-100">
-    <div class="d-flex justify-content-between align-items-center py-3 px-4">
-      <a href="/" class="text-danger fw-bold fs-5 me-4">월정액 인생</a>
-
-      <div class="d-flex gap-4 flex-wrap">
-        <div v-for="menu in menus" :key="menu" class="text-dark small fw-semibold cursor-pointer">
-          {{ menu }}
+    <div class="bg-dark text-white py-1">
+      <div class="container d-flex justify-content-between align-items-center ">
+        <!-- 왼쪽: 로고 -->
+        <a href="/" class="text-danger fw-bold fs-5 logo">월정액 인생</a>
+        <!-- 오른쪽: 메뉴 아이템 -->
+        <div class="d-flex align-items-center small flex-nowrap text-nowrap">
+          <div class="me-3">헬로+</div>
+          <div class="me-3">고객지원</div>
+          <div class="me-3">마이헬로</div>
+          <font-awesome-icon icon="magnifying-glass" class="text-white me-2 py-1" />
         </div>
       </div>
     </div>
-  </nav>
+    <nav class="custom-nav bg-white border-bottom w-100">
+      <div class="container d-flex justify-content-between align-items-center py-3 ">
+        <!-- 메뉴 리스트 -->
+        <ul class="nav flex-row mb-0 flex-nowrap text-nowrap">
+          <li v-for="menu in menus" :key="menu" class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">
+              {{ menu }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  <!-- 로고 + 메뉴 -->
 </header>
 
 </template>
@@ -37,8 +41,17 @@ const menus = [
 
 
 <style scoped>
-.navbar-brand {
-  font-size: 1.2rem;
+/* html, body {
+  margin: 0;
+  padding: 0;
 }
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+} */
 
 </style>
