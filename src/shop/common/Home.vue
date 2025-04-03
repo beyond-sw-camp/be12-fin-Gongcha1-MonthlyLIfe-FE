@@ -26,7 +26,7 @@ const categories = [
       <div class="d-flex justify-content-around flex-wrap text-center">
         <div v-for="item in categories" :key="item.name" class="mb-4 px-3">
           <img :src="item.icon" alt="icon" class="mb-2 category-icon" />
-          <div>{{ item.name }}</div>
+          <div class="small fw-semibold">{{ item.name }}</div>
         </div>
       </div>
     </section>
@@ -34,5 +34,9 @@ const categories = [
 </template>
 
 <style scoped>
-
+.category-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
 </style>
