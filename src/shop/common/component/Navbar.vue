@@ -1,8 +1,15 @@
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 const menus = [
   '전체렌탈상품', 'BEST', '0원 특가',
   '이벤트/혜택', '구매가이드', '사업자/B2B', '할인카드'
 ]
+
+const goToCart = () => {
+  router.push('/cart')
+}
 </script>
 
 <template>
@@ -16,7 +23,13 @@ const menus = [
           <div class="me-3">헬로+</div>
           <div class="me-3">고객지원</div>
           <div class="me-3">마이헬로</div>
-          <font-awesome-icon icon="magnifying-glass" class="text-white me-2 py-1" />
+          <font-awesome-icon icon="magnifying-glass" class="text-danger me-2 py-1" />
+          <font-awesome-icon
+            :icon="['fas', 'cart-shopping']"
+            class="ms-2"
+            @click="goToCart"
+            style="cursor: pointer;"
+          />
         </div>
       </div>
     </div>
