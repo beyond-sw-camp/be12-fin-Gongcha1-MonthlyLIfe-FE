@@ -6,7 +6,9 @@ import Footer from "./component/Footer.vue";
 
 <template>
   <Navbar></Navbar>
+  <div style="height: 120px;"></div>
   <router-view></router-view>
+  
   <Footer></Footer>
 </template>
 
