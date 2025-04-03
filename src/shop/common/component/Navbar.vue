@@ -20,7 +20,7 @@ const menus = [
   <!-- 로고 + 메뉴 -->
   <nav class="bg-white border-bottom w-100">
     <div class="d-flex justify-content-between align-items-center py-3 px-4">
-      <a href="/" class="text-danger fw-bold fs-5 me-4">월정액 인생</a>
+      <a href="/" class="text-danger fw-bold fs-5">월정액 인생</a>
 
       <div class="d-flex gap-4 flex-wrap">
         <div v-for="menu in menus" :key="menu" class="text-dark small fw-semibold cursor-pointer">
