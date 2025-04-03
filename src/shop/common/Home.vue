@@ -10,22 +10,22 @@ const categories = [
 </script>
 
 <template>
- <div>
+  <div>
     <!-- 메인 배너 -->
-    <section class="d-flex justify-content-between align-items-center p-5 bg-light">
+    <section class="d-flex justify-content-between align-items-center px-5 py-5 bg-light w-100">
       <div>
         <h1 class="display-4 fw-bold">Aircon</h1>
         <p class="lead">지금이 에어컨 구매타임!<br />역시즌 초특가</p>
         <button class="btn btn-dark mt-3">바로가기 →</button>
       </div>
-      <img src="/src/assets/images/aircon.png" alt="Aircon" style="height: 260px;" />
+      <img src="/src/assets/images/aircon.png" alt="Aircon" class="banner-image" />
     </section>
 
     <!-- 제품 아이콘 리스트 -->
-    <section class="container py-5 border-top">
-      <div class="row text-center">
-        <div class="col-6 col-md-2 mb-4" v-for="item in categories" :key="item.name">
-          <img :src="item.icon" alt="icon" class="mb-2" style="height: 50px;" />
+    <section class="w-100 py-5 border-top">
+      <div class="d-flex justify-content-around flex-wrap text-center">
+        <div v-for="item in categories" :key="item.name" class="mb-4 px-3">
+          <img :src="item.icon" alt="icon" class="mb-2 category-icon" />
           <div>{{ item.name }}</div>
         </div>
       </div>
@@ -34,7 +34,5 @@ const categories = [
 </template>
 
 <style scoped>
-img {
-  max-width: 100%;
-}
+
 </style>
