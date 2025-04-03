@@ -1,36 +1,3 @@
-<template>
-  <header class="w-100">
-    <!-- 최상단 검정 헤더 -->
-    <div class="bg-dark text-white py-1 px-3 d-flex justify-content-end small">
-      <div class="me-3">헬로+</div>
-      <div class="me-3">고객지원</div>
-      <div class="me-3">마이헬로 ▼</div>
-      <div><font-awesome-icon :icon="['far', 'magnifying-glass']" /></div>
-    </div>
-
-    <!-- 로고 및 메인 메뉴 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3">
-      <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center text-danger fw-bold" href="/">
-          Hello rental
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li v-for="menu in menus" :key="menu" class="nav-item">
-              <a class="nav-link" href="#">{{ menu }}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-</template>
-
 <script setup>
 const menus = [
   '전체렌탈상품', 'BEST', '0원 특가',
@@ -38,8 +5,40 @@ const menus = [
 ]
 </script>
 
+<template>
+  <header class="w-100">
+  <!-- 검정 헤더 -->
+  <div class="bg-dark text-white py-1 w-100">
+    <div class="d-flex justify-content-end small px-4">
+      <div class="me-3">헬로+</div>
+      <div class="me-3">고객지원</div>
+      <div class="me-3">마이헬로</div>
+      <font-awesome-icon icon="magnifying-glass" class="text-white me-2 py-1" />
+    </div>
+  </div>
+
+  <!-- 로고 + 메뉴 -->
+  <nav class="bg-white border-bottom w-100">
+    <div class="d-flex justify-content-between align-items-center py-3 px-4">
+      <a href="/" class="text-danger fw-bold fs-5">월정액 인생</a>
+
+      <div class="d-flex gap-4 flex-wrap">
+        <div v-for="menu in menus" :key="menu" class="text-dark small fw-semibold cursor-pointer">
+          {{ menu }}
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+</template>
+
+
+
+
 <style scoped>
 .navbar-brand {
   font-size: 1.2rem;
 }
+
 </style>
