@@ -34,7 +34,7 @@ const routes = [
         component: ShopLayout,
         children: [
             // 홈페이지 카테고리 있는 그거 페이지
-            { path: '', component: Main },
+            { path: '', component: Home },
             // 로그인 페이지
             { path: 'auth/login', component: Login },
             // 회원가입 본인인증 페이지
