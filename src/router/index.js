@@ -48,7 +48,7 @@ const routes = [
                 component: UserLayout,
                 children: [
                     // 개인 상세 페이지
-                    { path: '/detail', component: UserDetail },
+                    { path: 'detail', component: UserDetail },
                     // 개인 구독정보 페이지
                     { path: 'subscription', component: UserSubscription },
                 ]
