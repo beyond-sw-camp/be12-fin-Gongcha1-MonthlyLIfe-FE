@@ -10,7 +10,7 @@ const categories = [
 </script>
 
 <template>
-  <div>
+  <div class>
     <!-- 메인 배너 -->
     <section class="d-flex justify-content-between align-items-center px-5 py-5 bg-light w-100">
       <div>
