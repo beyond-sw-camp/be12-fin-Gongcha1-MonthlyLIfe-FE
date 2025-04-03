@@ -8,8 +8,8 @@ const menus = [
 <template>
   <header class="w-100">
   <!-- 검정 헤더 -->
-  <div class="bg-dark text-white py-1 w-100">
-    <div class="d-flex justify-content-end small px-4">
+  <div class="bg-dark text-white py-1">
+    <div class="container-fluid d-flex justify-content-end small px-4">
       <div class="me-3">헬로+</div>
       <div class="me-3">고객지원</div>
       <div class="me-3">마이헬로</div>
@@ -18,8 +18,8 @@ const menus = [
   </div>
 
   <!-- 로고 + 메뉴 -->
-  <nav class="bg-white border-bottom w-100">
-    <div class="d-flex justify-content-between align-items-center py-3 px-4">
+  <nav class="bg-white border-bottom">
+    <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
       <a href="/" class="text-danger fw-bold fs-5 me-4">월정액 인생</a>
 
       <div class="d-flex gap-4 flex-wrap">
