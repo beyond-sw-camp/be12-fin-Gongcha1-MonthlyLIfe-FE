@@ -6,43 +6,58 @@ const productName = ref("");
 const condition = ref("");
 const description = ref("");
 const price = ref(0);
-const shipping = ref("");
-const directDeal = ref("");
-const quantity = ref(1);
 const images = ref([]);
 
-// 파일 업로드 처리
-const handleFileChange = (event) => {
-  const files = Array.from(event.target.files);
-  if (files.length > 0) {
-    images.value = files.map((file) => ({
-      file,
-      name: file.name,
-      preview: URL.createObjectURL(file),
-    }));
-  }
-};
 
-const removeImage = () => {
-  images.value = [];
-};
+// 카테고리 데이터 (소형가구 렌탈샵)
+const mainCategories = ref([
+  "거실 가구",
+  "침실 가구",
+  "주방/식당 가구",
+  "사무실 가구"
+]);
 
-// 카테고리 데이터 (스토어 없이 로컬 상태만 사용)
-const mainCategories = ref(["디지털", "의류", "생활용품"]);
-
-// 선택된 카테고리에 따라 서브/세부 카테고리 목록을 동적으로 계산
+// 선택된 메인 카테고리에 따라 서브 카테고리 목록 설정
 const subCategories = computed(() => {
-  if (selectedMainCategory.value === "디지털") return ["노트북", "스마트폰"];
-  if (selectedMainCategory.value === "의류") return ["상의", "하의"];
-  if (selectedMainCategory.value === "생활용품") return ["가구", "주방용품"];
+  if (selectedMainCategory.value === "거실 가구") return ["소파", "커피 테이블", "TV 스탠드", "책장"];
+  if (selectedMainCategory.value === "침실 가구") return ["침대", "옷장", "서랍장"];
+  if (selectedMainCategory.value === "주방/식당 가구") return ["식탁", "식당 의자", "바 테이블"];
+  if (selectedMainCategory.value === "사무실 가구") return ["책상", "사무용 의자", "서류함"];
   return [];
 });
 
+// 선택된 서브 카테고리에 따라 세부 카테고리 목록 설정
 const subSubCategories = computed(() => {
-  if (selectedSubCategory.value === "노트북") return ["맥북", "윈도우 노트북"];
-  if (selectedSubCategory.value === "스마트폰") return ["아이폰", "갤럭시"];
-  if (selectedSubCategory.value === "상의") return ["셔츠", "후드티"];
-  return [];
+  switch (selectedSubCategory.value) {
+    case "소파":
+      return ["2인용 소파", "3인용 소파", "코너 소파"];
+    case "커피 테이블":
+      return ["유리 테이블", "원목 테이블"];
+    case "TV 스탠드":
+      return ["벽걸이형", "독립형"];
+    case "책장":
+      return ["벽걸이형 책장", "자유형 책장"];
+    case "침대":
+      return ["싱글 침대", "더블 침대", "퀸 침대"];
+    case "옷장":
+      return ["슬라이딩 도어", "스윙 도어"];
+    case "서랍장":
+      return ["2단 서랍장", "3단 서랍장"];
+    case "식탁":
+      return ["4인용", "6인용", "8인용"];
+    case "식당 의자":
+      return ["패브릭 의자", "가죽 의자"];
+    case "바 테이블":
+      return ["원목 바 테이블", "메탈 바 테이블"];
+    case "책상":
+      return ["일반 책상", "코너 책상"];
+    case "사무용 의자":
+      return ["인체공학적 의자", "메쉬 의자"];
+    case "서류함":
+      return ["서랍형", "캐비닛형"];
+    default:
+      return [];
+  }
 });
 
 // 선택된 카테고리
@@ -145,9 +160,9 @@ const handleRegister = () => {
             </div>
             <div class="mt-3">
               <strong class="text-danger">선택된 카테고리:</strong>
-              <span class="ms-2">{{ selectedMainCategory }}</span>
-              <span v-if="selectedSubCategory"> > {{ selectedSubCategory }}</span>
-              <span v-if="selectedSubSubCategory"> > {{ selectedSubSubCategory }}</span>
+              <strong class="ms-2">{{ selectedMainCategory }}</strong>
+              <strong v-if="selectedSubCategory"> > {{ selectedSubCategory }}</strong>
+              <strong v-if="selectedSubSubCategory"> > {{ selectedSubSubCategory }}</strong>
             </div>
           </div>
         </div>
@@ -156,7 +171,8 @@ const handleRegister = () => {
         <div class="row mb-4 border-top pt-3">
           <label class="col-3 col-form-label fw-bold">상품 상태</label>
           <div class="col-9">
-            <div class="form-check mb-1" v-for="option in ['S (새 상품)', 'A (사용감 없음)', 'B (사용감 조금)', 'C (사용감 많음)']" :key="option">
+            <div class="form-check mb-1" v-for="option in ['S (새 상품)', 'A (사용감 없음)', 'B (사용감 조금)', 'C (사용감 많음)']"
+              :key="option">
               <input class="form-check-input" type="radio" :value="option" v-model="condition" :id="option"
                 name="condition" />
               <label class="form-check-label ms-1" :for="option">{{ option }}</label>
