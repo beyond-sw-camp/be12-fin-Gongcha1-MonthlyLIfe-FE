@@ -84,7 +84,7 @@ const routes = [
             // 판매 관리 페이지
             { path: '/sale', component: AdminSale },
             // 판매 등록 페이지
-            { path: '/sale/register', component: AdminSaleRegister },
+            { path: 'sale/register', component: AdminSaleRegister },
             // 카테고리 관리 페이지
             { path: 'category', component: AdminCategory },
             // 상품 관리 페이지 ( 상품 이름, 상품 코드 )
