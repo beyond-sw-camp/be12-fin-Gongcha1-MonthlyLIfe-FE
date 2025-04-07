@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <footer class="w-100 bg-dark text-white pt-5 pb-4 mt-5">
+  <footer class="footer-container w-100 bg-dark text-white pt-5 pb-4 mt-5">
     <div class="row mx-0 px-5">
       <!-- 회사 정보 -->
       <div class="col-md-3 mb-4">
@@ -64,18 +64,14 @@
   text-decoration: none;
   transition: color 0.2s ease;
 }
-
 .footer-link:hover {
   color: #cccccc;
   text-decoration: underline;
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  z-index: 999;
+.footer-container {
+  width: 100%;
+  margin-top: auto;
+  margin-left: 0;
 }
 </style>
