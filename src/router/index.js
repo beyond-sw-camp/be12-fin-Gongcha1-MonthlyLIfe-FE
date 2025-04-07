@@ -28,6 +28,7 @@ import AdminProduct from "../admin/product/AdminProduct.vue";
 import AdminUser from "../admin/user/AdminUser.vue";
 import UserLayout from "../shop/user/UserLayout.vue";
 import Home from "../shop/common/Home.vue";
+import AdminStatistics from "../admin/statistics/AdminStatistics.vue";
 
 const routes = [
     {
@@ -97,6 +98,8 @@ const routes = [
             { path: 'subscription', component: AdminSubscription },
             // 사용자 관리 페이지
             { path: 'user', component: AdminUser },
+            //통계 리포트 페이지
+            { path: 'statistics', component: AdminStatistics}
         ]
     }
 ]

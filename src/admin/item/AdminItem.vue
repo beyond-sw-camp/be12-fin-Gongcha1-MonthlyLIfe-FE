@@ -198,7 +198,7 @@ function goToPage(page) {
         <div class="p-3">
 
           <div class="text-center border-top pt-3 mt-3 mb-2">
-            <h5 class="fw-bold mb-0">상품관리</h5>
+            <h5 class="fw-bold mb-0">재고 관리</h5>
           </div>
           <!-- 테이블 -->
           <table class="table table-bordered table-hover text-center">

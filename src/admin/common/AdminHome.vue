@@ -230,8 +230,8 @@ import {
   Legend,
   ArcElement
 } from 'chart.js'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+//import 'bootstrap/dist/css/bootstrap.min.css'
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 // Chart.js 플러그인 등록 (Doughnut 차트용)
 ChartJS.register(Title, Tooltip, Legend, ArcElement)
@@ -318,9 +318,9 @@ const closeOrderModal = () => {
 /* 카드 스타일 */
 .info-card {
   background-color: #ffffff;
-  padding: 1rem;
+  padding: 0.75rem;
   text-align: center;
-  min-height: 120px;
+  min-height: 90px; /* ✅ 높이 줄임 */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -329,6 +329,15 @@ const closeOrderModal = () => {
 }
 .info-card:hover {
   transform: scale(1.02);
+}
+.info-card .fs-2 {
+  font-size: 1.25rem !important; /* ✅ 아이콘 크기 줄임 */
+}
+.info-card .fs-1 {
+  font-size: 1.5rem !important; /* ✅ 숫자 크기 줄임 */
+}
+.info-card .mt-1 {
+  font-size: 0.875rem; /* ✅ 제목 글자 크기 */
 }
 
 /* 차트 박스 */
@@ -370,4 +379,5 @@ const closeOrderModal = () => {
 .modal-content {
   border-radius: 8px;
 }
+
 </style>
