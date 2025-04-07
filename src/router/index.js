@@ -79,23 +79,23 @@ const routes = [
             //관리자 홈페이지
             { path: '', component: AdminHome },
             // 재고 관리 페이지 (상품 이름, 재고 위치, 재고 상태, 갯수)
-            { path: '/item', component: AdminItem },
+            { path: 'item', component: AdminItem },
             // 판매 관리 페이지
-            { path: '/sale', component: AdminSale },
+            { path: 'sale', component: AdminSale },
             // 판매 등록 페이지
-            { path: '/sale/register', component: AdminSaleRegister },
+            { path: 'sale/register', component: AdminSaleRegister },
             // 카테고리 관리 페이지
-            { path: '/category', component: AdminCategory },
+            { path: 'category', component: AdminCategory },
             // 상품 관리 페이지 ( 상품 이름, 상품 코드 )
-            { path: '/product', component: AdminProduct },
+            { path: 'product', component: AdminProduct },
             // 상품 등록 페이지 (보류)
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
-            { path: '/delivery', component: AdminDelivery },
+            { path: 'delivery', component: AdminDelivery },
             // 구독 관리 페이지
-            { path: '/subscription', component: AdminDelivery },
+            { path: 'subscription', component: AdminDelivery },
             // 사용자 관리 페이지
-            { path: '/user', component: AdminUser },
+            { path: 'user', component: AdminUser },
         ]
     }
 ]
