@@ -5,7 +5,7 @@
       <!-- 로고 + 관리자 -->
       <div class="mb-4">
         <div class="text-center">
-          <img style="width: 4rem; height: 5rem" src="../../../assets/images/profile.jpg">
+          <img style="width: 4rem; height: 5rem" src="../../../../assets/images/profile.jpg">
         </div>
         <h5 class="fw-bold mt-2">관리자</h5>
       </div>
