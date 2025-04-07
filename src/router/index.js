@@ -22,6 +22,7 @@ import AdminSale from "../admin/sale/AdminSale.vue";
 import AdminSaleRegister from "../admin/sale/AdminSaleRegister.vue";
 import AdminCategory from "../admin/product/AdminCategory.vue";
 import AdminDelivery from "../admin/subscription/AdminDelivery.vue";
+import AdminSubscription from "../admin/subscription/AdminSubscription.vue";
 import AdminProductRegister from "../admin/product/AdminProductRegister.vue";
 import AdminProduct from "../admin/product/AdminProduct.vue";
 import AdminUser from "../admin/user/AdminUser.vue";
@@ -93,7 +94,7 @@ const routes = [
             // 배송 관리 페이지
             { path: 'delivery', component: AdminDelivery },
             // 구독 관리 페이지
-            { path: 'subscription', component: AdminDelivery },
+            { path: 'subscription', component: AdminSubscription },
             // 사용자 관리 페이지
             { path: 'user', component: AdminUser },
         ]
