@@ -3,12 +3,12 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const categories = [
-  { idx: 1, name: 'TV', icon: '/src/assets/images/tv.png' },
-  { idx: 2, name: '에어컨', icon: '/src/assets/images/aircon_icon.png' },
-  { idx: 3, name: '로봇청소기', icon: '/src/assets/images/robot.png' },
-  { idx: 4, name: '공기청정기', icon: '/src/assets/images/aircleaner.png' },
-  { idx: 5, name: '안마의자', icon: '/src/assets/images/chair.png' },
-  { idx: 6, name: '의류관리기', icon: '/src/assets/images/styler.png' },
+  { idx: 1, name: 'TV', icon: '/assets/images/tv.png' },
+  { idx: 2, name: '에어컨', icon: '/assets/images/aircon_icon.png' },
+  { idx: 3, name: '로봇청소기', icon: '/assets/images/robot.png' },
+  { idx: 4, name: '공기청정기', icon: '/assets/images/aircleaner.png' },
+  { idx: 5, name: '안마의자', icon: '/assets/images/chair.png' },
+  { idx: 6, name: '의류관리기', icon: '/assets/images/styler.png' },
 ]
 
 const goToCategory = (idx) => {
@@ -28,7 +28,7 @@ const goToCategory = (idx) => {
         </p>
         <button class="btn btn-dark mt-3">바로가기 →</button>
       </div>
-      <img src="/src/assets/images/aircon.png" alt="Aircon" class="home-banner-image" />
+      <img src="/assets/images/aircon.png" alt="Aircon" class="home-banner-image" />
     </section>
 
     <!-- 제품 카테고리 -->

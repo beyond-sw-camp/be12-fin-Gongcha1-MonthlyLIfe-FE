@@ -6,9 +6,6 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 
-import sampleTv1 from '../../assets/images/tv1.png'
-import sampleTv2 from '../../assets/images/tv2.png'
-
 const products = ref([
   {
     id: 1,
@@ -17,7 +14,7 @@ const products = ref([
     originalPrice: "47,900",
     price: "30,900",
     badge: "사운드 증정",
-    image: sampleTv1,
+    image: '/assets/images/tv1.png',
   },
   {
     id: 2,
@@ -26,7 +23,7 @@ const products = ref([
     originalPrice: "24,900",
     price: "17,900",
     badge: "최다",
-    image: sampleTv2,
+    image: '/assets/images/tv2.png',
   },
 ])
 
