@@ -16,15 +16,16 @@
 
       <!-- 메뉴 리스트 -->
       <ul class="nav nav-pills flex-column gap-2 text-start">
-        <!-- 상품관리 -->
+        <!-- 상품 재고 관리 -->
         <li>
           <a class="nav-link" href="#">
-            <font-awesome-icon :icon="['fas', 'box-open']" /> 상품 관리
+            <font-awesome-icon :icon="['fas', 'box-open']" /> 상품 재고 관리
           </a>
           <ul class="nav flex-column ms-4 small">
-            <li><a class="nav-link text-white-50" href="#">- 상품 목록 관리</a></li>
-            <li><a class="nav-link text-white-50" href="#">- 상품 정비 이력</a></li>
-            <li><a class="nav-link text-white-50" href="#">- 수리 신청/분실 신고 목록 관리</a></li>
+            <li>
+              <router-link to="/admin/item" class="nav-link text-white-50" >- 재고 관리</router-link>
+            </li>
+            <!--            <li><a class="nav-link text-white-50" href="#">- 수리 신청/분실 신고 목록 관리</a></li>-->
           </ul>
         </li>
 
@@ -34,16 +35,20 @@
             <font-awesome-icon :icon="['fas', 'clipboard-check']" /> 구독 관리
           </a>
           <ul class="nav flex-column ms-4 small">
-            <li><a class="nav-link text-white-50" href="#">- 결제 및 연체 관리</a></li>
-            <li><a class="nav-link text-white-50" href="#">- 예약 스케줄 관리</a></li>
+            <li>
+              <router-link to="/admin/sale" class="nav-link text-white-50" >- 결제 및 연체 관리</router-link>
+            </li>
+            <li>
+              <router-link to="/admin/sale" class="nav-link text-white-50" >- 예약 스케줄 관리</router-link>
+            </li>
           </ul>
         </li>
 
         <!-- 사용자 관리 -->
         <li>
-          <a class="nav-link" href="#">
+          <router-link to="/admin/user" class="nav-link text-white-50" >
             <font-awesome-icon :icon="['fas', 'user']" /> 사용자 관리
-          </a>
+          </router-link>
         </li>
 
         <!-- 통계 리포트 -->
@@ -59,7 +64,7 @@
             <font-awesome-icon :icon="['fas', 'globe']" /> 홈페이지 관리
           </a>
           <ul class="nav flex-column ms-4 small">
-            <li><a class="nav-link text-white-50" href="#">- 상품 관리</a></li>
+            <li><router-link to="/admin/sale/register" class="nav-link text-white-50" >- 판매 관리</router-link></li>
             <li><a class="nav-link text-white-50" href="#">- FAQ 관리</a></li>
             <li><a class="nav-link text-white-50" href="#">- 공지사항 관리</a></li>
           </ul>
@@ -108,3 +113,5 @@
   color: #ffffff;
 }
 </style>
+<script setup lang="ts">
+</script>
