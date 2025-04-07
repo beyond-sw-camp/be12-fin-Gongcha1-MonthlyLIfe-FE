@@ -89,5 +89,5 @@ const menus = [
 </template>
 
 <style scoped>
-/* 필요에 따라 스타일 추가/수정 가능 */
+
 </style>
