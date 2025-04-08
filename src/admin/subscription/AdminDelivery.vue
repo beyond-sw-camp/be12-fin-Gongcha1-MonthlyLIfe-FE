@@ -119,7 +119,7 @@ function openOrderModal(order) {
                 <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                   <!-- 주문일시(기간) 선택 -->
                   <div class="d-flex align-items-center gap-1">
-                    <label class="form-label mb-0">주문일시</label>
+                    <label class="form-label mb-0 text-nowrap">주문일시</label>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateFrom" style="max-width: 140px;">
                     <span>~</span>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateTo" style="max-width: 140px;">

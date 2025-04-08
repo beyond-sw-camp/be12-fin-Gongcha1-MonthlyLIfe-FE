@@ -53,6 +53,8 @@ const routes = [
                     { path: 'detail', component: UserDetail },
                     // 개인 구독정보 페이지
                     { path: 'subscription', component: UserSubscription },
+                    { path: 'delivery', component: DeliveryTracking },
+
                 ]
             },
             // 카테고리별 판매 목록 페이지
