@@ -1,4 +1,5 @@
-  <div class="container-fluid d-flex p-0 min-vh-100">
+<template>
+<div class="container-fluid d-flex p-0 min-vh-100">
     <!-- Sidebar -->
 <!--    <div class="sidebar bg-white border-end p-3">-->
 <!--      <h5 class="fw-bold mb-4">월정액 인생</h5>-->
