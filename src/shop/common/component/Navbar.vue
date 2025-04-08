@@ -23,10 +23,9 @@ const goToCart = () => {
 const menus = [
   "전체렌탈상품",
   "BEST",
-  "0원 특가",
+  "패키지 특가",
   "이벤트/혜택",
   "구매가이드",
-  "사업자/B2B",
   "할인카드",
 ];
 </script>
@@ -46,11 +45,10 @@ const menus = [
 
         <!-- 오른쪽: 메뉴 아이템 -->
         <div class="d-flex align-items-center small flex-nowrap text-nowrap">
-          <div class="me-3">헬로+</div>
           <div class="me-3">고객지원</div>
-          <router-link to="u`ser/subscription" class="me-3 text-decoration-none text-white">
-            마이페이지
-          </router-link>
+
+          <div class="me-3"><router-link to="/user/detail" class="nav-link text-white" >마이페이지</router-link></div>
+          
           <font-awesome-icon
             icon="magnifying-glass"
             class="text-danger me-2 py-1"
