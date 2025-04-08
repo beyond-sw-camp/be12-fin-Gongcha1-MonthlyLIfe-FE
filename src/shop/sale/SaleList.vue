@@ -25,6 +25,15 @@ const products = ref([
     badge: "최다",
     image: '/assets/images/tv2.png',
   },
+  {
+    id: 3,
+    brand: "LG",
+    name: "[삼성] 그랑데 세탁기 + 건조기 패키지",
+    originalPrice: "24,900",
+    price: "17,900",
+    badge: "특가",
+    image: '/assets/images/pakage.png',
+  },
 ])
 
 function goToDetail(productId) {
@@ -137,7 +146,7 @@ function goToDetail(productId) {
 
 /* 상품 카드 이미지 크기 조정 */
 .card img {
-  height: 100px;
-  object-fit: cover;
+  height: 250px;
+  object-fit: fit;
 }
 </style>
