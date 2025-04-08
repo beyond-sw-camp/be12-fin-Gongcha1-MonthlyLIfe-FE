@@ -25,6 +25,15 @@ const products = ref([
     badge: "최다",
     image: '/assets/images/tv2.png',
   },
+  {
+    id: 3,
+    brand: "SAMSUNG",
+    name: "그랑데 세탁기 + 건조기 패키지",
+    originalPrice: "24,900",
+    price: "17,900",
+    badge: "특가",
+    image: '/assets/images/pakage.png',
+  },
 ])
 
 function goToDetail(productId) {
@@ -74,7 +83,7 @@ function goToDetail(productId) {
           >
             <img :src="product.image" class="card-img-top" alt="product image" />
             <div class="card-body">
-              <h6 class="card-title">{{ product.brand }}</h6>
+              <h6 class="card-title fw-bold">{{ product.brand }}</h6>
               <p class="card-text small">{{ product.name }}</p>
               <p class="text-muted small"><del>{{ product.originalPrice }}원</del></p>
               <p class="fw-bold">{{ product.price }}원</p>
@@ -137,7 +146,7 @@ function goToDetail(productId) {
 
 /* 상품 카드 이미지 크기 조정 */
 .card img {
-  height: 100px;
-  object-fit: cover;
+  height: 250px;
+  object-fit: fit;
 }
 </style>

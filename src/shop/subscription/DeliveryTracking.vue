@@ -1,4 +1,3 @@
-<template>
   <div class="container-fluid d-flex p-0 min-vh-100">
     <!-- Sidebar -->
 <!--    <div class="sidebar bg-white border-end p-3">-->
