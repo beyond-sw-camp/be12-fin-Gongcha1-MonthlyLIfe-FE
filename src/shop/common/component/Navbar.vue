@@ -48,7 +48,9 @@ const menus = [
         <div class="d-flex align-items-center small flex-nowrap text-nowrap">
           <div class="me-3">헬로+</div>
           <div class="me-3">고객지원</div>
-          <div class="me-3">마이헬로</div>
+          <router-link to="u`ser/subscription" class="me-3 text-decoration-none text-white">
+            마이페이지
+          </router-link>
           <font-awesome-icon
             icon="magnifying-glass"
             class="text-danger me-2 py-1"
