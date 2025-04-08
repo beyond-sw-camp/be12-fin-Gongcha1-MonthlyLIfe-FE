@@ -16,7 +16,7 @@
 
       <!-- 오른쪽: 유저 정보 / 알림 등 추가 가능 -->
       <div class="d-flex align-items-center gap-3">
-        <span class="text-muted small">admin</span>
+        <router-link to="/" class="text-muted small text-decoration-none">홈으로</router-link>
         <!-- 알림 아이콘이나 프로필 아이콘 자리 -->
       </div>
     </div>
