@@ -37,7 +37,7 @@ const menus = [
       <div class="container d-flex justify-content-between align-items-center">
         <!-- 왼쪽: 로고 + 관리자 버튼 -->
         <div class="d-flex align-items-center">
-          <a href="/" class="text-danger fw-bold fs-5 logo">월정액 인생</a>
+          <a href="/" class="text-danger fw-bold fs-5 logo text-decoration-none">월정액 인생</a>
           <button class="btn btn-sm btn-outline-light ms-3" @click="goAdmin">
             관리자
           </button>
