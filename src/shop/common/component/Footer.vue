@@ -1,6 +1,6 @@
 <template>
   <footer class="footer-wrapper bg-light border-top mt-5">
-    <div class="container py-4">
+    <div class="container py-5">
       <div class="row">
         <!-- 왼쪽 정보 -->
         <div class="col-md-4 mb-3">
@@ -27,13 +27,22 @@
             <a href="#" class="text-decoration-none text-dark">이용약관</a> |
             <a href="#" class="text-decoration-none text-dark">개인정보처리방침</a>
           </p>
-          <div class="mt-2">
-            <span class="fw-bold me-2">Follow Us</span>
-            <a href="#" class="me-2 text-dark"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="me-2 text-dark"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="me-2 text-dark"><i class="bi bi-youtube"></i></a>
-            <a href="#" class="text-dark"><i class="bi bi-github"></i></a>
-          </div>
+
+        </div>
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold mb-3">Follow Us</h5>
+          <a href="#" class=" me-3">
+            <font-awesome-icon :icon="['fab', 'facebook']" />
+          </a>
+          <a href="#" class=" me-3 insta" >
+            <font-awesome-icon :icon="['fab', 'square-instagram']" />
+          </a>
+          <a href="#" class=" me-3" style="color: red">
+            <font-awesome-icon :icon="['fab', 'youtube']" />
+          </a>
+          <a href="#" class="" style="color: black">
+            <font-awesome-icon :icon="['fab', 'github']" />
+          </a>
         </div>
       </div>
 
@@ -56,4 +65,8 @@
 a:hover {
   text-decoration: underline;
 }
+
 </style>
+
+
+
