@@ -150,7 +150,6 @@
               </tr>
 
 
-
               <!-- 배송비 -->
               <tr>
                 <th class="text-muted">배송비</th>
@@ -205,7 +204,6 @@
                       />
                       <label for="credit" class="form-check-label">신용카드</label>
                     </div>
-
 
 
                     <div class="form-check me-3">
@@ -326,9 +324,9 @@ export default {
   data() {
     return {
       cartItems: [
-        { name: "상품명", description: "간단한 설명", price: 12 },
-        { name: "두 번째 상품", description: "간단한 설명", price: 8 },
-        { name: "세 번째 상품", description: "간단한 설명", price: 5 }
+        {name: "상품명", description: "간단한 설명", price: 12},
+        {name: "두 번째 상품", description: "간단한 설명", price: 8},
+        {name: "세 번째 상품", description: "간단한 설명", price: 5}
       ],
       promoCode: "EXAMPLECODE",
       promoDiscount: 5,
@@ -381,7 +379,7 @@ export default {
     changeAddress() {
       alert("배송지 변경 로직 구현!");
     }
-    ,formatCurrency(amount) {
+    , formatCurrency(amount) {
       if (amount === undefined || amount === null) {
         return "0원"; // 또는 원하는 기본값을 반환
       }
@@ -415,18 +413,21 @@ export default {
 
 /* 버튼에 강렬한 그라데이션 효과 */
 button.btn-primary.btn-lg {
-  background-image: linear-gradient(45deg, #ff6b6b, #f06595);
+  background-image: linear-gradient(45deg, #2a5ae8, #008cf6); /* 밝은 파랑 → 시원한 블루 */
   border: none;
+  color: #ffffff;
 }
 
 button.btn-primary.btn-lg:hover {
-  background-image: linear-gradient(45deg, #f06595, #ff6b6b);
+  background-image: linear-gradient(45deg, #008cf6, #2a5ae8); /* 반전 */
 }
+
 
 .table-borderless th {
   width: 100px;
   white-space: nowrap;
 }
+
 .table th {
   background-color: #f8f9fa;
   vertical-align: middle;

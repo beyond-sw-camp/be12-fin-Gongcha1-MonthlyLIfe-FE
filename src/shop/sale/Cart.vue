@@ -9,11 +9,6 @@
           일반구매({{ generalItems.length }})
         </button>
       </li>
-      <li class="nav-item">
-        <button class="nav-link" :class="{ active: activeTab === 'subscription' }" @click="activeTab = 'subscription'">
-          정기발송(0)
-        </button>
-      </li>
     </ul>
 
     <div class="row">
@@ -30,7 +25,7 @@
             >
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">{{ item.name }}</h5>
-                <button class="btn btn-sm btn-outline-danger" @click.prevent="removeItem('general', index)">삭제</button>
+                <button class="btn btn-sm " @click.prevent="removeItem('general', index)"><font-awesome-icon :icon="['fas', 'x']" /></button>
               </div>
 
               <div class="d-flex align-items-center">
@@ -65,7 +60,7 @@
                   <input type="checkbox" class="form-check-input me-2" v-model="group.checked"/>
                   <h5 class="fw-bold mb-0">[{{ group.name }}]</h5>
                 </div>
-                <button class="btn btn-sm btn-outline-danger" @click="removePackageGroup(gIdx)">삭제</button>
+                <button class="btn btn-sm" @click="removePackageGroup(gIdx)"><font-awesome-icon :icon="['fas', 'x']" /></button>
               </div>
 
               <!-- 패키지 내부 항목은 체크박스 없이 정보만 표시 -->
