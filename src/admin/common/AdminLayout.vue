@@ -1,6 +1,5 @@
 <script setup>
 import AdminNavbar from "./component/AdminNavbar.vue";
-import AdminFooter from "./component/AdminFooter.vue";
 import AdminHeader from "./component/AdminHeader.vue";
 </script>
 
@@ -16,7 +15,6 @@ import AdminHeader from "./component/AdminHeader.vue";
       <!-- 메인 컨텐츠 -->
       <div class="flex-grow-1 d-flex flex-column">
         <router-view class="flex-grow-1" />
-        <AdminFooter />
       </div>
     </div>
   </div>
