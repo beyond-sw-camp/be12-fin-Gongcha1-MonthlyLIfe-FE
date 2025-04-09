@@ -18,6 +18,11 @@
       <ul class="nav nav-pills flex-column gap-2 text-start">
         <!-- 상품 재고 관리 -->
         <li>
+          <router-link to="/admin" class="nav-link text-white" >
+          <font-awesome-icon :icon="['fas', 'table-columns']" /> 관리자 대시보드
+          </router-link>
+        </li>
+        <li>
           <a class="nav-link" href="#">
             <font-awesome-icon :icon="['fas', 'box-open']" /> 상품 재고 관리
           </a>
@@ -28,7 +33,6 @@
             <li>
               <router-link to="/admin/subscription" class="nav-link text-white-50" >- 구독 관리</router-link>
             </li>
-            <!--            <li><a class="nav-link text-white-50" href="#">- 수리 신청/분실 신고 목록 관리</a></li>-->
           </ul>
         </li>
 
@@ -49,14 +53,14 @@
 
         <!-- 사용자 관리 -->
         <li>
-          <router-link to="/admin/user" class="nav-link text-white-50" >
+          <router-link to="/admin/user" class="nav-link text-white" >
             <font-awesome-icon :icon="['fas', 'user']" /> 사용자 관리
           </router-link>
         </li>
 
         <!-- 통계 리포트 -->
         <li>
-          <router-link to="/admin/statistics" class="nav-link text-white-50" >
+          <router-link to="/admin/statistics" class="nav-link text-white" >
             <font-awesome-icon :icon="['fas', 'chart-simple']" /> 통계 리포트
           </router-link>
         </li>
