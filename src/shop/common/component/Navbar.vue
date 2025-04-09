@@ -19,15 +19,6 @@ const goToCart = () => {
   router.push("/cart");
 };
 
-// 예시 메뉴 데이터
-const menus = [
-  "전체렌탈상품",
-  "BEST",
-  "패키지 특가",
-  "이벤트/혜택",
-  "구매가이드",
-  "할인카드",
-];
 </script>
 
 <template>
@@ -86,10 +77,23 @@ const menus = [
           </router-link>
         </div>
         <ul class="nav flex-row mb-0 flex-nowrap text-nowrap">
-          <li v-for="menu in menus" :key="menu" class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">
-              {{ menu }}
-            </a>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">전체렌탈상품</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">BEST</a>
+          </li>
+          <li class="nav-item">
+            <router-link to="/sale/2" class="nav-link text-dark fw-semibold custom-nav-link">패키지 특가</router-link>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">이벤트/혜택</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">구매가이드</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">할인카드</a>
           </li>
         </ul>
       </div>
