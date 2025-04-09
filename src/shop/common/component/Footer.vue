@@ -3,7 +3,7 @@
     <div class="container py-5">
       <div class="row">
         <!-- 왼쪽 정보 -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-4 ">
           <h6 class="fw-bold mb-2">구독구독</h6>
           <p class="mb-0">월정액인생</p>
           <p class="mb-0">대표이사: 김철돌</p>
@@ -12,7 +12,7 @@
         </div>
 
         <!-- 고객센터 -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-4 ">
           <h6 class="fw-bold mb-2">고객센터</h6>
           <p class="mb-0">전화번호: 1855-1000</p>
           <p class="mb-0">운영시간: 평일 09:00 ~ 18:00</p>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- 이용안내 및 SNS -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-4 ">
           <h6 class="fw-bold mb-2">이용안내</h6>
           <p class="mb-1">
             <a href="#" class="text-decoration-none text-dark">이용약관</a> |
@@ -29,7 +29,7 @@
           </p>
 
         </div>
-        <div class="col-md-3 mb-4">
+        <div class="col-md-3 mb-4 ">
           <h5 class="fw-bold mb-3">Follow Us</h5>
           <a href="#" class=" me-3">
             <font-awesome-icon :icon="['fab', 'facebook']" />
@@ -65,8 +65,9 @@
 a:hover {
   text-decoration: underline;
 }
-
+.insta {
+  color: #C13584;
+}
 </style>
-
 
 
