@@ -1,46 +1,61 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
+const categoryIdx = ref(route.params.categoryIdx)
 
-const products = ref([
-  {
-    id: 1,
-    brand: "LG",
-    name: "[사운드바 증정] 75인치 울트라HD/스마트TV(벽걸이형)",
-    originalPrice: "47,900",
-    price: "30,900",
-    badge: "사운드 증정",
-    image: '/assets/images/tv1.png',
-  },
-  {
-    id: 2,
-    brand: "LG",
-    name: "[두카] 울트라 HD 스마트 TV 75인치",
-    originalPrice: "24,900",
-    price: "17,900",
-    badge: "최다",
-    image: '/assets/images/tv2.png',
-  },
-  {
-    id: 3,
-    brand: "SAMSUNG",
-    name: "그랑데 세탁기 + 건조기 패키지",
-    originalPrice: "24,900",
-    price: "17,900",
-    badge: "특가",
-    image: '/assets/images/pakage.png',
-  },
-])
+// 카테고리별 상품 목록
+const productMap = {
+  1: [
+    {
+      id: 1,
+      brand: "LG",
+      name: "[사운드바 증정] 75인치 울트라HD/스마트TV(벽걸이형)",
+      originalPrice: "47,900",
+      price: "30,900",
+      badge: "사운드 증정",
+      image: '/assets/images/tv1.png',
+    },
+    {
+      id: 2,
+      brand: "LG",
+      name: "[두카] 울트라 HD 스마트 TV 75인치",
+      originalPrice: "24,900",
+      price: "17,900",
+      badge: "최다",
+      image: '/assets/images/tv2.png',
+    },
+  ],
+  2: [
+    {
+      id: 3,
+      brand: "SAMSUNG",
+      name: "그랑데 세탁기 + 건조기 패키지",
+      originalPrice: "24,900",
+      price: "17,900",
+      badge: "특가",
+      image: '/assets/images/pakage.png',
+    },
+  ],
+  3: [] // 추가 가능
+}
+
+const products = ref(productMap[categoryIdx.value] || [])
+
+watch(
+  () => route.params.categoryIdx,
+  (newVal) => {
+    categoryIdx.value = newVal
+    products.value = productMap[newVal] || []
+  }
+)
 
 function goToDetail(productId) {
   router.push(`/sale/detail/${productId}`)
 }
-
-
 </script>
 
 <template>
