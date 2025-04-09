@@ -1,3 +1,4 @@
+<!--재고 관리-->
 <script setup>
 import { ref, reactive, computed } from 'vue'
 
@@ -201,7 +202,7 @@ function goToPage(page) {
             <h5 class="fw-bold mb-0">재고 관리</h5>
           </div>
           <!-- 테이블 -->
-          <table class="table table-bordered table-hover text-center">
+          <table class="table table-bordered table-hover text-center product-table">
             <thead class="custom-thead">
             <tr>
               <th>상품 ID</th>
@@ -259,7 +260,8 @@ function goToPage(page) {
   font-size: 14px;
 }
 
-.custom-thead th {
-  background-color: #DFF0D8 !important;
+.product-table th {
+  background-color: #FFF8DE;
 }
+
 </style>

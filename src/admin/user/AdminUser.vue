@@ -201,6 +201,6 @@ button {
 }
 
 .custom-thead th {
-  background-color: coral !important;
+  background-color: #e4e5ff !important;
 }
 </style>
