@@ -4,18 +4,41 @@ import Navbar from "./component/Navbar.vue";
 import Footer from "./component/Footer.vue";
 </script>
 
+
 <template>
+  <div class="user-layout">
+    <Navbar />
 
-  <Navbar></Navbar>
+    <main class="main-content">
+      <router-view />
+    </main>
 
-  <div style="height: 150px;"></div>
-  <div style="display: flex; margin: 0 auto; max-width: 1280px">
-    <router-view></router-view>
+
+
+    <Footer />
   </div>
-  
-  <Footer></Footer>
 </template>
 
 <style scoped>
+.user-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  text-align: center;
+  flex: 1;
+  padding-top: 150px; /* 상단 네비 높이 고려 */
+  margin: 0 auto;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 </style>
