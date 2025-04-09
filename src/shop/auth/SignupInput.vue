@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <div class="container">
-    <div class="d-flex" style="width: 50vh;">
+  <div class="container" style="max-width: 720px;">
+    <div class="d-flex" >
       <p class="fs-2">회원정보입력</p>
     </div>
 
@@ -20,7 +20,7 @@
       <small class="text-start d-block">아이디</small>
       <div class="d-flex">
         <input type="text" class="underline-input">
-        <button class="btn btn-danger text-nowrap btn-sm" style="font-size: 10px">중복체크</button>
+        <button class="btn btn-dark text-nowrap btn-sm" style="font-size: 10px">중복체크</button>
       </div>
     </div>
 
@@ -74,7 +74,7 @@
 
 
 
-    <router-link to="/auth/signup/end" class="btn btn-danger rounded-pill w-100">다음</router-link>
+    <router-link to="/auth/signup/end" class="btn btn-primary rounded-pill w-100">다음</router-link>
 
   </div>
 </template>

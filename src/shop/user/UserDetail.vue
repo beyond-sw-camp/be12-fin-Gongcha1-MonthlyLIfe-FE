@@ -13,7 +13,7 @@
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <h6 class="fw-bold text-lg-start">개인정보</h6>
-          <button class="btn btn-outline-secondary btn-sm me-2 mb-1">수정하기</button>
+          <button class="btn btn-link text-decoration-underline btn-sm me-2 mb-1">수정</button>
         </div>
 
         <div class="mb-4 border p-3 rounded">
@@ -85,21 +85,21 @@
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">네이버</p>
                 <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-secondary btn-sm me-2 mb-1">등록하기</button>
+                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">카카오</p>
                 <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-secondary btn-sm me-2 mb-1">등록하기</button>
+                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">구글</p>
                 <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-secondary btn-sm me-2 mb-1">등록하기</button>
+                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
                 </div>
               </li>
             </ul>
@@ -113,7 +113,7 @@
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <h6 class="fw-bold text-lg-start">태그</h6>
-          <button class="btn btn-outline-secondary btn-sm me-2 mb-1">수정하기</button>
+          <button class="btn btn-link text-decoration-underline btn-sm me-2 mb-1">수정</button>
         </div>
 
         <div class="mb-4 border p-3 rounded">
@@ -145,7 +145,7 @@
 
       <!-- 더보기 버튼 -->
       <div class="text-end">
-        <small>회원 탈퇴</small>
+        <button class="btn btn-link text-black text-decoration-underline btn-sm me-2 mb-1">회원탈퇴</button>
       </div>
 
     </div>

@@ -6,7 +6,7 @@
   <div class="ms-4" >
     <div class="border" style="border-color: #777777">
 
-    <div class="sidebar-title bg-danger ">
+    <div class="sidebar-title bg-black ">
       <p class="m-0 text-white"><strong>마이페이지</strong></p>
     </div>
     <div class="sidebar">
@@ -32,7 +32,7 @@
 .sidebar {
   background-color: #eeeeee;
   width: 10rem;
-  height: 70em;
+  height: 80em;
   left: 0;
   padding: 20px;
   color: white;
