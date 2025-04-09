@@ -2,15 +2,15 @@
 </script>
 
 <template>
-  <footer class="footer-container w-100 bg-dark text-white pt-5 pb-4 mt-5">
+  <footer class="footer-container w-100 bg-white pt-5 pb-4 mt-5">
     <div class="row mx-0 px-5">
       <!-- 회사 정보 -->
-      <div class="col-md-3 mb-4">
+      <div class="col-md-3 mb-4 ">
         <h5 class="fw-bold mb-3">구독구독</h5>
-        <p class="mb-1">㈜월정액인생</p>
-        <p class="mb-1">대표이사: 김경준</p>
-        <p class="mb-1">사업자등록번호: 123-45-67890</p>
-        <p class="mb-1">통신판매업신고: 제2025-서울동작-0000호</p>
+          <p class="mb-1">㈜월정액인생</p>
+          <p class="mb-1">대표이사: 김경준</p>
+          <p class="mb-1">사업자등록번호: 123-45-67890</p>
+          <p class="mb-1">통신판매업신고: 제2025-서울동작-0000호</p>
       </div>
 
       <!-- 고객센터 -->
@@ -25,27 +25,25 @@
       <!-- 이용안내 -->
       <div class="col-md-3 mb-4">
         <h5 class="fw-bold mb-3">이용안내</h5>
-        <ul class="list-unstyled">
-          <li><a href="#" class="footer-link">이용약관</a></li>
-          <li><a href="#" class="footer-link">개인정보처리방침</a></li>
-          <li><a href="#" class="footer-link">고객센터</a></li>
-          <li><a href="#" class="footer-link">자주 묻는 질문</a></li>
-        </ul>
+          <p class="mb-1" >이용약관</p>
+          <p class="mb-1">개인정보처리방침</p>
+          <p class="mb-1">고객센터</p>
+          <p class="mb-1">자주 묻는 질문</p>
       </div>
 
       <!-- SNS -->
       <div class="col-md-3 mb-4">
         <h5 class="fw-bold mb-3">Follow Us</h5>
         <a href="#" class=" me-3">
-          <font-awesome-icon :icon="['fab', 'facebook']" class="text-white" />
+          <font-awesome-icon :icon="['fab', 'facebook']" />
         </a>
-        <a href="#" class="text-white me-3">
+        <a href="#" class=" me-3 insta" >
           <font-awesome-icon :icon="['fab', 'square-instagram']" />
         </a>
-        <a href="#" class="text-white me-3">
+        <a href="#" class=" me-3" style="color: red">
           <font-awesome-icon :icon="['fab', 'youtube']" />
         </a>
-        <a href="#" class="text-white">
+        <a href="#" class="" style="color: black">
           <font-awesome-icon :icon="['fab', 'github']" />
         </a>
       </div>
@@ -68,10 +66,20 @@
   color: #cccccc;
   text-decoration: underline;
 }
-
+.insta {
+  color: #C13584;
+}
 .footer-container {
-  width: 100%;
   margin-top: auto;
   margin-left: 0;
 }
+p {
+  font-size: 10px;
+}
+
+
 </style>
+
+
+
+

@@ -18,7 +18,7 @@
     "@vueuse/motion": "^3.0.3",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
-    "bootstrap-vue-3": "^0.5.1",
+    "bootstrap-vue-3": "^0.3.12",
     "chart.js": "^4.4.8",
     "chartjs-gauge": "^0.3.0",
     "framer-motion": "^12.6.3",
