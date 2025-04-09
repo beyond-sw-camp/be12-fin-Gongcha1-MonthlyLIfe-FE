@@ -78,7 +78,7 @@ function goToDetail(productId) {
     <!-- 카테고리 탭 섹션 -->
     <div class="category-tabs bg-white border-bottom py-4">
       <div class="container d-flex gap-3">
-        <button class="btn btn-danger">UHD TV 53</button>
+        <button class="btn btn-primary">UHD TV 53</button>
         <button class="btn btn-light">LED TV 7</button>
         <button class="btn btn-light">디자인 TV 10</button>
       </div>
