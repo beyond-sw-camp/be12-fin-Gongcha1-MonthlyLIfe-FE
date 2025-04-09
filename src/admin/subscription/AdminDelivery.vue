@@ -203,7 +203,8 @@ function openOrderModal(order) {
 .table {
   font-size: 14px;
 }
-.custom-thead th {
-  background-color: #DFF0D8 !important;
+.subscribe-table th {
+  background-color: #D9EDF7;
 }
+
 </style>

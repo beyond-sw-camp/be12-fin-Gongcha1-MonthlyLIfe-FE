@@ -236,7 +236,7 @@ function filterList() {
   padding: 0 15px;
 }
 .table th {
-  background-color: #f8b9b9;
+  background-color: #fff5ee;
   vertical-align: middle;
   text-align: center;
 }
