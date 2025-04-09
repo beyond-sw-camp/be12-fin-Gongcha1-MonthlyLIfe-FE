@@ -39,6 +39,7 @@ const productMap = {
       originalPrice: "24,900",
       price: "17,900",
       badge: "특가",
+      grade: "S급",
       image: '/assets/images/pakage.png',
     },
   ],
