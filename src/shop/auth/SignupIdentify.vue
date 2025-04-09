@@ -4,8 +4,8 @@
 
 <template>
 
-  <div class="container">
-    <div class="d-flex" style="width: 50vh;">
+  <div class="container" style="max-width: 720px;">
+    <div class="d-flex">
       <p class="fs-2">본인인증하기</p>
     </div>
     <div class="mt-5 mb-5">
@@ -16,7 +16,7 @@
     <div class="mt-5 mb-5">
       <button>휴대폰 인증하기</button>
     </div>
-    <router-link to="/auth/signup/input" class="btn btn-danger rounded-pill w-100">
+    <router-link to="/auth/signup/input" class="btn btn-primary rounded-pill w-100">
       다음
     </router-link>
   </div>
