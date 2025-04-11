@@ -202,6 +202,7 @@ function goToPage(page) {
             <h5 class="fw-bold mb-0">재고 관리</h5>
           </div>
           <!-- 테이블 -->
+          <!-- Todo: 테이블 칼럼 변경         -->
           <table class="table table-bordered table-hover text-center product-table">
             <thead class="custom-thead">
             <tr>
