@@ -27,6 +27,19 @@ export const useUserStore = defineStore("user", {
             console.log(response);
             return response.data.isSuccess;
         },
+        async postLogin(user) {
+            try {
+                const response = await axios
+                    .post("/api/auth/login",
+                        user,
+                    );
+                console.log(response);
+                return response.data.isSuccess;
+            } catch (error) {
+                console.error()
+                return false
+            }
+        },
         async putExample(context) {
             const response = await axios
                 .put(url,
