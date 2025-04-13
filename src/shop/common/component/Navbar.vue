@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import {useUserStore} from "../../../store/useUserStore.js";
 
 const router = useRouter();
+const userStore = useUserStore();
 
 // 로그인, 회원가입, 관리자 라우팅
 const goLogin = () => {
@@ -18,6 +20,14 @@ const goAdmin = () => {
 const goToCart = () => {
   router.push("/cart");
 };
+
+const logout = async () => {
+  await userStore.getLogout();
+  router.go(0);
+}
+
+
+
 
 </script>
 
@@ -38,7 +48,7 @@ const goToCart = () => {
         <div class="d-flex align-items-center small flex-nowrap text-nowrap">
           <div class="me-3">고객지원</div>
 
-          <div class="me-3"><router-link to="/user/detail" class="nav-link" >마이페이지</router-link></div>
+          <div v-if="userStore.isLogin" class="me-3"><router-link to="/user/detail" class="nav-link" >마이페이지</router-link></div>
           
           <font-awesome-icon
             icon="magnifying-glass"
@@ -51,12 +61,17 @@ const goToCart = () => {
             style="cursor: pointer;"
           />
           <!-- 로그인 / 회원가입 버튼 -->
-          <div class="ms-3">
+          <div v-if="!userStore.isLogin" class="ms-3">
             <button class="btn btn-sm btn-outline-dark me-1" @click="goLogin">
               로그인
             </button>
             <button class="btn btn-sm btn-outline-dark" @click="goSignup">
               회원가입
+            </button>
+          </div >
+          <div v-else class="ms-3">
+            <button class="btn btn-sm btn-outline-dark" @click="logout">
+              로그아웃
             </button>
           </div>
         </div>
