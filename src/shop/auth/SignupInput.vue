@@ -14,7 +14,7 @@ const emailDomain = ref('');
 const isCustom = computed(() => emailDomain.value === 'custom')
 const customEmail = ref('');
 const email = computed(() => {
-  if(isCustom) {
+  if(isCustom.value) {
     return emailFirst.value + '@' + customEmail.value
   }
   else {

@@ -1,5 +1,31 @@
 <script setup>
 
+import {ref} from "vue";
+import {useUserStore} from "../../store/useUserStore.js";
+import router from "../../router/index.js";
+
+const id = ref('');
+const password = ref('');
+const loginFailed = ref(false);
+
+const userStore = useUserStore();
+
+const login = async () => {
+  const success = await userStore.postLogin(
+      {
+        "id": id.value,
+        "password": password.value
+      }
+  );
+  console.log(success);
+  if(success) {
+    router.go(-1);
+  }
+  else {
+    loginFailed.value=true;
+  }
+}
+
 </script>
 
 <template>
@@ -16,12 +42,15 @@
     <div class="d-flex justify-content-center" >
       <div style="width: 20em">
         <p class="fs-5">MonthlyLife</p>
-        <input type="text" class="form-control mb-1" placeholder="아이디">
+        <input type="text" class="form-control mb-1" v-model="id" placeholder="아이디">
 
-        <input type="password" class="form-control mb-1" placeholder="비밀번호">
-        <router-link to="/">
-          <button class="btn btn-dark w-100">로그인</button>
-        </router-link>
+        <input type="password" class="form-control mb-1" v-model="password" placeholder="비밀번호">
+
+        <button class="btn btn-dark w-100" @click="login">로그인</button>
+
+        <div v-if="loginFailed">
+          <p class="m-0 text-danger">아이디 또는 비밀번호가 일치하지 않습니다.</p>
+        </div>
 
 
         <div class="d-flex align-items-center">
