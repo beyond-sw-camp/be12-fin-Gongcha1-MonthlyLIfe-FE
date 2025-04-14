@@ -16,6 +16,9 @@ export const useProductStore = defineStore('product', {
           code: form.code,
           description: form.description,
           manufacturer: form.manufacturer,
+          condition: form.condition,
+          location: form.location,
+          count: form.count,
           productImages: form.productImages.map(img => ({
             productImgUrl: img.productImgUrl
           }))
@@ -30,6 +33,9 @@ export const useProductStore = defineStore('product', {
             name: form.name,
             description: form.description,
             manufacturer: form.manufacturer,
+            condition: form.condition,
+            location: form.location,
+            count: form.count,
             productImages: form.productImages,
           })
         }
@@ -46,19 +52,22 @@ export const useProductStore = defineStore('product', {
       try {
         const res = await axios.get('/api/product/list')
         console.log('상품 목록 응답:', res.data)
-    
+
         const list = Array.isArray(res.data.result) ? res.data.result : []
         this.products = list.map(item => ({
           code: item.code,
           name: item.name,
           description: item.description,
           manufacturer: item.manufacturer,
+          condition: item.condition,
+          location: item.location,
+          count: item.count,
           productImages: item.productImages || []
         }))
       } catch (error) {
         console.error('상품 목록 조회 실패', error)
       }
     }
-    
+
   }
 })

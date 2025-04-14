@@ -78,10 +78,10 @@ function goToPage(page) {
                 <th>상품명</th>
                 <th>상품 설명</th>
                 <th>제조사</th>
+                <th>상품 상태</th>
+                <th>위치</th>
+                <th>재고 수량</th>
                 <th>상품 이미지</th>
-                <!-- <th>카테고리</th> -->
-                <!-- <th>가격</th> -->
-                <!-- <th>재고 수량</th> -->
                 <!-- <th>등록일</th> -->
                 <!-- <th>판매 상태</th> -->
                 <!-- <th>연체 여부</th> -->
@@ -93,14 +93,11 @@ function goToPage(page) {
                 <td>{{ item.name }}</td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.manufacturer }}</td>
+                <td>{{ item.condition }}</td>
+                <td>{{ item.location }}</td>
+                <td>{{ item.count }}</td>
                 <td><img v-for="(img, idx) in item.productImages" :key="idx" :src="img.productImgUrl" alt="product"
                     style="width: 50px; height: 50px; object-fit: cover; margin-right: 4px;" /></td>
-                <!-- <td>{{ item.category }}</td> -->
-                <!-- <td>{{ item.price }}</td> -->
-                <!-- <td>{{ item.stock }}</td> -->
-                <!-- <td>{{ item.registered }}</td> -->
-                <!-- <td>{{ item.status }}</td> -->
-                <!-- <td>{{ item.overdue }}</td> -->
               </tr>
             </tbody>
           </table>
