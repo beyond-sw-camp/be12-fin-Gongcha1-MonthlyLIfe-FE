@@ -67,6 +67,18 @@ const submit = async () => {
             <input v-model="form.manufacturer" type="text" class="form-control" />
           </div>
           <div class="mb-2">
+            <label class="form-label">상품 상태</label>
+            <input v-model="form.condition" type="text" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">위치</label>
+            <input v-model="form.location" type="text" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">재고 수량</label>
+            <input v-model="form.count" type="text" class="form-control" />
+          </div>
+          <div class="mb-2">
             <label class="form-label">이미지 URL</label>
             <input v-model="newImageUrl" type="text" class="form-control mb-1" placeholder="https://..." />
             <button class="btn btn-outline-secondary btn-sm" @click="addImage">추가</button>
