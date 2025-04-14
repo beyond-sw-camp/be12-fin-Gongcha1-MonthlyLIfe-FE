@@ -1,3 +1,98 @@
+<script setup>
+import { ref, reactive, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import * as PortOne from "@portone/browser-sdk/v2";
+import axios from "axios";
+
+const router = useRouter();
+
+const cartItems = ref([
+  { name: "상품명", description: "간단한 설명", price: 12 },
+  { name: "두 번째 상품", description: "간단한 설명", price: 8 },
+  { name: "세 번째 상품", description: "간단한 설명", price: 5 }
+]);
+
+const promoCode = ref("EXAMPLECODE");
+const promoDiscount = ref(5);
+const promoInput = ref("");
+
+const billing = reactive({
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  address: "",
+  address2: "",
+  country: "",
+  state: "",
+  zip: "",
+  sameAddress: false,
+  saveInfo: false
+});
+
+const paymentMethod = ref("credit");
+
+const card = reactive({
+  name: "",
+  number: "",
+  expiration: "",
+  cvv: ""
+});
+
+const receiver = reactive({
+  name: "",
+  address: "",
+  address2: "",
+  phone: "",
+  memo: ""
+});
+
+const totalPrice = computed(() => {
+  const subtotal = cartItems.value.reduce((acc, item) => acc + item.price, 0);
+  return subtotal - promoDiscount.value;
+});
+
+function redeemPromo() {
+  alert("프로모션 코드 적용됨: " + promoInput.value);
+}
+
+const submitCheckout = async () => {
+  const issueResponse = await PortOne.requestIssueBillingKey({
+    storeId: "store-b71ccbfa-83cf-4cc8-9896-64aa903dda46",
+    channelKey: "channel-key-4ba32ba7-1c46-429c-976d-8e90d75b2e0a",
+    billingKeyMethod: "CARD",
+  });
+// 빌링키가 제대로 발급되지 않은 경우 에러 코드가 존재합니다
+  if (issueResponse.code !== undefined) {
+    return alert(issueResponse.message);
+  }
+
+  console.log(issueResponse);
+// 고객사 서버에 빌링키를 전달합니다
+  const response = await axios
+      .post(`/api/payment/billing`,
+          {
+      billingKey: issueResponse.billingKey,
+          }
+      );
+  if (!response.data.isSuccess) throw new Error(`response: ${await response.json()}`);
+
+  alert("주문이 접수되었습니다!");
+  // router.push('/');
+}
+
+function changeAddress() {
+  alert("배송지 변경 로직 구현!");
+}
+
+function formatCurrency(amount) {
+  if (amount === undefined || amount === null) {
+    return "0원";
+  }
+  return amount.toLocaleString() + "원";
+}
+</script>
+
 <template>
   <div class="container py-5 checkout-container">
     <div class="row g-5">
@@ -30,7 +125,7 @@
       <!-- 청구 주소 및 결제 컬럼 -->
       <div class="col-md-7 col-lg-8">
         <h4 class="mb-3 fw-bold">청구 주소</h4>
-        <form class="needs-validation" novalidate @submit.prevent="submitCheckout">
+        <form class="needs-validation">
           <div class="row g-3">
             <div class="col-12">
               <label for="username" class="form-label">사용자 이름</label>
@@ -309,7 +404,7 @@
 
           <hr class="my-4"/>
 
-          <button class="w-100 btn btn-primary btn-lg" type="submit">
+          <button class="w-100 btn btn-primary btn-lg" @click="submitCheckout" >
             결제 진행
           </button>
         </form>
@@ -317,77 +412,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CheckoutPage",
-  data() {
-    return {
-      cartItems: [
-        {name: "상품명", description: "간단한 설명", price: 12},
-        {name: "두 번째 상품", description: "간단한 설명", price: 8},
-        {name: "세 번째 상품", description: "간단한 설명", price: 5}
-      ],
-      promoCode: "EXAMPLECODE",
-      promoDiscount: 5,
-      promoInput: "",
-      billing: {
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        address: "",
-        address2: "",
-        country: "",
-        state: "",
-        zip: "",
-        sameAddress: false,
-        saveInfo: false
-      },
-      paymentMethod: "credit",
-      card: {
-        name: "",
-        number: "",
-        expiration: "",
-        cvv: ""
-      },
-      receiver: {
-        name: "",
-        address: "",
-        address2: "",
-        phone: "",
-        memo: ""
-      }
-    };
-  },
-  computed: {
-    totalPrice() {
-      let subtotal = this.cartItems.reduce((acc, item) => acc + item.price, 0);
-      return subtotal - this.promoDiscount;
-    }
-  },
-  methods: {
-    redeemPromo() {
-      alert("프로모션 코드 적용됨: " + this.promoInput);
-    },
-    submitCheckout() {
-
-      alert("주문이 접수되었습니다!");
-      this.$router.push('/');
-
-    },
-    changeAddress() {
-      alert("배송지 변경 로직 구현!");
-    }
-    , formatCurrency(amount) {
-      if (amount === undefined || amount === null) {
-        return "0원"; // 또는 원하는 기본값을 반환
-      }
-      return amount.toLocaleString() + "원";
-    }
-  }
-};
-</script>
 
 <style scoped>
 .checkout-container {
