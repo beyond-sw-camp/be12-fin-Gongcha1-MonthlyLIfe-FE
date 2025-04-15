@@ -120,7 +120,7 @@ function goToDetailPage(item) {
         <!-- 데이터 영역 -->
         <div class="p-3">
           <div class="text-center border-top pt-3 mt-3 mb-2">
-            <h5 class="fw-bold mb-0">재고 관리</h5>
+            <h5 class="fw-bold mb-0">상품 관리</h5>
           </div>
 
           <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
