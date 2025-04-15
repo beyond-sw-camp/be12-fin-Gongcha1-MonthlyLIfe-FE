@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
 import { useProductStore } from '../../store/useProductStore'
@@ -10,29 +10,41 @@ const saleStore = useSaleStore()
 const productStore = useProductStore()
 
 const categoryIdx = ref(route.params.categoryIdx)
+const currentPage = ref(0)
+const pageSize = 3
 
 onMounted(() => {
-  saleStore.fetchSaleListByCategory(categoryIdx.value)
+  fetchPageData()
   productStore.fetchProductList()
 })
 
 watch(() => route.params.categoryIdx, (newVal) => {
   categoryIdx.value = newVal
-  saleStore.fetchSaleListByCategory(newVal)
+  currentPage.value = 0
+  fetchPageData()
 })
 
-// 상세 페이지 이동
+function fetchPageData() {
+  saleStore.fetchSaleListByCategory(categoryIdx.value, currentPage.value, pageSize)
+}
+
+const totalPages = computed(() => saleStore.saleList.totalPages || 0)
+const saleContent = computed(() => saleStore.saleList.content || [])
+
+function changePage(page) {
+  currentPage.value = page
+  fetchPageData()
+}
+
 function goToDetail(productCode) {
   router.push(`/sale/detail/${productCode}`)
 }
 
-// 상품 이미지 가져오기
 function getProductImage(productCode) {
   const product = productStore.products.find(p => p.code === productCode)
   return product?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'
 }
 
-// 등급에 따라 색상 클래스 반환(S급은 초록색, A급은 파랑, B급은 노랑, C급은 빨강)
 function conditionColorClass(condition) {
   switch (condition) {
     case 'S급':
@@ -48,21 +60,18 @@ function conditionColorClass(condition) {
   }
 }
 
-// 최저 가격 구하기
 function getMinPrice(sale) {
   if (!sale.priceList || sale.priceList.length === 0) return null
   const sorted = [...sale.priceList].sort((a, b) => a.price - b.price)
   return sorted[0]
 }
-
 </script>
 
 <template>
   <div class="container-fluid p-0">
     <!-- 배너 -->
     <section class="banner-section">
-      <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지"
-        class="banner-image" />
+      <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지" class="banner-image" />
       <div class="text-area">
         <div class="text01">온 가족이 함께 더 생생한 화질로</div>
         <div class="text02"><strong>TV 렌탈&amp;구독</strong></div>
@@ -81,15 +90,18 @@ function getMinPrice(sale) {
     <!-- 추천 상품 -->
     <div class="container py-5">
       <h4 class="fw-bold mb-3">많은 고객님들이 선택한 상품이에요</h4>
-      <div v-if="saleStore.saleList.length > 0" class="row g-4">
-        <div v-for="(sale, idx) in saleStore.saleList" :key="idx" class="col-md-4"
+
+      <div v-if="saleContent.length > 0" class="row g-4">
+        <div v-for="(sale, idx) in saleContent" :key="idx" class="col-md-4"
           @click="goToDetail(sale.productList[0]?.productCode)" style="cursor: pointer">
-          <!-- 카드 내부 이미지 출력 부분 수정 -->
           <div class="card h-100 shadow-sm">
-            <!-- 여러 이미지 출력 -->
             <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img v-for="(product, pIdx) in sale.productList" :key="pIdx" :src="getProductImage(product.productCode)"
-                class="img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;" />
+              <img
+                v-for="(product, pIdx) in sale.productList"
+                :key="pIdx"
+                :src="getProductImage(product.productCode)"
+                class="img-thumbnail"
+                style="width: 120px; height: 120px; object-fit: cover;" />
             </div>
 
             <div class="card-body text-center">
@@ -109,12 +121,23 @@ function getMinPrice(sale) {
               </p>
             </div>
           </div>
-
         </div>
       </div>
 
       <div v-else class="text-center text-muted py-5">
         해당 카테고리에 등록된 상품이 없습니다.
+      </div>
+
+      <!-- 페이지네이션 -->
+      <div class="text-center mt-4" v-if="totalPages > 1">
+        <button
+          v-for="n in totalPages"
+          :key="n"
+          class="btn btn-outline-secondary mx-1"
+          :class="{ 'btn-dark': n - 1 === currentPage }"
+          @click="changePage(n - 1)">
+          {{ n }}
+        </button>
       </div>
     </div>
 
