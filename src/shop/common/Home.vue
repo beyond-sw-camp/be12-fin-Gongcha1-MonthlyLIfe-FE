@@ -1,15 +1,20 @@
 <script setup>
+import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCategoryStore } from '../../store/useCategoryStore'
 
 const router = useRouter()
-const categories = [
-  { idx: 1, name: 'TV', icon: '/assets/images/tv.png' },
-  { idx: 2, name: '에어컨', icon: '/assets/images/aircon_icon.png' },
-  { idx: 3, name: '로봇청소기', icon: '/assets/images/robot.png' },
-  { idx: 4, name: '공기청정기', icon: '/assets/images/aircleaner.png' },
-  { idx: 5, name: '안마의자', icon: '/assets/images/chair.png' },
-  { idx: 6, name: '의류관리기', icon: '/assets/images/styler.png' },
-]
+const store = useCategoryStore()
+
+// 페이지 로딩 시 카테고리 목록 요청
+onMounted(() => {
+  store.fetchCategoryList()
+})
+
+// iconUrl이 있는 카테고리만 필터링
+const visibleCategories = computed(() =>
+  store.categories.filter(c => !!c.iconUrl)
+)
 
 const goToCategory = (idx) => {
   router.push(`/sale/${idx}`)
@@ -36,13 +41,13 @@ const goToCategory = (idx) => {
       <section class="w-100 py-5 border-top">
         <div class="d-flex justify-content-around flex-wrap text-center">
           <div
-            v-for="item in categories"
-            :key="item.name"
+            v-for="item in visibleCategories"
+            :key="item.idx"
             class="mb-4 px-3 home-category-item"
             @click="goToCategory(item.idx)"
             style="cursor: pointer"
           >
-            <img :src="item.icon" alt="icon" class="mb-2 home-category-icon" />
+            <img :src="item.iconUrl" alt="icon" class="mb-2 home-category-icon" />
             <div class="small fw-semibold">{{ item.name }}</div>
           </div>
         </div>
@@ -52,56 +57,54 @@ const goToCategory = (idx) => {
 </template>
 
 <style scoped>
-/* 전체 감싸는 래퍼 */
 .home-wrapper {
   width: 100%;
 }
 
-/* 배너 이미지 */
 .home-banner-image {
   max-width: 300px;
   height: auto;
 }
 
-/* 카테고리 영역 배경 및 패딩 */
 .home-cate {
   background-color: #fff;
   padding: 2rem 0;
 }
 
-/* 카테고리 섹션 안의 전체 너비 제한 */
 .home-cate section {
-  max-width: 1140px; /* 부트스트랩 container-xl 기준 */
+  max-width: 1140px;
   margin: 0 auto;
 }
 
-/* 카테고리 아이템 */
 .home-category-item {
-  flex: 1 0 150px;
-  max-width: 180px;
+  width: 160px;
+  height: 200px;
   text-align: center;
   transition: transform 0.2s ease-in-out;
   padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .home-category-item:hover {
   transform: translateY(-6px);
 }
 
-/* 아이콘 이미지 */
 .home-category-icon {
-  width: 100%;
-  max-width: 140px;
-  height: auto;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
   display: block;
   margin: 0 auto 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 텍스트 스타일 */
 .home-category-item .small {
   font-size: 1.05rem;
   font-weight: 600;
   color: #212529;
 }
 </style>
-
