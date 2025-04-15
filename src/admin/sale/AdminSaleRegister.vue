@@ -212,7 +212,7 @@ const handleRegister = () => {
 
 <style scoped>
 .test1 {
-  width: 990.4px;
+  width: 100%;
 }
 
 /* 선택된 버튼 강조 */
