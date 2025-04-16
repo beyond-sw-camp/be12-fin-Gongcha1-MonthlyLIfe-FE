@@ -21,6 +21,8 @@ const selectedProductCode = ref('')
 const price3 = ref(0)
 const price6 = ref(0)
 const price12 = ref(0)
+const saleName = ref('')
+
 
 // 카테고리 UI용
 const selectedMainCategory = ref(null)
@@ -80,13 +82,13 @@ const selectSubSubCategory = (val) => {
 const handleRegister = async () => {
   const category = categoryStore.categories.find(c => c.name === selectedSubSubCategory.value)
 
-  if (!productName.value || !condition.value || !description.value || !selectedProductCode.value || !category) {
+  if (!saleName.value || !condition.value || !description.value || !selectedProductCode.value || !category) {
     alert('❗ 모든 항목을 입력해주세요.')
     return
   }
 
   const dto = {
-    name: productName.value,
+    name: saleName.value,
     description: description.value,
     categoryIdx: category.idx,
     saleProducts: [
@@ -117,11 +119,12 @@ const handleRegister = async () => {
       <div class="container">
         <h2 class="mb-4 text-center">판매 상품 정보</h2>
 
-        <!-- 상품명 -->
+        <!-- 판매 상품명 -->
         <div class="row mb-4 border-top pt-3">
-          <label class="col-3 col-form-label fw-bold">상품명</label>
+          <label class="col-3 col-form-label fw-bold">판매 상품명</label>
           <div class="col-9">
-            <input type="text" class="form-control" v-model="productName" placeholder="상품명을 입력해 주세요." />
+            <input type="text" class="form-control" v-model="saleName"
+              placeholder="판매용 이름을 입력해주세요 (ex. 삼성TV 3개월 패키지)" />
           </div>
         </div>
 
@@ -136,8 +139,7 @@ const handleRegister = async () => {
                   <strong>메인 카테고리</strong>
                   <div class="list-group mt-2">
                     <button v-for="main in mainCategories" :key="main" @click="selectMainCategory(main)"
-                      class="list-group-item list-group-item-action"
-                      :class="{ active: selectedMainCategory === main }">
+                      class="list-group-item list-group-item-action" :class="{ active: selectedMainCategory === main }">
                       {{ main }}
                     </button>
                   </div>
@@ -150,8 +152,7 @@ const handleRegister = async () => {
                   <strong>서브 카테고리</strong>
                   <div class="list-group mt-2">
                     <button v-for="sub in subCategories" :key="sub" @click="selectSubCategory(sub)"
-                      class="list-group-item list-group-item-action"
-                      :class="{ active: selectedSubCategory === sub }">
+                      class="list-group-item list-group-item-action" :class="{ active: selectedSubCategory === sub }">
                       {{ sub }}
                     </button>
                   </div>
@@ -164,8 +165,7 @@ const handleRegister = async () => {
                   <strong>세부 카테고리</strong>
                   <div class="list-group mt-2">
                     <button v-for="ss in subSubCategories" :key="ss" @click="selectSubSubCategory(ss)"
-                      class="list-group-item list-group-item-action"
-                      :class="{ active: selectedSubSubCategory === ss }">
+                      class="list-group-item list-group-item-action" :class="{ active: selectedSubSubCategory === ss }">
                       {{ ss }}
                     </button>
                   </div>
@@ -247,6 +247,7 @@ const handleRegister = async () => {
 .test1 {
   width: 100%;
 }
+
 .list-group-item.active {
   background-color: #ffecec;
   border-color: #ffcccc;
