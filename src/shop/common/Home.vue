@@ -15,6 +15,10 @@ onMounted(() => {
 const visibleCategories = computed(() =>
   store.categories.filter(c => !!c.iconUrl)
 )
+// 최상위 카테고리 + 아이콘이 있는 것만 필터링
+// const visibleCategories = computed(() =>
+//   store.categories.filter(c => c.parentIdx === null && !!c.iconUrl)
+// )
 
 const goToCategory = (idx) => {
   router.push(`/sale/${idx}`)

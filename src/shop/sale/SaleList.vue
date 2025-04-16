@@ -3,37 +3,57 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
 import { useProductStore } from '../../store/useProductStore'
+import { useCategoryStore } from '../../store/useCategoryStore'
 
 const route = useRoute()
 const router = useRouter()
 const saleStore = useSaleStore()
 const productStore = useProductStore()
+const categoryStore = useCategoryStore()
 
-const categoryIdx = ref(route.params.categoryIdx)
 const currentPage = ref(0)
 const pageSize = 3
+const categoryIdx = ref(Number(route.params.categoryIdx)) // 중간 카테고리 idx
+const selectedDetailCategory = ref(null)
 
 onMounted(() => {
-  fetchPageData()
+  categoryStore.fetchCategoryList()
   productStore.fetchProductList()
+  saleStore.fetchSaleProductList()
+  fetchPageData(categoryIdx.value)
 })
 
 watch(() => route.params.categoryIdx, (newVal) => {
-  categoryIdx.value = newVal
+  categoryIdx.value = Number(newVal)
+  selectedDetailCategory.value = null
   currentPage.value = 0
-  fetchPageData()
+  fetchPageData(categoryIdx.value)
 })
 
-function fetchPageData() {
-  saleStore.fetchSaleListByCategory(categoryIdx.value, currentPage.value, pageSize)
+watch(selectedDetailCategory, (cat) => {
+  if (cat) {
+    currentPage.value = 0
+    fetchPageData(cat.idx)
+  }
+})
+
+function fetchPageData(catId) {
+  saleStore.fetchSaleListByCategory(catId, currentPage.value, pageSize)
 }
 
-const totalPages = computed(() => saleStore.saleList.totalPages || 0)
+const detailCategories = computed(() =>
+  categoryStore.categories.filter(c => Number(c.parentIdx) === Number(categoryIdx.value))
+)
+
+
+
 const saleContent = computed(() => saleStore.saleList.content || [])
+const totalPages = computed(() => saleStore.saleList.totalPages || 0)
 
 function changePage(page) {
   currentPage.value = page
-  fetchPageData()
+  const id = selectedDetailCategory.value?.idx || categoryIdx.value
+  fetchPageData(id)
 }
 
 function goToDetail(productCode) {
@@ -47,17 +67,16 @@ function getProductImage(productCode) {
 
 function conditionColorClass(condition) {
   switch (condition) {
-    case 'S급':
-      return 'bg-success'
-    case 'A급':
-      return 'bg-primary'
-    case 'B급':
-      return 'bg-warning text-dark'
-    case 'C급':
-      return 'bg-danger'
-    default:
-      return 'bg-secondary'
+    case 'S급': return 'bg-success'
+    case 'A급': return 'bg-primary'
+    case 'B급': return 'bg-warning text-dark'
+    case 'C급': return 'bg-danger'
+    default: return 'bg-secondary'
   }
+}
+
+function findProductByCode(productCode) {
+  return productStore.products.find(p => p.code === productCode)
 }
 
 function getMinPrice(sale) {
@@ -78,12 +97,18 @@ function getMinPrice(sale) {
       </div>
     </section>
 
-    <!-- 카테고리 탭 -->
-    <div class="category-tabs bg-white border-bottom py-4">
-      <div class="container d-flex gap-3">
-        <button class="btn btn-primary">UHD TV</button>
-        <button class="btn btn-light">LED TV</button>
-        <button class="btn btn-light">디자인 TV</button>
+    <!-- 세부 카테고리 탭 -->
+    <div class="category-tabs bg-white border-bottom py-4" v-if="detailCategories.length > 0">
+      <div class="container d-flex gap-3 flex-wrap">
+        <button
+          v-for="cat in detailCategories"
+          :key="cat.idx"
+          @click="selectedDetailCategory = cat"
+          class="btn"
+          :class="{ 'btn-primary': selectedDetailCategory?.idx === cat.idx, 'btn-light': selectedDetailCategory?.idx !== cat.idx }"
+        >
+          {{ cat.name }}
+        </button>
       </div>
     </div>
 
@@ -93,35 +118,36 @@ function getMinPrice(sale) {
 
       <div v-if="saleContent.length > 0" class="row g-4">
         <div v-for="(sale, idx) in saleContent" :key="idx" class="col-md-4"
-          @click="goToDetail(sale.productList[0]?.productCode)" style="cursor: pointer">
-          <div class="card h-100 shadow-sm">
-            <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img
-                v-for="(product, pIdx) in sale.productList"
-                :key="pIdx"
-                :src="getProductImage(product.productCode)"
-                class="img-thumbnail"
-                style="width: 120px; height: 120px; object-fit: cover;" />
-            </div>
+  @click="goToDetail(sale.productList[0]?.productCode)" style="cursor: pointer">
+  <div class="card h-100 shadow-sm">
+    <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
+      <img
+        v-for="(product, pIdx) in sale.productList"
+        :key="pIdx"
+        :src="findProductByCode(product.productCode)?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'"
+        class="img-thumbnail"
+        style="width: 120px; height: 120px; object-fit: cover;"
+      />
+    </div>
+    <div class="card-body text-center">
+      <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
+        {{ sale.name }}
+        <span
+          v-if="findProductByCode(sale.productList[0]?.productCode)?.condition"
+          class="badge ms-2"
+          :class="conditionColorClass(findProductByCode(sale.productList[0]?.productCode)?.condition)">
+          {{ findProductByCode(sale.productList[0]?.productCode)?.condition }}
+        </span>
+      </h6>
+      <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
+      <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
+        월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
+        {{ getMinPrice(sale).period }}개월
+      </p>
+    </div>
+  </div>
+</div>
 
-            <div class="card-body text-center">
-              <h6 class="card-title fw-bold d-flex justify-content-center align-items-center">
-                {{ sale.name }}
-                <span v-if="sale.productList[0]?.conditionName" class="badge ms-2"
-                  :class="conditionColorClass(sale.productList[0].conditionName)">
-                  {{ sale.productList[0].conditionName }}
-                </span>
-              </h6>
-
-              <p class="card-text text-muted">{{ sale.description }}</p>
-
-              <p v-if="getMinPrice(sale)" class="fw-bold mt-2">
-                월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
-                {{ getMinPrice(sale).period }}개월
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div v-else class="text-center text-muted py-5">
@@ -135,7 +161,8 @@ function getMinPrice(sale) {
           :key="n"
           class="btn btn-outline-secondary mx-1"
           :class="{ 'btn-dark': n - 1 === currentPage }"
-          @click="changePage(n - 1)">
+          @click="changePage(n - 1)"
+        >
           {{ n }}
         </button>
       </div>
@@ -156,14 +183,12 @@ function getMinPrice(sale) {
   background-color: #c4c9c3;
   overflow: hidden;
 }
-
 .banner-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 }
-
 .text-area {
   position: absolute;
   top: 50%;
@@ -171,17 +196,14 @@ function getMinPrice(sale) {
   transform: translateY(-50%);
   color: #000;
 }
-
 .text01 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
-
 .text02 {
   font-size: 2rem;
   font-weight: bold;
 }
-
 .card img {
   height: 250px;
   object-fit: contain;
