@@ -1,3 +1,47 @@
+<script setup>
+import { onMounted, computed, ref } from 'vue'
+import axios from 'axios'
+import { useSubscribeStore } from '../../store/useSubcribeStore.js'
+import { useRouter } from 'vue-router'
+
+
+const store = useSubscribeStore()
+const activeTab = ref('general')
+const router = useRouter()
+
+onMounted(() => {
+  store.fetchCartItems()
+  console.log(generalItems.value)
+})
+
+const generalItems = computed(() => store.cartItems || [])
+
+const totalPrice = computed(() =>
+    generalItems.value.reduce((sum, item) => (item.checked ? sum + item.price : sum), 0)
+)
+// 선택된거 카운터
+const selectedCount = computed(() =>
+    generalItems.value.filter(item => item.checked).length
+
+)
+// 삭제 인데 삭제 안됌
+const removeItem = async (index) => {
+  const { cartIdx } = generalItems.value[index]
+  await store.deleteCartItem(cartIdx)
+}
+
+// 직접 API 호출 후 배열에서 제거
+// 구독으로 가면서 값 전달해주는거
+const goToPayment = () => {
+  const selected = generalItems.value.filter(item => item.checked)
+  router.push({
+    name: 'subscription',
+    query: {
+      items: encodeURIComponent(JSON.stringify(selected))
+    }
+  })
+}
+</script>
 <template>
   <div class="container py-5">
     <h3 class="mb-5">🛒 장바구니</h3>
@@ -5,7 +49,11 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-4 fs-5">
       <li class="nav-item">
-        <button class="nav-link" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">
+        <button
+            class="nav-link"
+            :class="{ active: activeTab === 'general' }"
+            @click="activeTab = 'general'"
+        >
           일반구매({{ generalItems.length }})
         </button>
       </li>
@@ -15,9 +63,7 @@
       <!-- Left: Product List -->
       <div class="col-md-8">
         <div class="product-list-container">
-          <!-- 상품이 하나라도 있으면 목록 출력, 없으면 안내 메시지 -->
-          <template v-if="generalItems.length > 0 || packageGroups.length > 0">
-            <!-- 단일 상품 -->
+          <template v-if="generalItems.length > 0">
             <div
                 v-for="(item, index) in generalItems"
                 :key="'single-' + index"
@@ -25,72 +71,35 @@
             >
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">{{ item.name }}</h5>
-                <button class="btn btn-sm " @click.prevent="removeItem('general', index)"><font-awesome-icon :icon="['fas', 'x']" /></button>
+                <button class="btn btn-sm" @click.prevent="removeItem(index)">
+                  <font-awesome-icon :icon="['fas', 'x']"/>
+                </button>
               </div>
 
               <div class="d-flex align-items-center">
-                <input type="checkbox" class="form-check-input me-4" v-model="item.checked"/>
-                <img :src="item.image" alt="상품" class="me-4" width="80" height="120"/>
+                <input
+                    type="checkbox"
+                    class="form-check-input me-4"
+                    v-model="item.checked"
+                />
+                <img
+                    :src="item.image"
+                    alt="상품"
+                    class="me-4"
+                    width="80"
+                    height="120"
+                />
                 <div class="flex-grow-1">
-                  <p class="text-muted mb-3">{{ item.deliveryTime }} · {{ item.price }}원</p>
-                  <div class="btn-group btn-group-sm">
-                    <button
-                        v-for="term in item.terms"
-                        :key="term"
-                        class="btn px-3"
-                        :class="{ 'btn-primary': item.selectedTerm === term, 'btn-outline-secondary': item.selectedTerm !== term }"
-                        @click="item.selectedTerm = term"
-                    >
-                      {{ term }}개월
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 패키지 상품 -->
-            <div
-                v-for="(group, gIdx) in packageGroups"
-                :key="'group-' + gIdx"
-                class="border rounded p-4 mb-4"
-            >
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center">
-                  <!-- 패키지 그룹 전체 선택 체크박스 -->
-                  <input type="checkbox" class="form-check-input me-2" v-model="group.checked"/>
-                  <h5 class="fw-bold mb-0">[{{ group.name }}]</h5>
-                </div>
-                <button class="btn btn-sm" @click="removePackageGroup(gIdx)"><font-awesome-icon :icon="['fas', 'x']" /></button>
-              </div>
-
-              <!-- 패키지 내부 항목은 체크박스 없이 정보만 표시 -->
-              <div
-                  v-for="(item, iIdx) in group.items"
-                  :key="'group-item-' + iIdx"
-                  class="border p-3 mb-3 rounded"
-              >
-                <div class="d-flex align-items-center">
-                  <!-- 개별 체크박스 제거 -->
-                  <img :src="item.image" alt="상품" class="me-4" width="80" height="120"/>
-                  <div class="flex-grow-1">
-                    <h5 class="mb-2">{{ item.name }}</h5>
-                    <p class="text-muted mb-3">{{ item.deliveryTime }} · {{ item.price }}원</p>
-                    <div class="btn-group btn-group-sm">
-                      <button
-                          v-for="term in item.terms"
-                          :key="term"
-                          class="btn px-3"
-                          :class="{ 'btn-primary': item.selectedTerm === term, 'btn-outline-secondary': item.selectedTerm !== term }"
-                          @click="item.selectedTerm = term"
-                      >
-                        {{ term }}개월
-                      </button>
-                    </div>
-                  </div>
+                  <p class="text-muted mb-2">
+                    {{ item.deliveryTime }} · {{ item.price }}원
+                  </p>
+                  <!-- 기간을 고정 텍스트로 표시 -->
+                  <p class="mb-0">구독 기간: <strong>{{ item.period }}개월</strong></p>
                 </div>
               </div>
             </div>
           </template>
+
           <template v-else>
             <div class="empty-cart text-center py-5">
               <p class="fs-4">장바구니가 비어 있습니다.</p>
@@ -103,13 +112,21 @@
       <div class="col-md-4">
         <div class="bg-light border p-4 rounded summary-box">
           <p class="mb-2 fw-bold fs-5">주문 예산 금액</p>
-          <p class="mb-2 fs-6">상품 금액: <span class="float-end">{{ totalPrice }}원</span></p>
-          <p class="mb-2 text-danger fs-6">할인 금액: <span class="float-end">-800원</span></p>
+          <p class="mb-2 fs-6">
+            상품 금액:
+            <span class="float-end">{{ totalPrice }}원</span>
+          </p>
+          <p class="mb-2 text-danger fs-6">
+            할인 금액: <span class="float-end">-0원</span>
+          </p>
           <hr/>
-          <p class="fw-bold fs-5">총 금액: <span class="float-end">{{ totalPrice - 800 }}원</span></p>
+          <p class="fw-bold fs-5">
+            총 금액: <span class="float-end">{{ totalPrice - 0 }}원</span>
+          </p>
 
-          <!-- 상품 선택이 없을 경우 안내 문구 -->
-          <p v-if="selectedCount === 0" class="text-muted text-center mt-3">장바구니가 비어 있습니다.</p>
+          <p v-if="selectedCount === 0" class="text-muted text-center mt-3">
+            장바구니가 비어 있습니다.
+          </p>
 
           <button
               class="btn btn-primary w-100 mt-4 py-2 fs-5"
@@ -121,86 +138,9 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
-
-<script>
-
-
-export default {
-  data() {
-    return {
-      activeTab: 'general',
-      generalItems: [
-        {
-          name: '월스 슈퍼클린 직수 정수기 (냉온정)',
-          price: 15900,
-          deliveryTime: '4시도착',
-          image: 'https://rentalcdn.lghellovision.net/uploads/product/LGPseWmRNy.png',
-          terms: [3, 6, 12],
-          selectedTerm: 3,
-          checked: true
-        }
-      ],
-      packageGroups: [
-        {
-          name: '아이폰 스타터팩',
-          checked: true,
-          items: [
-            {
-              name: '월스 슈퍼클린 직수 정수기 (냉온정)',
-              price: 15900,
-              deliveryTime: '4시도착',
-              image: 'https://rentalcdn.lghellovision.net/uploads/product/LGPseWmRNy.png',
-              terms: [3, 6, 12],
-              selectedTerm: 3
-            },
-            {
-              name: '월스 슈퍼클린 직수 정수기 (냉온정)',
-              price: 31000,
-              deliveryTime: '4시도착',
-              image: 'https://rentalcdn.lghellovision.net/uploads/product/LGPseWmRNy.png',
-              terms: [3, 6, 12],
-              selectedTerm: 6
-            }
-          ]
-        }
-      ]
-    };
-  },
-  computed: {
-    totalPrice() {
-      // 일반 상품 합산
-      const generalSum = this.generalItems.reduce((sum, item) => (item.checked ? sum + item.price : sum), 0);
-      // 패키지 그룹이 선택된 경우에만 해당 그룹 내 모든 상품의 가격을 합산
-      const packageSum = this.packageGroups.reduce((sum, group) => {
-        return group.checked ? sum + group.items.reduce((s, item) => s + item.price, 0) : sum;
-      }, 0);
-      return generalSum + packageSum;
-    },
-    selectedCount() {
-      // 일반 상품은 개별로 카운트
-      const generalCount = this.generalItems.filter((item) => item.checked).length;
-      // 패키지 그룹은 그룹 단위로 카운트
-      const packageCount = this.packageGroups.filter((group) => group.checked).length;
-      return generalCount + packageCount;
-    }
-  },
-  methods: {
-    removeItem(type, index) {
-      if (type === 'general') this.generalItems.splice(index, 1);
-    },
-    removePackageGroup(index) {
-      this.packageGroups.splice(index, 1);
-    }
-    ,
-    goToPayment() {
-      // Vue Router를 이용하여 결제 페이지로 이동
-      this.$router.push({name: 'subscription'});
-    }
-  }
-};
-</script>
 
 <style scoped>
 .btn-group .btn {
