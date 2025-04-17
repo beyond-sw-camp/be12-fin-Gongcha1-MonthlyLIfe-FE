@@ -1,5 +1,5 @@
 import Main from "../common/Main.vue";
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import SaleList from "../shop/sale/SaleList.vue";
 import SaleDetail from "../shop/sale/SaleDetail.vue";
 import Login from "../shop/auth/Login.vue";
@@ -57,20 +57,26 @@ const routes = [
 
                 ]
             },
+
+            // 판매 상세 페이지
+            // { path: 'sale/detail/:idx', component: SaleDetail },
             // 카테고리별 판매 목록 페이지
             { path: 'sale/:categoryIdx', component: SaleList },
-            // 판매 상세 페이지
-            { path: 'sale/detail/:idx', component: SaleDetail },
+            {
+                path: 'sale/detail/:categoryIdx/:saleIdx',
+                component: SaleDetail
+            },
+
             // 장바구니 페이지
             { path: 'cart', component: Cart },
             // 구독 확정 페이지 (결제 페이지)
-            { path: 'subscription', name : 'subscription',component: Subscription },
+            { path: 'subscription', name: 'subscription', component: Subscription },
             // 구독 완료 페이지
             { path: 'subscription/end', component: SubscriptionEnd },
             // 반납 신청 페이지
-            { path: 'subscription/:detailIdx/return ', component: ReturnRequest},
+            { path: 'subscription/:detailIdx/return ', component: ReturnRequest },
             // 수리 신청 페이지
-            { path: 'subscription/:detailIdx/repair', component: RepairRequest},
+            { path: 'subscription/:detailIdx/repair', component: RepairRequest },
             // 배송 조회 페이지
             { path: 'subscription/:idx/delivery', component: DeliveryTracking },
         ]
@@ -101,7 +107,7 @@ const routes = [
             // 사용자 관리 페이지
             { path: 'user', component: AdminUser },
             //통계 리포트 페이지
-            { path: 'statistics', component: AdminStatistics}
+            { path: 'statistics', component: AdminStatistics }
         ]
     }
 ]
