@@ -2,6 +2,7 @@
 import {ref, reactive, onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
+import ProductModal from "../product/ProductModal.vue";
 
 const router = useRouter()
 
@@ -80,16 +81,16 @@ function goToDetailPage(item) {
               <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                 <div class="d-flex align-items-center gap-1">
                   <label class="form-label mb-0 text-nowrap">상품 등록일</label>
-<!--                  <div class="dropdown">-->
-<!--                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">-->
-<!--                      상품 등록일-->
-<!--                    </button>-->
-<!--                    <ul class="dropdown-menu">-->
-<!--                      <li><a class="dropdown-item" href="#">상품 등록일</a></li>-->
-<!--                      <li><a class="dropdown-item" href="#">상품 등록일2</a></li>-->
-<!--                    </ul>-->
-<!--                  </div>-->
-<!--                  <button type="button" class="btn btn-sm btn-primary">전체</button>-->
+                  <!--                  <div class="dropdown">-->
+                  <!--                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">-->
+                  <!--                      상품 등록일-->
+                  <!--                    </button>-->
+                  <!--                    <ul class="dropdown-menu">-->
+                  <!--                      <li><a class="dropdown-item" href="#">상품 등록일</a></li>-->
+                  <!--                      <li><a class="dropdown-item" href="#">상품 등록일2</a></li>-->
+                  <!--                    </ul>-->
+                  <!--                  </div>-->
+                  <!--                  <button type="button" class="btn btn-sm btn-primary">전체</button>-->
                 </div>
                 <div class="d-flex align-items-center gap-1">
                   <input type="date" class="form-control form-control-sm" value="2024-01-01"  :value="search.startDate" style="max-width: 140px;">
@@ -117,6 +118,14 @@ function goToDetailPage(item) {
           </div>
         </div>
 
+        <!-- 상품 등록 버튼 -->
+        <div class="d-flex justify-content-end px-3 my-2">
+          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+            상품 등록
+          </button>
+        </div>
+
+
         <!-- 데이터 영역 -->
         <div class="p-3">
           <div class="text-center border-top pt-3 mt-3 mb-2">
@@ -135,6 +144,7 @@ function goToDetailPage(item) {
           <table v-if="!loading" class="table table-bordered table-hover text-center product-table">
             <thead class="custom-thead">
             <tr>
+              <th>상품코드</th>
               <th>상품명</th>
               <th>제조사</th>
               <th>전체 재고</th>
@@ -147,6 +157,7 @@ function goToDetailPage(item) {
               <td colspan="5">데이터가 없습니다.</td>
             </tr>
             <tr v-for="item in products" :key="item.productCode" style="cursor: pointer;" @click="goToDetailPage(item)">
+              <td>{{ item.productCode }}</td>
               <td>{{ item.productName }}</td>
               <td>{{ item.manufacturer }}</td>
               <td>{{ item.totalStockCount ?? '-' }}</td>
@@ -183,6 +194,11 @@ function goToDetailPage(item) {
       </div>
     </div>
   </div>
+
+
+  <!-- 상품 등록 모달 -->
+  <ProductModal @registered="filterList" />
+
 </template>
 
 <style scoped>

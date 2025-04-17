@@ -28,7 +28,7 @@
           </a>
           <ul class="nav flex-column ms-4 small">
             <li>
-              <router-link to="/admin/product" class="nav-link text-white-50" >- 상품 관리</router-link>
+              <router-link to="/admin/product-by-page" class="nav-link text-white-50" >- 상품 관리</router-link>
             </li>
             <li>
               <router-link to="/admin/subscription" class="nav-link text-white-50" >- 구독 관리</router-link>
