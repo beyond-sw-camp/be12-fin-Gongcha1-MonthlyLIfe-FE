@@ -74,7 +74,7 @@ const routes = [
             // 구독 완료 페이지
             { path: 'subscription/end', component: SubscriptionEnd },
             // 반납 신청 페이지
-            { path: 'subscription/:detailIdx/return ', component: ReturnRequest },
+            { path: 'subscription/:detailIdx/return', component: ReturnRequest },
             // 수리 신청 페이지
             { path: 'subscription/:detailIdx/repair', component: RepairRequest },
             // 배송 조회 페이지
