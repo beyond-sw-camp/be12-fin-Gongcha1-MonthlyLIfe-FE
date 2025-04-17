@@ -25,7 +25,7 @@ const filteredData = computed(() => {
   return store.products.filter((item) => {
     return (
       item.code?.includes(search.productId) &&
-      item.name?.includes(search.productName) 
+      item.name?.includes(search.productName)
       // item.price?.toString().includes(search.seller)
     )
   })
@@ -82,9 +82,6 @@ function goToPage(page) {
                 <th>위치</th>
                 <th>재고 수량</th>
                 <th>상품 이미지</th>
-                <!-- <th>등록일</th> -->
-                <!-- <th>판매 상태</th> -->
-                <!-- <th>연체 여부</th> -->
               </tr>
             </thead>
             <tbody>
