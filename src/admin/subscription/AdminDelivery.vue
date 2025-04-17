@@ -31,14 +31,14 @@ async function fetchOrders() {
   error.value = null
 
   try {
-    const response = await axios.get('/api/admin/delivery', {
+    const response = await axios.get('/api/admin/delivery-by-page', {
       params: {
         page: currentPage.value - 1,
         size: pageSize,
       }
     })
 
-    const result = response.data
+    const result = response.data.result // ✅ 여기서 result 추출
 
     orders.value = result.content
     totalPages.value = result.totalPages

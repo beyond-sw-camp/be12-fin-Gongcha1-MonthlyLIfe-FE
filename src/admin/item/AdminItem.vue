@@ -30,7 +30,7 @@ async function fetchProducts() {
   error.value = null
 
   try {
-    const response = await axios.get('/api/admin/product', {
+    const response = await axios.get('/api/admin/product-by-page', {
       params: {
         page: currentPage.value - 1,
         size: pageSize,

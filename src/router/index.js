@@ -90,7 +90,7 @@ const routes = [
             //관리자 홈페이지
             { path: '', component: AdminHome },
             // 재고 관리 페이지 (상품 이름, 재고 위치, 재고 상태, 갯수)
-            { path: 'product', component: AdminItem },
+            { path: 'product-by-page', component: AdminItem },
             // 재고 상세 페이지 (상품 이름, 재고 위치, 재고 상태, 갯수)
             { path: 'item-detail/:id', component: AdminItemDetail },
             // 판매 관리 페이지
@@ -104,7 +104,7 @@ const routes = [
             // 상품 등록 페이지 (보류)
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
-            { path: 'delivery', component: AdminDelivery },
+            { path: 'delivery-by-page', component: AdminDelivery },
             // 구독 관리 페이지
             { path: 'subscription', component: AdminSubscription },
             // 사용자 관리 페이지

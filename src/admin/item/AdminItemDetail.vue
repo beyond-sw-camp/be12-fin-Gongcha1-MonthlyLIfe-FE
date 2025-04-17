@@ -81,7 +81,7 @@ onMounted(fetchStockDetails)
       <div class="root">
         <div class="p-3">
           <div class="text-center border-top pt-3 mt-3 mb-4">
-            <h5 class="fw-bold mb-0">상품 상세 관리</h5>
+            <h5 class="fw-bold mb-0">상품 재고 상세 관리</h5>
           </div>
 
           <!-- 상품 정보 -->

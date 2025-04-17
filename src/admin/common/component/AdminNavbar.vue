@@ -46,7 +46,7 @@
               <router-link to="/admin/sale" class="nav-link text-white-50" >- 결제 및 연체 관리</router-link>
             </li>
             <li>
-              <router-link to="/admin/delivery" class="nav-link text-white-50" >- 배송 스케줄 관리</router-link>
+              <router-link to="/admin/delivery-by-page" class="nav-link text-white-50" >- 배송 스케줄 관리</router-link>
             </li>
           </ul>
         </li>
