@@ -57,7 +57,7 @@ function changePage(page) {
 function goToDetail(sale) {
   console.log(sale)
   const catId = sale.categoryIdx ?? categoryIdx.value
-  const saleId = sale.idx 
+  const saleId = sale.idx
 
   router.push(`/sale/detail/${catId}/${saleId}`)
 
@@ -113,7 +113,7 @@ function getMinPrice(sale) {
       <h4 class="fw-bold mb-3">많은 고객님들이 선택한 상품이에요</h4>
 
       <div v-if="saleContent.length > 0" class="row g-4">
-        <div v-for="sale in saleContent" :key="sale.saleIdx" @click="goToDetail(sale)" style="cursor:pointer">
+        <div v-for="sale in saleContent" :key="sale.saleIdx" @click="goToDetail(sale)" style="cursor:pointer" class="col-md-4">
           <div class="card h-100 shadow-sm">
             <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
               <img v-for="(product, pIdx) in sale.productList" :key="pIdx"
