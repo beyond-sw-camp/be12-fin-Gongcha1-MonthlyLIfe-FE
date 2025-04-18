@@ -1,130 +1,108 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import axios from 'axios'
 
-// 오늘 날짜 (참고용)
+// 오늘 날짜
 const today = new Date().toISOString().split("T")[0]
 
-// 검색 조건 (배송 스케줄 관리에 맞춤)
-// 날짜 범위와 검색 구분(주문번호, 주문자명, 주문상태), 검색어
+// 검색 조건
 const search = reactive({
   dateFrom: '',
   dateTo: '',
-  searchType: '주문번호', // 옵션: '주문번호', '주문자명', '주문상태'
+  searchType: '주문번호', // '주문번호', '주문자명', '주문상태'
   searchQuery: ''
 })
 
-// 테이블 데이터 관련
+// 페이징 관련
 const currentPage = ref(1)
 const pageSize = 10
+const totalPages = ref(1)
 
-// 주문 목록 (예시 데이터)
-const orders = ref([
-  {
-    orderNo: '20200509VV0002',
-    customerName: '김재구',
-    amount: 38120,
-    status: '결제완료',
-    memo: '배송안내 필요',
-    date: '2020-06-11 16:31:53'
-  },
-  {
-    orderNo: '20200510VV0002',
-    customerName: '이우진',
-    amount: 18200,
-    status: '결제완료',
-    memo: '배송안내 필요',
-    date: '2020-06-11 16:31:53'
-  }
-])
+// 데이터
+const orders = ref([])
 
-// 필터된 결과 (검색 조건에 맞게 필터)
-// - 날짜 범위: 주문일시(YYYY-MM-DD) 기준 필터링
-// - 검색 구분에 따라 주문번호, 주문자명, 주문상태 필터 적용
-const filteredData = computed(() => {
-  return orders.value.filter(item => {
-    let match = true
-    // 날짜 필터: item.date의 앞 10자리가 주문일시(YYYY-MM-DD)
-    const orderDate = item.date.substring(0, 10)
-    if (search.dateFrom && orderDate < search.dateFrom) {
-      match = false
-    }
-    if (search.dateTo && orderDate > search.dateTo) {
-      match = false
-    }
-    // 검색어 필터
-    if (search.searchQuery) {
-      if (search.searchType === '주문번호' && !item.orderNo.includes(search.searchQuery)) {
-        match = false
-      } else if (search.searchType === '주문자명' && !item.customerName.includes(search.searchQuery)) {
-        match = false
-      } else if (search.searchType === '주문상태' && !item.status.includes(search.searchQuery)) {
-        match = false
+// 상태
+const loading = ref(false)
+const error = ref(null)
+
+// 데이터 요청 함수
+async function fetchOrders() {
+  loading.value = true
+  error.value = null
+
+  try {
+    const response = await axios.get('/api/admin/delivery-by-page', {
+      params: {
+        page: currentPage.value - 1,
+        size: pageSize,
       }
-    }
-    return match
-  })
-})
+    })
 
-// 페이지네이션 데이터
-const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize
-  return filteredData.value.slice(start, start + pageSize)
-})
+    const result = response.data.result // ✅ 여기서 result 추출
 
-const totalPages = computed(() => {
-  return Math.ceil(filteredData.value.length / pageSize)
-})
-
-// 검색 조건 변경 시 페이지 초기화
-function filterList() {
-  currentPage.value = 1
+    orders.value = result.content
+    totalPages.value = result.totalPages
+  } catch (err) {
+    console.error(err)
+    error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
+  } finally {
+    loading.value = false
+  }
 }
 
-// 특정 페이지로 이동
+// 페이지 이동
 function goToPage(page) {
+  if (page < 1 || page > totalPages.value) return
   currentPage.value = page
+  fetchOrders()
 }
 
-// 이전 페이지로 이동
 function prevPage() {
   if (currentPage.value > 1) {
     currentPage.value--
+    fetchOrders()
   }
 }
 
-// 다음 페이지로 이동
 function nextPage() {
   if (currentPage.value < totalPages.value) {
     currentPage.value++
+    fetchOrders()
   }
 }
 
-// 주문 클릭 시 주문 상세 모달 열기 (예시)
-function openOrderModal(order) {
-  alert('주문 상세 보기: ' + order.orderNo)
+// 필터는 서버 연동이므로 그냥 fetchOrders() 로 새로고침
+function filterList() {
+  currentPage.value = 1
+  fetchOrders()
 }
+
+// 주문 클릭 시 모달 열기
+function openOrderModal(order) {
+  alert('주문 상세 보기: ' + order.subscribeIdx)
+}
+
+// 초기 로딩
+onMounted(fetchOrders)
 </script>
 
 <template>
   <div class="screen">
     <div class="root-wrapper">
       <div class="root">
-        <!-- 상단 옵션 영역 -->
+        <!-- 상단 옵션 -->
         <div class="border rounded p-4 bg-light">
           <div class="bg-white rounded shadow-sm p-3 mb-3">
             <div class="d-flex flex-wrap gap-3 align-items-center">
-              <!-- 옵션 폼 그룹 -->
               <div class="flex-grow-1">
-                <!-- 1행: 주문일시(기간) 및 검색 구분 -->
+                <!-- 1행 -->
                 <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                  <!-- 주문일시(기간) 선택 -->
                   <div class="d-flex align-items-center gap-1">
                     <label class="form-label mb-0 text-nowrap">주문일시</label>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateFrom" style="max-width: 140px;">
                     <span>~</span>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateTo" style="max-width: 140px;">
                   </div>
-                  <!-- 검색 구분 및 검색어 입력 -->
                   <div class="d-flex align-items-center gap-1 flex-nowrap">
                     <label class="form-label mb-0 text-nowrap" style="font-size: 12px">검색 구분</label>
                     <div class="dropdown">
@@ -141,43 +119,60 @@ function openOrderModal(order) {
                   </div>
                 </div>
               </div>
+
               <!-- 검색 버튼 -->
               <div class="align-self-start">
                 <button type="submit" class="btn btn-primary" @click="filterList">검색</button>
               </div>
             </div>
           </div>
-          <!-- 필요 시 가운데 정렬된 제목 등 추가 -->
         </div>
+
+        <!-- 데이터 영역 -->
         <div class="p-3">
           <div class="text-center border-top pt-3 mt-3 mb-2">
             <h5 class="fw-bold mb-0">배송 스케줄 관리</h5>
           </div>
-          <!-- 주문 테이블 -->
-          <table class="table table-bordered table-hover subscribe-table">
+
+          <!-- 에러 -->
+          <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
+
+          <!-- 로딩 -->
+          <div v-if="loading" class="text-center my-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <!-- 테이블 -->
+          <table v-if="!loading" class="table table-bordered table-hover subscribe-table">
             <thead class="table-header custom-thead">
             <tr style="background-color: #4ea8de">
               <th>주문번호</th>
               <th>주문자명</th>
               <th>주문금액</th>
               <th>주문상태</th>
-              <th>주문메모</th>
+              <th>연락처</th>
               <th>주문일시</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(order, idx) in paginatedData" :key="idx" style="cursor: pointer;" @click="openOrderModal(order)">
-              <td>{{ order.orderNo }}</td>
-              <td>{{ order.customerName }}</td>
-              <td>{{ order.amount }}</td>
-              <td>{{ order.status }}</td>
-              <td>{{ order.memo }}</td>
-              <td>{{ order.date }}</td>
+            <tr v-if="orders.length === 0">
+              <td colspan="6">데이터가 없습니다.</td>
+            </tr>
+            <tr v-for="order in orders" :key="order.subscribeIdx" style="cursor: pointer;" @click="openOrderModal(order)">
+              <td>{{ order.subscribeIdx }}</td>
+              <td>{{ order.userName }}</td>
+              <td>{{ order.subscribePrice.toLocaleString() }}</td>
+              <td>{{ order.deliveryStatus }}</td>
+              <td>{{ order.userPhone }}</td>
+              <td>{{ order.subscribeDetailCreatedAt.split('T')[0] }}</td>
             </tr>
             </tbody>
           </table>
+
           <!-- 페이지네이션 -->
-          <nav class="d-flex justify-content-center">
+          <nav v-if="!loading && orders.length > 0" class="d-flex justify-content-center">
             <ul class="pagination">
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link" href="#" @click.prevent="prevPage">‹</a>
@@ -206,5 +201,4 @@ function openOrderModal(order) {
 .subscribe-table th {
   background-color: #D9EDF7;
 }
-
 </style>

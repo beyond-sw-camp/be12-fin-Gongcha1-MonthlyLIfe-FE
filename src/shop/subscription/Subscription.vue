@@ -10,11 +10,9 @@ const router = useRouter();
 
 const paymentMethodStore = usePaymentMethodStore();
 
-const cartItems = ref([
-  {name: "상품명", description: "간단한 설명", price: 12},
-  {name: "두 번째 상품", description: "간단한 설명", price: 8},
-  {name: "세 번째 상품", description: "간단한 설명", price: 5}
-]);
+const cartItems = ref(
+    JSON.parse(decodeURIComponent(route.query.items || '[]'))
+)
 
 const addressInputRef = ref(null)
 
@@ -104,13 +102,13 @@ const addPaymentMethod = async () => {
         </h4>
         <ul class="list-group mb-3">
           <li
-              v-for="(item, index) in cartItems"
-              :key="index"
+              v-for="(item, idx) in cartItems"
+              :key="idx"
               class="list-group-item d-flex justify-content-between lh-sm"
           >
             <div>
               <h6 class="my-0">{{ item.name }}</h6>
-              <small class="text-muted">{{ item.description }}</small>
+              <small class="text-muted">구독 기간 {{ item.period }}개월</small>
             </div>
             <span class="text-muted">₩{{ item.price }}</span>
           </li>
@@ -289,6 +287,77 @@ const addPaymentMethod = async () => {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "CheckoutPage",
+  data() {
+    return {
+      cartItems: [
+        {name: "상품명", description: "간단한 설명", price: 12},
+        {name: "두 번째 상품", description: "간단한 설명", price: 8},
+        {name: "세 번째 상품", description: "간단한 설명", price: 5}
+      ],
+      promoCode: "EXAMPLECODE",
+      promoDiscount: 5,
+      promoInput: "",
+      billing: {
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        address: "",
+        address2: "",
+        country: "",
+        state: "",
+        zip: "",
+        sameAddress: false,
+        saveInfo: false
+      },
+      paymentMethod: "credit",
+      card: {
+        name: "",
+        number: "",
+        expiration: "",
+        cvv: ""
+      },
+      receiver: {
+        name: "",
+        address: "",
+        address2: "",
+        phone: "",
+        memo: ""
+      }
+    };
+  },
+  computed: {
+    totalPrice() {
+      let subtotal = this.cartItems.reduce((acc, item) => acc + item.price, 0);
+      return subtotal - this.promoDiscount;
+    }
+  },
+  methods: {
+    redeemPromo() {
+      alert("프로모션 코드 적용됨: " + this.promoInput);
+    },
+    submitCheckout() {
+
+      alert("주문이 접수되었습니다!");
+      this.$router.push('/');
+
+    },
+    changeAddress() {
+      alert("배송지 변경 로직 구현!");
+    }
+    , formatCurrency(amount) {
+      if (amount === undefined || amount === null) {
+        return "0원"; // 또는 원하는 기본값을 반환
+      }
+      return amount.toLocaleString() + "원";
+    }
+  }
+};
+</script>
 
 <style scoped>
 .checkout-container {
