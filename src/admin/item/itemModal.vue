@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { defineEmits } from 'vue'
 import { useProductStore } from '../../store/useProductStore'
+import { Modal } from 'bootstrap'
 
 const emit = defineEmits(['registered'])
 const store = useProductStore()
@@ -54,7 +55,11 @@ const submit = async () => {
     await store.fetchProductList()
     alert('등록 완료!')
     emit('registered')
-    // reset form
+    // 모달 닫기
+    const modalEl = document.getElementById('registerModal')
+    const modalInstance = Modal.getInstance(modalEl) || new Modal(modalEl)
+    modalInstance.hide()
+    // 폼 초기화
     Object.assign(form, {
       name: '', code: '', description: '',
       manufacturer: '', condition: '',
