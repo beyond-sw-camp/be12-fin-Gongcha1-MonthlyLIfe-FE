@@ -98,15 +98,26 @@ const submit = async () => {
             <input v-model="form.manufacturer" type="text" class="form-control" />
           </div>
           <div class="mb-2">
-            <label class="form-label">상태(Condition)</label>
-            <input v-model="form.condition" type="text" class="form-control" />
+            <label class="form-label fw-bold">상태</label>
+            <select v-model="form.condition" class="form-select">
+              <option disabled value="">상태 선택</option>
+              <option value="S">S급 (새 상품)</option>
+              <option value="A">A급 (사용감 없음)</option>
+              <option value="B">B급 (사용감 조금)</option>
+              <option value="C">C급 (사용감 많음)</option>
+            </select>
           </div>
           <div class="mb-2">
-            <label class="form-label">위치(Location)</label>
-            <input v-model="form.location" type="text" class="form-control" />
+            <label class="form-label fw-bold">위치</label>
+            <select v-model="form.location" class="form-select">
+              <option disabled value="">위치 선택</option>
+              <option>창고</option>
+              <option>대여중</option>
+              <option>수리중</option>
+            </select>
           </div>
           <div class="mb-2">
-            <label class="form-label">수량(Count)</label>
+            <label class="form-label">수량</label>
             <input v-model.number="form.count" type="number" class="form-control" />
           </div>
           <div class="mb-2">
@@ -134,6 +145,24 @@ const submit = async () => {
 
 <style scoped>
 .mb-2 {
-  margin-bottom: .5rem
+  margin-bottom: 0.75rem;
 }
+.form-label {
+  font-weight: 600;
+}
+ul {
+  padding-left: 0;
+  list-style: none;
+}
+ul li {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  background: #f8f9fa;
+}
+.btn-outline-danger {
+  font-size: 0.8rem;
+}
+
 </style>
