@@ -1,31 +1,3 @@
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useSubscribeStore } from '../../store/useSubcribeStore.js'
-
-const route = useRoute()
-const store = useSubscribeStore()
-
-const fallbackImg = 'https://via.placeholder.com/300x200?text=No+Image'
-const returnDate = ref('')
-const note = ref('')
-
-onMounted(() => {
-  const detailIdx = route.params.detailIdx
-  store.fetchSubscribeDetail(detailIdx)
-})
-
-const submitReturn = () => {
-  console.log('반납 신청 데이터:', {
-    subscribeDetailIdx: store.detail?.subscribeDetailIdx,
-    returnDate: returnDate.value,
-    note: note.value,
-  })
-  alert('반납 신청이 완료되었습니다!')
-}
-</script>
-
 <template>
   <div class="container py-5">
     <div v-if="store.loading" class="text-center">로딩 중...</div>
@@ -48,42 +20,87 @@ const submitReturn = () => {
           <!-- 렌탈 정보 -->
           <div class="mb-3">
             <label class="form-label fw-bold">렌탈 상품명</label>
-            <input type="text" class="form-control" :value="store.detail.salename" readonly />
+            <input
+                type="text"
+                class="form-control"
+                :value="store.detail.salename"
+                readonly
+            />
           </div>
 
           <!-- 고객명 -->
           <div class="mb-3">
             <label class="form-label fw-bold">고객명</label>
-            <input type="text" class="form-control" value="이우진" readonly />
+            <input
+                type="text"
+                class="form-control"
+                v-model="subscribeName"
+                placeholder="이름을 입력하세요"
+            />
           </div>
 
-          <!-- 구독 기간 -->
+          <!-- 전화번호 -->
           <div class="mb-3">
-            <label class="form-label fw-bold">구독 기간</label>
-            <input type="text" class="form-control" :value="`${store.detail.period}개월`" readonly />
+            <label class="form-label fw-bold">전화번호</label>
+            <input
+                type="tel"
+                class="form-control"
+                v-model="subscribePhone"
+                placeholder="010-1234-5678"
+            />
           </div>
 
-          <!-- 가격 -->
+          <!-- 주소 1 -->
           <div class="mb-3">
-            <label class="form-label fw-bold">가격</label>
-            <input type="text" class="form-control" :value="`${store.detail.price.toLocaleString()}원`" readonly />
+            <label class="form-label fw-bold">주소</label>
+            <input
+                type="text"
+                class="form-control"
+                v-model="address1"
+                placeholder="도로명 주소를 입력하세요"
+            />
+          </div>
+
+          <!-- 주소 2 -->
+          <div class="mb-3">
+            <label class="form-label fw-bold">상세 주소</label>
+            <input
+                type="text"
+                class="form-control"
+                v-model="address2"
+                placeholder="상세 주소를 입력하세요"
+            />
           </div>
 
           <!-- 반납 예정일 -->
           <div class="mb-3">
             <label class="form-label fw-bold">반납 예정일</label>
-            <input type="date" class="form-control" v-model="returnDate" />
+            <input
+                type="date"
+                class="form-control"
+                v-model="pickupDate"
+            />
           </div>
 
           <!-- 참고사항 -->
           <div class="mb-4">
             <label class="form-label fw-bold">제품 상태 및 참고사항</label>
-            <textarea class="form-control" rows="3" v-model="note" placeholder="제품 상태 및 반납 시 참고사항을 입력하세요"></textarea>
+            <textarea
+                class="form-control"
+                rows="3"
+                v-model="description"
+                placeholder="제품 상태 및 반납 시 참고사항을 입력하세요"
+            ></textarea>
           </div>
 
           <!-- 버튼 -->
           <div class="text-end">
-            <button class="btn btn-outline-primary btn-lg" @click="submitReturn">반납 신청</button>
+            <button
+                class="btn btn-outline-primary btn-lg"
+                @click="submitReturn"
+            >
+              반납 신청
+            </button>
           </div>
         </div>
       </div>
@@ -91,7 +108,66 @@ const submitReturn = () => {
   </div>
 </template>
 
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+import { useRoute } from 'vue-router'
+import { useSubscribeStore } from '../../store/useSubcribeStore.js'
 
+const route = useRoute()
+const store = useSubscribeStore()
+
+const fallbackImg = 'https://via.placeholder.com/300x200?text=No+Image'
+const pickupDate = ref('')
+
+// 추가된 고객 정보 필드
+const subscribeName = ref('')
+const subscribePhone = ref('010-')
+const address1 = ref('')
+const address2 = ref('')
+const description = ref('')
+
+onMounted(() => {
+  const detailIdx = route.params.detailIdx
+  store.fetchSubscribeDetail(detailIdx)
+
+
+})
+
+async function submitReturn() {
+  const payload = {
+    subscribedetailIdx: route.params.detailIdx,
+    subscribeName: subscribeName.value,
+    subscribePhone: subscribePhone.value,
+    address1: address1.value,
+    address2: address2.value,
+    description: description.value,
+    pickupDate: `${pickupDate.value}T09:00:00`
+  }
+  console.log('반납 신청 데이터:', {
+    subscribedetailIdx: route.params.detailIdx,
+    subscribeName: subscribeName.value,
+    subscribePhone: subscribePhone.value,
+    address1: address1.value,
+    address2: address2.value,
+    description: description.value,
+    pickupDate: `${pickupDate.value}T09:00:00`
+  })
+  try {
+    const res = await axios.post('/api/subscribe/return', payload)
+    if (res.data.isSuccess) {
+      alert('반납 신청이 완료되었습니다!')
+      // 원하는 경우, 완료 후 다른 페이지로 이동
+      router.push('/user/detail')
+    } else {
+      alert('실패: ' + res.data.message)
+    }
+  } catch (err) {
+    console.error('반납 신청 오류', err)
+    alert('서버 오류가 발생했습니다.')
+  }
+}
+</script>
 
 <style scoped>
 .return_card {
@@ -116,3 +192,18 @@ const submitReturn = () => {
   }
 }
 </style>
+INSERT INTO subscribe (
+created_at,
+updated_at,
+version,
+payment_idx,
+user_id,
+billing_key_idx
+) VALUES (
+NOW(),            -- created_at
+NOW(),            -- updated_at
+0,                -- version (초기 버전)
+null,              -- payment_idx: 실제 결제 idx 로 바꿔주세요
+'1',       -- user_id: 실제 사용자 ID 로 바꿔주세요
+null               -- billing_key_idx: 실제 청구키 idx 로 바꿔주세요
+);
