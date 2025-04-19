@@ -94,6 +94,8 @@
                   <button
                       v-else-if="detail.status === 'RETURN_REQUESTED'"
                       class="btn btn-outline-warning btn-sm"
+                      @click="goCancel(detail.subscribeDetailIdx) " :disabled="isCancelling"
+
                   >
                     반납 취소
                   </button>
@@ -154,6 +156,40 @@ function loadPage() {
       .catch(err => console.error('구독 목록 로드 실패', err))
 }
 
+const isCancelling = ref(false)
+
+
+function undoReturn(detailIdx) {
+  return axios
+      .post(`/api/subscribe/${detailIdx}/cancel/undo`)
+}
+
+
+
+
+function goCancel(detailIdx) {
+  undoReturn(detailIdx)
+      .then(() => {
+        // 1) 전체 구독 중에서 detailIdx를 포함하고 있는 sub 찾기
+        const subscription = subscriptions.value
+            .find(sub => sub.details.some(d => d.subscribeDetailIdx === detailIdx))
+
+        if (!subscription) return
+
+        // 2) 그 안에서 실제 detail 객체 찾아서 status 변경
+        const detail = subscription.details
+            .find(d => d.subscribeDetailIdx === detailIdx)
+
+        detail.status = 'SUBSCRIBING'         // SUBSCRIBING 으로 바꿔 주면
+        // (필요하면 returnedAt 같은 다른 필드도 업데이트)
+
+        // 3) Vue의 반응성 덕분에 화면이 바로 갱신됩니다.
+      })
+      .catch(err => {
+        console.error(err)
+        alert('반납 취소에 실패했습니다.')
+      })
+}
 
 function goToReturn(detailIdx) {
   router.push(`/subscription/${detailIdx}/return`)

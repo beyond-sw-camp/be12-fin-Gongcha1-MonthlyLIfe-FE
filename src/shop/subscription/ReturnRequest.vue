@@ -116,9 +116,10 @@ import { useSubscribeStore } from '../../store/useSubcribeStore.js'
 
 const route = useRoute()
 const store = useSubscribeStore()
+const today = new Date().toISOString().slice(0, 10)
 
 const fallbackImg = 'https://via.placeholder.com/300x200?text=No+Image'
-const pickupDate = ref('')
+const pickupDate = ref(today)
 
 // 추가된 고객 정보 필드
 const subscribeName = ref('')
@@ -126,7 +127,6 @@ const subscribePhone = ref('010-')
 const address1 = ref('')
 const address2 = ref('')
 const description = ref('')
-
 onMounted(() => {
   const detailIdx = route.params.detailIdx
   store.fetchSubscribeDetail(detailIdx)
