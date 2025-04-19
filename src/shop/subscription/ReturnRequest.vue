@@ -158,7 +158,7 @@ async function submitReturn() {
     if (res.data.isSuccess) {
       alert('반납 신청이 완료되었습니다!')
       // 원하는 경우, 완료 후 다른 페이지로 이동
-      router.push('/user/detail')
+      // router.push('/user/detail')
     } else {
       alert('실패: ' + res.data.message)
     }
@@ -192,18 +192,3 @@ async function submitReturn() {
   }
 }
 </style>
-INSERT INTO subscribe (
-created_at,
-updated_at,
-version,
-payment_idx,
-user_id,
-billing_key_idx
-) VALUES (
-NOW(),            -- created_at
-NOW(),            -- updated_at
-0,                -- version (초기 버전)
-null,              -- payment_idx: 실제 결제 idx 로 바꿔주세요
-'1',       -- user_id: 실제 사용자 ID 로 바꿔주세요
-null               -- billing_key_idx: 실제 청구키 idx 로 바꿔주세요
-);
