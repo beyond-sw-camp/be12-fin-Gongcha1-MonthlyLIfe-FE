@@ -16,9 +16,29 @@ export const useSaleStore = defineStore('sale', {
   }),
 
   actions: {
-    async fetchSaleListByCategory(categoryIdx, page = 0, size = 3) {
+    /**
+     * 카테고리 조회 or 검색(키워드/등급) 조회를 하나로 합침
+     *
+     * @param {Number} categoryIdx 
+     * @param {Number} page 
+     * @param {Number} size 
+     * @param {{keyword?: string, grade?: string}} filter 
+     */
+    async fetchSaleListByCategory(categoryIdx, page = 0, size = 3, filter = {}) {
+      const { keyword, grade } = filter
       try {
-        const res = await axios.get(`/api/sale/category/${categoryIdx}?page=${page}&size=${size}`)
+        let res
+        if (!keyword && !grade) {
+          // 기본 카테고리 조회
+          res = await axios.get(`/api/sale/category/${categoryIdx}`, {
+            params: { page, size }
+          })
+        } else {
+          // 검색용 엔드포인트 호출
+          res = await axios.get(`/api/sale/search`, {
+            params: { categoryIdx, page, size, keyword, grade }
+          })
+        }
         this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch (err) {
         console.error('판매 목록 조회 실패', err)

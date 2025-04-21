@@ -3,6 +3,7 @@ import {ref, reactive, onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
 import ProductModal from "../product/ProductModal.vue";
+import ItemModal from './itemModal.vue';
 
 const router = useRouter()
 
@@ -49,6 +50,10 @@ async function fetchProducts() {
   }
 }
 
+function refreshList() {
+   currentPage.value = 1
+   fetchProducts()
+ }
 function goToPage(page) {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
@@ -146,6 +151,7 @@ function goToDetailPage(item) {
             <tr>
               <th>상품코드</th>
               <th>상품명</th>
+              <th>이미지</th>
               <th>제조사</th>
               <th>전체 재고</th>
               <th>가용 재고</th>
@@ -159,6 +165,15 @@ function goToDetailPage(item) {
             <tr v-for="item in products" :key="item.productCode" style="cursor: pointer;" @click="goToDetailPage(item)">
               <td>{{ item.productCode }}</td>
               <td>{{ item.productName }}</td>
+              <td>
+                  <img
+                    v-for="(img, idx) in item.productImages"
+                    :key="idx"
+                    :src="img.productImgUrl"
+                    alt="product"
+                    style="width:50px; height:50px; object-fit:cover; margin-right:4px"
+                  />
+                </td>
               <td>{{ item.manufacturer }}</td>
               <td>{{ item.totalStockCount ?? '-' }}</td>
               <td>{{ item.availableStockCount ?? '-' }}</td>
@@ -197,7 +212,7 @@ function goToDetailPage(item) {
 
 
   <!-- 상품 등록 모달 -->
-  <ProductModal @registered="filterList" />
+  <ItemModal @registered="refreshList" />
 
 </template>
 
