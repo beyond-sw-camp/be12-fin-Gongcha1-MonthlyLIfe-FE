@@ -31,6 +31,16 @@ export const useSubscribeStore = defineStore('subscribe', {
             }
         },
 
+        async postSubscribe(subscribe) {
+            const response = await axios.post('/api/subscribe/subscribe',
+               subscribe,
+               { withCredentials: true }
+            )
+
+            console.log(response);
+
+        },
+
         // ✅ 장바구니 목록 불러오기
         async fetchCartItems() {
             this.cartLoading = true

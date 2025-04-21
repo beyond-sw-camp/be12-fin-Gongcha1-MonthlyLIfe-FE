@@ -1,14 +1,16 @@
 <script setup>
 import {ref, reactive, computed, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import * as PortOne from "@portone/browser-sdk/v2";
 import AddressInput from '../common/component/AddressInput.vue'
 import axios from "axios";
 import {usePaymentMethodStore} from "../../store/usePaymentMethodStore.js";
+import {useSubscribeStore} from "../../store/useSubcribeStore.js";
 
 const router = useRouter();
-
+const route = useRoute();
 const paymentMethodStore = usePaymentMethodStore();
+const subscribeStore = useSubscribeStore();
 
 const cartItems = ref(
     JSON.parse(decodeURIComponent(route.query.items || '[]'))
@@ -48,13 +50,37 @@ const submitCheckout = async () => {
 
   const { postcode, address1, address2 } = addressInputRef.value;
 
+
+  const sales = cartItems.value.map(item => ({
+    saleIdx: item.saleIdx,
+    period: item.period
+  }));
   console.log('서버에 보낼 데이터:', {
-    postcode,
-    address1,
-    address2,
-    name: receiver.name,
-    email: receiver.email
+    sales: sales,
+    rentalDelivery: {
+      postalCode: postcode,
+      address1,
+      address2,
+      deliveryMemo: receiver.memo,
+      recipientName: receiver.name,
+      recipientPhone: receiver.phone
+    },
+    billingKeyIdx: paymentMethodIdx.value
   })
+  await subscribeStore.postSubscribe(
+      {
+        sales: sales,
+        rentalDelivery: {
+          postalCode: postcode,
+          address1,
+          address2,
+          deliveryMemo: receiver.memo,
+          recipientName: receiver.name,
+          recipientPhone: receiver.phone
+        },
+        billingKeyIdx: paymentMethodIdx.value
+      }
+  );
 }
 
 const addPaymentMethod = async () => {
