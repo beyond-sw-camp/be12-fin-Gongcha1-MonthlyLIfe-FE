@@ -22,6 +22,13 @@ const selectedDetailCategory = ref(null)
 const keyword = ref('')
 const gradeFilter = ref(null)
 
+// 검색 이벤트 핸들러
+function onSearch({ keyword: kw, grade }) {
+  keyword.value = kw
+  gradeFilter.value = grade
+  currentPage.value = 0
+}
+
 // 카테고리 하위(detail) 목록
 const detailCategories = computed(() =>
   categoryStore.categories.filter(c => c.parentIdx === categoryIdx.value)
@@ -67,16 +74,8 @@ watch(
       { keyword: kw, grade }
     )
   },
-
   { immediate: true }
 )
-
-// 검색 이벤트 핸들러
-function onSearch({ keyword: kw, grade }) {
-  keyword.value = kw
-  gradeFilter.value = grade
-  currentPage.value = 0
-}
 
 // 페이지 변경 핸들러
 function changePage(page) {
@@ -129,8 +128,13 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
 
     <div class="category-tabs bg-white border-bottom py-4" v-if="detailCategories.length > 0">
       <div class="container d-flex gap-3 flex-wrap">
-        <button v-for="cat in detailCategories" :key="cat.idx" @click="selectedDetailCategory = cat" class="btn"
-          :class="{ 'btn-primary': selectedDetailCategory?.idx === cat.idx, 'btn-light': selectedDetailCategory?.idx !== cat.idx }">
+        <button
+          v-for="cat in detailCategories"
+          :key="cat.idx"
+          @click="selectedDetailCategory = cat"
+          class="btn"
+          :class="{ 'btn-primary': selectedDetailCategory?.idx === cat.idx, 'btn-light': selectedDetailCategory?.idx !== cat.idx }"
+        >
           {{ cat.name }}
         </button>
       </div>
@@ -142,19 +146,31 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
       <h4 class="fw-bold mb-3">많은 고객님들이 선택한 상품이에요</h4>
 
       <div v-if="saleContent.length > 0" class="row g-4">
-        <div v-for="sale in saleContent" :key="sale.saleIdx" @click="goToDetail(sale)" style="cursor:pointer"
-          class="col-md-4">
+        <div
+          v-for="sale in saleContent"
+          :key="sale.saleIdx"
+          @click="goToDetail(sale)"
+          style="cursor:pointer"
+          class="col-md-4"
+        >
           <div class="card h-100 shadow-sm">
             <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img v-for="(product, pIdx) in sale.productList" :key="pIdx"
+              <img
+                v-for="(product, pIdx) in sale.productList"
+                :key="pIdx"
                 :src="findProductByCode(product.productCode)?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'"
-                class="img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;" />
+                class="img-thumbnail"
+                style="width: 120px; height: 120px; object-fit: cover;"
+              />
             </div>
             <div class="card-body text-center">
               <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
                 {{ sale.name }}
-                <span v-if="findProductByCode(sale.productList[0]?.productCode)?.condition" class="badge ms-2"
-                  :class="conditionColorClass(findProductByCode(sale.productList[0]?.productCode)?.condition)">
+                <span
+                  v-if="findProductByCode(sale.productList[0]?.productCode)?.condition"
+                  class="badge ms-2"
+                  :class="conditionColorClass(findProductByCode(sale.productList[0]?.productCode)?.condition)"
+                >
                   {{ findProductByCode(sale.productList[0]?.productCode)?.condition }}
                 </span>
               </h6>
@@ -173,8 +189,13 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
       </div>
 
       <div class="text-center mt-4" v-if="totalPages > 1">
-        <button v-for="n in totalPages" :key="n" class="btn btn-outline-secondary mx-1"
-          :class="{ 'btn-dark': n - 1 === currentPage }" @click="changePage(n - 1)">
+        <button
+          v-for="n in totalPages"
+          :key="n"
+          class="btn btn-outline-secondary mx-1"
+          :class="{ 'btn-dark': n - 1 === currentPage }"
+          @click="changePage(n - 1)"
+        >
           {{ n }}
         </button>
       </div>
@@ -224,8 +245,5 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
   height: 250px;
   object-fit: contain;
 }
-
-.sale-search {
-  margin-bottom: 1rem;
-}
+.sale-search { margin-bottom: 1rem; }
 </style>
