@@ -10,7 +10,7 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - www.monthlylife.kro.kr
+    - monthlylife.kro.kr
     secretName: ml-front-tls-secret
   rules:
   - http:
