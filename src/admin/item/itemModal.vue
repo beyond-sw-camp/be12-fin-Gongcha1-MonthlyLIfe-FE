@@ -101,10 +101,10 @@ const submit = async () => {
             <label class="form-label fw-bold">상태</label>
             <select v-model="form.condition" class="form-select">
               <option disabled value="">상태 선택</option>
-              <option value="S">S급 (새 상품)</option>
-              <option value="A">A급 (사용감 없음)</option>
-              <option value="B">B급 (사용감 조금)</option>
-              <option value="C">C급 (사용감 많음)</option>
+              <option value="S급">S급 (새 상품)</option>
+              <option value="A급">A급 (사용감 없음)</option>
+              <option value="B급">B급 (사용감 조금)</option>
+              <option value="C급">C급 (사용감 많음)</option>
             </select>
           </div>
           <div class="mb-2">
