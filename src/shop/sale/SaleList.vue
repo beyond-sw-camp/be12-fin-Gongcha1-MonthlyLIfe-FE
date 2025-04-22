@@ -200,11 +200,6 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
         </button>
       </div>
     </div>
-
-    <div class="position-fixed bottom-0 end-0 p-3 d-flex flex-column align-items-center gap-2">
-      <button class="btn btn-outline-secondary rounded-circle">🔍</button>
-      <button class="btn btn-dark rounded-circle">TOP</button>
-    </div>
   </div>
 </template>
 
