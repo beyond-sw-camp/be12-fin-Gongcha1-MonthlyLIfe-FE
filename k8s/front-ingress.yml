@@ -19,6 +19,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: front-service-v{version}
+            name: front-svc-v{version}
             port:
               number: 80
