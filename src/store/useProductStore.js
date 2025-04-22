@@ -4,37 +4,43 @@ import axios from 'axios'
 
 export const useProductStore = defineStore('product', {
   state: () => ({
-    products: []
+    products: [],
+    selectedCategoryIdx: null  // 카테고리 선택 상태 추가
   }),
 
+  getters: {
+    filteredProducts: (state) => {
+      if (!state.selectedCategoryIdx) return []
+      return state.products.filter(p => p.categoryIdx === state.selectedCategoryIdx)
+    }
+  },
+
   actions: {
-    // form: { name, code, description, manufacturer, condition, location, count, files: File[] }
     async registerProduct(payload) {
       try {
         let formData
-    
+
         if (payload instanceof FormData) {
-          // Modal에서 보낸 FormData 그대로 사용
           formData = payload
         } else {
-          // 기존 방식: raw form 객체
           formData = new FormData()
           const dto = {
-            name:        payload.name,
-            code:        payload.code,
+            name: payload.name,
+            code: payload.code,
             description: payload.description,
-            manufacturer:payload.manufacturer,
+            manufacturer: payload.manufacturer,
+            categoryIdx: payload.categoryIdx // 등록 시 카테고리 포함
           }
           formData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }))
           payload.files.forEach(file => formData.append('images', file))
         }
-    
+
         const res = await axios.post(
           '/api/admin/product/create',
           formData,
           { headers: { 'Content-Type': 'multipart/form-data' } }
         )
-    
+
         if (res.data.isSuccess) {
           await this.fetchProductList()
         }
@@ -52,6 +58,7 @@ export const useProductStore = defineStore('product', {
         this.products = list.map(item => ({
           code: item.code,
           name: item.name,
+          categoryIdx: item.categoryIdx,
           description: item.description,
           manufacturer: item.manufacturer,
           condition: item.condition,
