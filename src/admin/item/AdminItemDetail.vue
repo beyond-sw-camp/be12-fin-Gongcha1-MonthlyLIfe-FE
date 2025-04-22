@@ -161,7 +161,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="mt-5">
-      <h5 class="fw-bold mb-3">해당 상품 판매 내역</h5>
+      <h5 class="text-center fw-bold mb-3">해당 상품 판매 내역</h5>
 
       <div v-if="filteredSales.length === 0" class="text-muted">
         판매 내역이 없습니다.
@@ -205,4 +205,29 @@ onMounted(async () => {
 .table {
   font-size: 14px;
 }
+
+/* 판매 목록 컨테이너 여백 (좌우 여백 조금) */
+.list-group {
+  padding: 1rem;         /* 좌우·상하 여백 */
+  margin: 0;               /* 기본 리스트 마진 제거 */
+}
+
+/* 각 판매 아이템 사이 간격 */
+.list-group-item {
+  margin-bottom: 1rem;     /* 아래쪽 여백 */
+  padding: 1rem 1.5rem;    /* 상하 1rem, 좌우 1.5rem */
+  border-radius: 8px;      /* 모서리 둥글게 */
+  transition: background 0.2s;
+}
+
+/* 마지막 아이템은 아래쪽 마진 제거 */
+.list-group-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 호버 시 살짝 배경 강조 */
+.list-group-item:hover {
+  background-color: #f1f1f1;
+}
+
 </style>
