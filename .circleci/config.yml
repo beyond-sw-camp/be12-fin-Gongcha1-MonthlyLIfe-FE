@@ -1,41 +1,65 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:node:.
 version: 2.1
-orbs:
-  node: circleci/node@5
+
+parameters:
+  tag:
+    type: string
+    default: v1
+
 jobs:
-  build-node:
-    # Build node project
-    executor: node/default
+  vue-build:
+    docker:
+      - image: cimg/node:20.5.0
+    working_directory: ~/frontend
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
       - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build frontend
           command: npm run build
-      - run:
-          name: Create the ~/artifacts directory if it doesn't exist
-          command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
-      - run:
-          name: Copy artifacts
-          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
-      - store_artifacts:
-          path: ~/artifacts
-          destination: node-build
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+
+  vue-docker-build-and-push:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:2022.09
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    working_directory: ~/frontend
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
+      - attach_workspace:
+          at: ~/frontend
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Build Docker image
+          command: |
+            echo "Using TAG << pipeline.parameters.tag >>"
+            docker build -t $DOCKERHUB_USERNAME/mlfront:<< pipeline.parameters.tag >> .
+      - run:
+          name: Push Vue Docker image
+          command: |
+            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+            docker push $DOCKERHUB_USERNAME/mlfront:<< pipeline.parameters.tag >>
+
 workflows:
-  build:
+  version: 2
+  build-and-deploy:
     jobs:
-      - build-node
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - vue-build:
+          filters:
+            branches:
+              only:
+                - develop
+      - vue-docker-build-and-push:
+          requires:
+            - vue-build
+          filters:
+            branches:
+              only:
+                - develop
