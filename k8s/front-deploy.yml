@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-vlatest
+  name: frontend-v{version}
 spec:
   replicas: 1
   strategy:
