@@ -3,7 +3,7 @@
     <div v-if="store.loading" class="text-center">로딩 중...</div>
     <div v-else-if="store.error" class="alert alert-danger text-center">{{ store.error }}</div>
     <div v-else-if="store.detail" class="fade-in">
-      <!-- 제품 이미지 -->
+      <!--  -->
       <div class="text-center mb-4">
         <img
             :src="store.detail.imageUrl"
