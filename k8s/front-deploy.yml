@@ -10,12 +10,12 @@ spec:
   selector:
     matchLabels:
         type: frontend 
-        version: "latest"
+        version: "v-latest"
   template:
     metadata:
       labels:
         type: frontend
-        version: "latest"
+        version: "v-latest"
     spec:
       containers:
         - name: nginx
