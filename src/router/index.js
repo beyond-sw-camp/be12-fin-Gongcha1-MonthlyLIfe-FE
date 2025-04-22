@@ -30,6 +30,7 @@ import UserLayout from "../shop/user/UserLayout.vue";
 import Home from "../shop/common/Home.vue";
 import AdminStatistics from "../admin/statistics/AdminStatistics.vue";
 import AdminItemDetail from "../admin/item/AdminItemDetail.vue";
+import Chat from "../chat.vue"
 
 const routes = [
     {
@@ -60,7 +61,7 @@ const routes = [
             },
 
             // 판매 상세 페이지
-            // { path: 'sale/detail/:idx', component: SaleDetail },
+            { path: 'sale/detail/:idx', component: SaleDetail },
             // 카테고리별 판매 목록 페이지
             { path: 'sale/:categoryIdx', component: SaleList },
             {
@@ -70,6 +71,7 @@ const routes = [
 
             // 장바구니 페이지
             { path: 'cart', component: Cart },
+            { path: 'chat', component: Chat },
             // 구독 확정 페이지 (결제 페이지)
             { path: 'subscription', name: 'subscription', component: Subscription },
             // 구독 완료 페이지
