@@ -31,6 +31,8 @@ const scrollToBottom = () => {
   })
 }
 
+
+
 const sendMessage = () => {
   if (!input.value.trim()) return
   const msg = { from: userId.value, to: 'admin', text: input.value }
