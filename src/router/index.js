@@ -18,12 +18,9 @@ import AdminHome from "../admin/common/AdminHome.vue";
 import AdminLayout from "../admin/common/AdminLayout.vue";
 import ShopLayout from "../shop/common/ShopLayout.vue";
 import AdminItem from "../admin/item/AdminItem.vue";
-import AdminSale from "../admin/sale/AdminSale.vue";
 import AdminSaleRegister from "../admin/sale/AdminSaleRegister.vue";
 import AdminCategory from "../admin/product/AdminCategory.vue";
 import AdminDelivery from "../admin/subscription/AdminDelivery.vue";
-import AdminSubscription from "../admin/subscription/AdminSubscription.vue";
-import AdminProductRegister from "../admin/product/AdminProductRegister.vue";
 import AdminProduct from "../admin/product/AdminProduct.vue";
 import AdminUser from "../admin/user/AdminUser.vue";
 import UserLayout from "../shop/user/UserLayout.vue";
@@ -34,6 +31,7 @@ import AdminSubscriptionDetail from "../admin/subscription/AdminSubscriptionDeta
 import AdminSubscribe from "../admin/subscription/AdminSubscribe.vue";
 import Chat from "../chat.vue"
 import AdminChat from "../Adminchat.vue"
+import AdminPayment from "../admin/payment/AdminPayment.vue";
 
 const routes = [
     {
@@ -100,7 +98,7 @@ const routes = [
             // 재고 상세 페이지 (상품 이름, 재고 위치, 재고 상태, 갯수)
             { path: 'item-detail/:id', component: AdminItemDetail },
             // 판매 관리 페이지
-            { path: 'sale', component: AdminSale },
+            { path: 'sale', component: AdminPayment },
             // 판매 등록 페이지
             { path: 'sale/register', component: AdminSaleRegister },
             // 카테고리 관리 페이지
