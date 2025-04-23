@@ -16,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@popperjs/core": "^2.11.8",
     "@portone/browser-sdk": "^0.0.17",
+    "@splidejs/vue-splide": "^0.6.12",
     "@vueuse/motion": "^3.0.3",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
