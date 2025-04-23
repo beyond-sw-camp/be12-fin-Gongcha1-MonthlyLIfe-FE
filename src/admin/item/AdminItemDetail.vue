@@ -108,6 +108,13 @@ function showSuccessToast(message) {
   }, 2000)
 }
 
+function goBack() {
+  router.back()
+}
+
+
+
+onMounted(fetchStockDetails)
 function getProductCondition(sale) {
   const entry = sale.productList.find(p => p.productCode === productId)
   return entry?.conditionName || entry?.conditionIdx || '—'
@@ -153,6 +160,7 @@ onMounted(async () => {
           <div class="text-center border-top pt-3 mt-3 mb-4">
             <h5 class="fw-bold mb-0">상품 재고 상세 관리</h5>
           </div>
+
           <!-- 상품 정보 -->
           <div class="card mb-4 p-3 d-flex flex-row align-items-center gap-4">
             <div class="product-image">
