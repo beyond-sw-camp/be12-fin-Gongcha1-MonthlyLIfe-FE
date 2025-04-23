@@ -56,6 +56,8 @@ workflows:
             branches:
               only:
                 - develop
+                - kgj/chore/jenkins
+                - main
       - vue-docker-build-and-push:
           requires:
             - vue-build
@@ -63,3 +65,6 @@ workflows:
             branches:
               only:
                 - develop
+                - kgj/chore/jenkins
+                - main
+                
