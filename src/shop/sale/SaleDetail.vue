@@ -40,6 +40,7 @@ function prevSlide() {
 }
 function addToCart() {
   alert('장바구니에 담았습니다!')
+
 }
 function subscribe() {
   alert('구독 진행!')

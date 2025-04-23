@@ -90,6 +90,15 @@ const handleRegister = () => {
   console.log("가격:", price.value);
   console.log("이미지 수:", images.value.length);
   alert("등록 버튼이 눌렸습니다. (실제 등록은 안 됩니다)");
+
+  productName.value = "";
+  selectedMainCategory.value = null;
+  selectedSubCategory.value = null;
+  selectedSubSubCategory.value = null;
+  condition.value = "";
+  description.value = "";
+  price.value = 0;
+  images.value = [];
 };
 </script>
 

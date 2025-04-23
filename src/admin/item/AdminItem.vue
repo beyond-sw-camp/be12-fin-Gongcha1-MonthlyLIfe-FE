@@ -3,11 +3,12 @@ import {ref, reactive, onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
 import ProductModal from "../product/ProductModal.vue";
+import ItemModal from './itemModal.vue';
 
 const router = useRouter()
 
 const today = new Date().toISOString().split("T")[0]
-//productId
+
 const search = reactive({
   productId: '',
   productName: '',
@@ -29,6 +30,7 @@ const savingItemId = ref(null)
 const showToast = ref(false)
 const toastMessage = ref('')
 
+// ✅ API 수정: /api/admin/product
 async function fetchProducts() {
   loading.value = true
   error.value = null
@@ -63,6 +65,10 @@ if (search.searchType === 'productName') {
   }
 }
 
+function refreshList() {
+   currentPage.value = 1
+   fetchProducts()
+ }
 function goToPage(page) {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
@@ -88,7 +94,6 @@ function goToDetailPage(item) {
   <div class="screen bg-light">
     <div class="root-wrapper">
       <div class="root">
-
         <!-- 검색 조건 -->
         <div class="bg-white rounded shadow-sm p-3 mb-3">
           <div class="d-flex flex-wrap gap-3 align-items-start">
@@ -96,6 +101,16 @@ function goToDetailPage(item) {
               <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                 <div class="d-flex align-items-center gap-1">
                   <label class="form-label mb-0 text-nowrap">상품 등록일</label>
+                  <!--                  <div class="dropdown">-->
+                  <!--                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">-->
+                  <!--                      상품 등록일-->
+                  <!--                    </button>-->
+                  <!--                    <ul class="dropdown-menu">-->
+                  <!--                      <li><a class="dropdown-item" href="#">상품 등록일</a></li>-->
+                  <!--                      <li><a class="dropdown-item" href="#">상품 등록일2</a></li>-->
+                  <!--                    </ul>-->
+                  <!--                  </div>-->
+                  <!--                  <button type="button" class="btn btn-sm btn-primary">전체</button>-->
                 </div>
                 <div class="d-flex align-items-center gap-1">
                   <input type="date" class="form-control form-control-sm" v-model="search.startDate" style="max-width: 140px;">
@@ -146,31 +161,42 @@ function goToDetailPage(item) {
               </div>
             </div>
 
-            <table v-if="!loading" class="table table-bordered table-hover text-center product-table">
-              <thead class="custom-thead">
-              <tr>
-                <th>상품코드</th>
-                <th>상품명</th>
-                <th>제조사</th>
-                <th>전체 재고</th>
-                <th>가용 재고</th>
-                <th>등록일</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-if="products.length === 0">
-                <td colspan="6">데이터가 없습니다.</td>
-              </tr>
-              <tr v-for="item in products" :key="item.productCode" style="cursor: pointer;" @click="goToDetailPage(item)">
-                <td>{{ item.productCode }}</td>
-                <td>{{ item.productName }}</td>
-                <td>{{ item.manufacturer }}</td>
-                <td>{{ item.totalStockCount ?? '-' }}</td>
-                <td>{{ item.availableStockCount ?? '-' }}</td>
-                <td>{{ item.createdAt.split('T')[0] }}</td>
-              </tr>
-              </tbody>
-            </table>
+          <!-- ✅ 테이블 수정 -->
+          <table v-if="!loading" class="table table-bordered table-hover text-center product-table">
+            <thead class="custom-thead">
+            <tr>
+              <th>상품코드</th>
+              <th>상품명</th>
+              <th>이미지</th>
+              <th>제조사</th>
+              <th>전체 재고</th>
+              <th>가용 재고</th>
+              <th>등록일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="products.length === 0">
+              <td colspan="5">데이터가 없습니다.</td>
+            </tr>
+            <tr v-for="item in products" :key="item.productCode" style="cursor: pointer;" @click="goToDetailPage(item)">
+              <td>{{ item.productCode }}</td>
+              <td>{{ item.productName }}</td>
+              <td>
+                  <img
+                    v-for="(img, idx) in item.productImages"
+                    :key="idx"
+                    :src="img.productImgUrl"
+                    alt="product"
+                    style="width:50px; height:50px; object-fit:cover; margin-right:4px"
+                  />
+                </td>
+              <td>{{ item.manufacturer }}</td>
+              <td>{{ item.totalStockCount ?? '-' }}</td>
+              <td>{{ item.availableStockCount ?? '-' }}</td>
+              <td>{{ item.createdAt.split('T')[0] }}</td>
+            </tr>
+            </tbody>
+          </table>
 
             <nav v-if="!loading && products.length > 0" class="d-flex justify-content-center">
               <ul class="pagination">
@@ -200,17 +226,21 @@ function goToDetailPage(item) {
     </div>
   </div>
 
+
   <!-- 상품 등록 모달 -->
-  <ProductModal @registered="fetchProducts" />
+  <ItemModal @registered="refreshList" />
+
 </template>
 
 <style scoped>
 .root {
   font-size: 12px;
 }
+
 .table {
   font-size: 14px;
 }
+
 .product-table th {
   background-color: #FFF8DE;
 }

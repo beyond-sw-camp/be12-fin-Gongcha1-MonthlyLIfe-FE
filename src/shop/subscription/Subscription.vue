@@ -1,3 +1,122 @@
+<script setup>
+import {ref, reactive, computed, onMounted} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import * as PortOne from "@portone/browser-sdk/v2";
+import AddressInput from '../common/component/AddressInput.vue'
+import axios from "axios";
+import {usePaymentMethodStore} from "../../store/usePaymentMethodStore.js";
+import {useSubscribeStore} from "../../store/useSubcribeStore.js";
+
+const router = useRouter();
+const route = useRoute();
+const paymentMethodStore = usePaymentMethodStore();
+const subscribeStore = useSubscribeStore();
+
+const cartItems = ref(
+    JSON.parse(decodeURIComponent(route.query.items || '[]'))
+)
+
+const addressInputRef = ref(null)
+
+// const promoCode = ref("EXAMPLECODE");
+// const promoDiscount = ref(5);
+// const promoInput = ref("");
+
+const isDefaultAddress = ref(true);
+const receiver = reactive({
+  name: "",
+  phone: "",
+  memo: ""
+});
+
+const paymentMethod = ref([]);
+const paymentMethodIdx = ref(0);
+
+const totalPrice = computed(() => {
+  return cartItems.value.reduce((acc, item) => acc + item.price, 0);
+});
+
+onMounted(async () => {
+  await paymentMethodStore.getPaymentMethodPage(0, 5);
+  paymentMethod.value = paymentMethodStore.methods;
+  console.log(paymentMethod.value);
+});
+
+// function redeemPromo() {
+//   alert("프로모션 코드 적용됨: " + promoInput.value);
+// }
+
+const submitCheckout = async () => {
+
+  const { postcode, address1, address2 } = addressInputRef.value;
+
+
+  const sales = cartItems.value.map(item => ({
+    saleIdx: item.saleIdx,
+    period: item.period
+  }));
+  console.log('서버에 보낼 데이터:', {
+    sales: sales,
+    rentalDelivery: {
+      postalCode: postcode,
+      address1,
+      address2,
+      deliveryMemo: receiver.memo,
+      recipientName: receiver.name,
+      recipientPhone: receiver.phone
+    },
+    billingKeyIdx: paymentMethodIdx.value
+  })
+  await subscribeStore.postSubscribe(
+      {
+        sales: sales,
+        rentalDelivery: {
+          postalCode: postcode,
+          address1,
+          address2,
+          deliveryMemo: receiver.memo,
+          recipientName: receiver.name,
+          recipientPhone: receiver.phone
+        },
+        billingKeyIdx: paymentMethodIdx.value
+      }
+  );
+}
+
+const addPaymentMethod = async () => {
+  const issueResponse = await PortOne.requestIssueBillingKey({
+    storeId: "store-b71ccbfa-83cf-4cc8-9896-64aa903dda46",
+    channelKey: "channel-key-4ba32ba7-1c46-429c-976d-8e90d75b2e0a",
+    billingKeyMethod: "CARD",
+  });
+// 빌링키가 제대로 발급되지 않은 경우 에러 코드가 존재합니다
+  if (issueResponse.code !== undefined) {
+    return alert(issueResponse.message);
+  }
+
+  console.log(issueResponse);
+// 고객사 서버에 빌링키를 전달합니다
+  const response = await axios
+      .post(`/api/payment/method`,
+          {
+            billingKey: issueResponse.billingKey,
+          }
+      );
+  if (!response.data.isSuccess) throw new Error(`response: ${await response.json()}`);
+
+  await paymentMethodStore.getPaymentMethodPage(0, 5);
+  paymentMethod.value = paymentMethodStore.methods
+}
+
+// function formatCurrency(amount) {
+//   if (amount === undefined || amount === null) {
+//     return "0원";
+//   }
+//   return amount.toLocaleString() + "원";
+// }
+</script>
+
+
 <template>
   <div class="container py-5 checkout-container">
     <div class="row g-5">
@@ -9,13 +128,13 @@
         </h4>
         <ul class="list-group mb-3">
           <li
-              v-for="(item, index) in cartItems"
-              :key="index"
+              v-for="(item, idx) in cartItems"
+              :key="idx"
               class="list-group-item d-flex justify-content-between lh-sm"
           >
             <div>
               <h6 class="my-0">{{ item.name }}</h6>
-              <small class="text-muted">{{ item.description }}</small>
+              <small class="text-muted">구독 기간 {{ item.period }}개월</small>
             </div>
             <span class="text-muted">₩{{ item.price }}</span>
           </li>
@@ -27,292 +146,169 @@
 
       </div>
 
+
       <!-- 청구 주소 및 결제 컬럼 -->
       <div class="col-md-7 col-lg-8">
-        <h4 class="mb-3 fw-bold">청구 주소</h4>
-        <form class="needs-validation" novalidate @submit.prevent="submitCheckout">
-          <div class="row g-3">
-            <div class="col-12">
-              <label for="username" class="form-label">사용자 이름</label>
-              <div class="input-group has-validation">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    v-model="billing.username"
-                    placeholder="사용자 이름"
-                    required
-                />
-                <div class="invalid-feedback">사용자 이름은 필수입니다.</div>
-              </div>
-            </div>
-            <div class="col-12">
-              <label for="email" class="form-label">
-                이메일
-              </label>
-              <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  v-model="billing.email"
-                  placeholder="you@example.com"
-              />
-              <div class="invalid-feedback">
-                배송 업데이트를 위해 유효한 이메일을 입력해 주세요.
-              </div>
-            </div>
-            <!-- 받는사람정보 테이블 영역 -->
-            <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="fw-bold mb-0">받는사람정보</h5>
-                <button class="btn btn-sm btn-outline-secondary" @click="changeAddress">
-                  배송지 변경
-                </button>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-borderless align-middle">
-                  <tbody>
-                  <tr>
-                    <th class="text-muted" style="width: 120px;">이름</th>
-                    <td>
+
+        <div>
+          <!-- 결제정보 타이틀 -->
+          <h4 class="fw-bold mb-3">결제정보</h4>
+
+          <!-- 결제수단 -->
+          <table class="table table-bordered align-middle">
+            <tbody>
+<!--            &lt;!&ndash; 총상품가격 &ndash;&gt;-->
+<!--            <tr>-->
+<!--              <th class="text-muted" style="width: 150px;">총상품가격</th>-->
+<!--              <td>{{ formatCurrency(totalPrice) }}</td>-->
+<!--            </tr>-->
+
+<!--            &lt;!&ndash; 즉시할인 &ndash;&gt;-->
+<!--            <tr>-->
+<!--              <th class="text-muted">즉시할인</th>-->
+<!--              <td>{{ formatCurrency(discount) }}</td>-->
+<!--            </tr>-->
+
+
+<!--            &lt;!&ndash; 배송비 &ndash;&gt;-->
+<!--            <tr>-->
+<!--              <th class="text-muted">배송비</th>-->
+<!--              <td>{{ formatCurrency(shippingCost) }}</td>-->
+<!--            </tr>-->
+
+
+            <!-- 총결제금액 -->
+            <tr>
+              <th class="text-muted">총결제금액</th>
+              <td>{{ totalPrice }}</td>
+            </tr>
+
+            <!-- 결제방식 -->
+            <tr>
+              <th class="text-muted">결제방식</th>
+              <td>
+                <!-- 결제방식 라디오 그룹 -->
+                <div>
+                  <div v-for="method in paymentMethod" class="form-check me-3":class="{'bg-body-secondary': paymentMethodIdx===method.idx}" >
+                    <input
+
+                        type="radio"
+                        class="form-check-input"
+                        :value="method.idx"
+                        :id="method.idx"
+                        v-model="paymentMethodIdx"
+                    />
+                    <label for="bank" class="form-check-label">{{ method.cardCompany }} {{method.cardNumber.substr(8)}}</label>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn" @click="addPaymentMethod">+ 결제 수단 추가</button>
+                </div>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+
+        <div>
+
+          <h4 class="mb-3 fw-bold">배송정보</h4>
+            <div class="row g-3">
+              <!-- 받는사람정보 테이블 영역 -->
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold mb-0">받는사람정보</h5>
+                  <div class="d-flex justify-content-end align-items-center">
+
+                    <div class="form-check">
                       <input
-                          type="text"
-                          class="form-control"
-                          v-model="receiver.name"
-                          placeholder="예) 이유정 (기본배송지)"
+                          type="radio"
+                          class="form-check-input"
+                          id="manualInput"
+                          v-model="isDefaultAddress"
+                          value="true"
+                          @change="toggleAddressFields"
                       />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th class="text-muted">배송주소</th>
-                    <td>
+                      <label class="form-check-label" for="manualInput">기본 정보</label>
+                    </div>
+                    <div class="form-check">
                       <input
-                          type="text"
-                          class="form-control mb-2"
-                          v-model="receiver.address"
-                          placeholder="예) 서울시 강남구 ..."
+                          type="radio"
+                          class="form-check-input"
+                          id="manualInput"
+                          v-model="isDefaultAddress"
+                          value="false"
+                          @change="toggleAddressFields"
                       />
-                      <input
-                          type="text"
-                          class="form-control"
-                          v-model="receiver.address2"
-                          placeholder="아파트, 동, 호수 등 (선택)"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th class="text-muted">연락처</th>
-                    <td>
-                      <input
-                          type="text"
-                          class="form-control"
-                          v-model="receiver.phone"
-                          placeholder="010-1234-5678"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th class="text-muted">메모</th>
-                    <td>
+                      <label class="form-check-label" for="manualInput">직접 입력하기</label>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-borderless align-middle">
+                    <tbody>
+                    <tr>
+                      <th class="text-muted" style="width: 120px;">이름</th>
+                      <td>
+                        <input
+                            type="text"
+                            class="form-control"
+                            v-model="receiver.name"
+                            placeholder="ex) 이유정"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-muted">연락처</th>
+                      <td>
+                        <input
+                            type="text"
+                            class="form-control"
+                            v-model="receiver.phone"
+                            placeholder="010-1234-5678"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-muted">배송주소</th>
+                      <td>
+
+                        <AddressInput  ref="addressInputRef" ></AddressInput>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-muted">메모</th>
+                      <td>
                         <textarea
                             class="form-control"
                             rows="2"
                             placeholder="배송 시 요청사항"
                             v-model="receiver.memo"
                         ></textarea>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <!--  결제   -->
-          <div>
-            <!-- 결제정보 타이틀 -->
-            <h4 class="fw-bold mb-3">결제정보</h4>
-
-            <!-- 결제정보 테이블 -->
-            <table class="table table-bordered align-middle">
-              <tbody>
-              <!-- 총상품가격 -->
-              <tr>
-                <th class="text-muted" style="width: 150px;">총상품가격</th>
-                <td>{{ formatCurrency(totalPrice) }}</td>
-              </tr>
-
-              <!-- 즉시할인 -->
-              <tr>
-                <th class="text-muted">즉시할인</th>
-                <td>-{{ formatCurrency(discount) }}</td>
-              </tr>
+            <!--  결제   -->
 
 
-              <!-- 배송비 -->
-              <tr>
-                <th class="text-muted">배송비</th>
-                <td>{{ formatCurrency(shippingCost) }}</td>
-              </tr>
+            <hr class="my-4"/>
+
+            <button class="w-100 btn btn-primary btn-lg" @click="submitCheckout">
+              결제 진행
+            </button>
 
 
-              <!-- 총결제금액 -->
-              <tr>
-                <th class="text-muted">총결제금액</th>
-                <td>{{ formatCurrency(finalPrice) }}</td>
-              </tr>
-
-              <!-- 결제방식 -->
-              <tr>
-                <th class="text-muted">결제방식</th>
-                <td>
-                  <!-- 결제방식 라디오 그룹 -->
-                  <div class="d-flex flex-wrap">
-                    <div class="form-check me-3">
-                      <input
-                          type="radio"
-                          name="paymentMethod"
-                          id="bank"
-                          value="bank"
-                          v-model="paymentMethod"
-                          class="form-check-input"
-                      />
-                      <label for="bank" class="form-check-label">계좌이체</label>
-                    </div>
-
-                    <div class="form-check me-3">
-                      <input
-                          type="radio"
-                          name="paymentMethod"
-                          id="kakaopay"
-                          value="kakaopay"
-                          v-model="paymentMethod"
-                          class="form-check-input"
-                      />
-                      <label for="kakaopay" class="form-check-label">카카오페이</label>
-                    </div>
-
-                    <div class="form-check me-3">
-                      <input
-                          type="radio"
-                          name="paymentMethod"
-                          id="credit"
-                          value="credit"
-                          v-model="paymentMethod"
-                          class="form-check-input"
-                      />
-                      <label for="credit" class="form-check-label">신용카드</label>
-                    </div>
-
-
-                    <div class="form-check me-3">
-                      <input
-                          type="radio"
-                          name="paymentMethod"
-                          id="wire"
-                          value="wire"
-                          v-model="paymentMethod"
-                          class="form-check-input"
-                      />
-                      <label for="wire" class="form-check-label">무통장입금</label>
-                    </div>
-                  </div>
-
-                  <!-- 계좌이체 선택 시 노출되는 영역 -->
-                  <div v-if="paymentMethod === 'bank'" class="border mt-3 p-3">
-                    <div class="mb-2">
-                      <label class="form-label me-2">은행 선택:</label>
-                      <select class="form-select d-inline-block w-auto" v-model="bankName">
-                        <option value="nh">농협은행</option>
-                        <option value="kb">국민은행</option>
-                        <option value="sh">신한은행</option>
-                      </select>
-                    </div>
-                    <div class="mb-2">
-                      <label class="form-label me-2">계좌번호:</label>
-                      <input
-                          type="text"
-                          class="form-control d-inline-block w-auto"
-                          v-model="accountNumber"
-                          placeholder="******185"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- 신용/체크카드 선택 시 노출되는 영역 -->
-                  <div
-                      v-if="paymentMethod === 'credit' || paymentMethod === 'debit'"
-                      class="border mt-3 p-3"
-                  >
-                    <div class="row g-2">
-                      <div class="col-md-6">
-                        <label class="form-label">카드에 표시된 이름</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="card.name"
-                            placeholder="홍길동"
-                        />
-                        <small class="text-muted">카드에 표시된 전체 이름</small>
-                      </div>
-                      <div class="col-md-6">
-                        <label class="form-label">카드 번호</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="card.number"
-                            placeholder="0000-0000-0000-0000"
-                        />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">유효기간</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="card.expiration"
-                            placeholder="MM/YY"
-                        />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">CVV</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="card.cvv"
-                            placeholder="123"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-
-            <!-- 기본 결제 수단으로 저장 체크박스 (선택사항) -->
-            <div class="form-check mt-2">
-              <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="defaultPayment"
-                  v-model="saveDefaultPayment"
-              />
-              <label class="form-check-label" for="defaultPayment">
-                기본 결제 수단으로 저장
-              </label>
-
-
-            </div>
-          </div>
-
-
-          <hr class="my-4"/>
-
-          <button class="w-100 btn btn-primary btn-lg" type="submit">
-            결제 진행
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>

@@ -18,11 +18,11 @@ import AdminHome from "../admin/common/AdminHome.vue";
 import AdminLayout from "../admin/common/AdminLayout.vue";
 import ShopLayout from "../shop/common/ShopLayout.vue";
 import AdminItem from "../admin/item/AdminItem.vue";
-import AdminSale from "../admin/payment/AdminPayment.vue";
+import AdminSale from "../admin/sale/AdminSale.vue";
 import AdminSaleRegister from "../admin/sale/AdminSaleRegister.vue";
 import AdminCategory from "../admin/product/AdminCategory.vue";
 import AdminDelivery from "../admin/subscription/AdminDelivery.vue";
-import AdminSubscription from "../admin/subscription/AdminSubscribe.vue";
+import AdminSubscription from "../admin/subscription/AdminSubscription.vue";
 import AdminProductRegister from "../admin/product/AdminProductRegister.vue";
 import AdminProduct from "../admin/product/AdminProduct.vue";
 import AdminUser from "../admin/user/AdminUser.vue";
@@ -32,6 +32,8 @@ import AdminStatistics from "../admin/statistics/AdminStatistics.vue";
 import AdminItemDetail from "../admin/item/AdminItemDetail.vue";
 import AdminSubscriptionDetail from "../admin/subscription/AdminSubscriptionDetail.vue";
 import AdminSubscribe from "../admin/subscription/AdminSubscribe.vue";
+import Chat from "../chat.vue"
+import AdminChat from "../Adminchat.vue"
 
 const routes = [
     {
@@ -62,7 +64,7 @@ const routes = [
             },
 
             // 판매 상세 페이지
-            // { path: 'sale/detail/:idx', component: SaleDetail },
+            { path: 'sale/detail/:idx', component: SaleDetail },
             // 카테고리별 판매 목록 페이지
             { path: 'sale/:categoryIdx', component: SaleList },
             {
@@ -72,12 +74,14 @@ const routes = [
 
             // 장바구니 페이지
             { path: 'cart', component: Cart },
+            { path: 'chat', component: Chat },
+            { path: 'adminchat', component: AdminChat },
             // 구독 확정 페이지 (결제 페이지)
             { path: 'subscription', name: 'subscription', component: Subscription },
             // 구독 완료 페이지
             { path: 'subscription/end', component: SubscriptionEnd },
             // 반납 신청 페이지
-            { path: 'subscription/:detailIdx/return ', component: ReturnRequest },
+            { path: 'subscription/:detailIdx/return', component: ReturnRequest },
             // 수리 신청 페이지
             { path: 'subscription/:detailIdx/repair', component: RepairRequest },
             // 배송 조회 페이지
@@ -103,7 +107,6 @@ const routes = [
             { path: 'category', component: AdminCategory },
             // 상품 관리 페이지 ( 상품 이름, 상품 코드 )
             { path: 'product', component: AdminProduct },
-
             // 상품 등록 페이지 (보류)
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
