@@ -33,7 +33,11 @@ function onSearch({ keyword: kw, grade }) {
 const detailCategories = computed(() =>
   categoryStore.categories.filter(c => c.parentIdx === categoryIdx.value)
 )
-
+// query 에서 detailIdx 읽기 (문자열 → 숫자)
+const detailIdx = computed(() => {
+  const d = route.query.detail
+  return d != null ? Number(d) : null
+})
 // 마운트 시 카테고리·상품 로드
 onMounted(async () => {
   await categoryStore.fetchCategoryList()
@@ -52,16 +56,29 @@ watch(
 )
 
 // detailCategories 변경 시 첫 번째 탭 자동 선택
+// watch(
+//   detailCategories,
+//   cats => {
+//     if (cats.length > 0) {
+//       selectedDetailCategory.value = cats[0]
+//     }
+//   },
+//   { immediate: true }
+// )
+// detailCategories 또는 URL query(detail) 변경 시
 watch(
-  detailCategories,
-  cats => {
-    if (cats.length > 0) {
-      selectedDetailCategory.value = cats[0]
-    }
+  [detailCategories, detailIdx],
+  ([cats, d]) => {
+    if (!cats.length) return
+    // detailIdx 가 있으면 그 값을, 없으면 첫 번째 탭 idx
+    const target = d != null && cats.some(c => c.idx === d)
+      ? d
+      : cats[0].idx
+    selectedDetailCategory.value =
+      cats.find(c => c.idx === target) || cats[0]
   },
   { immediate: true }
 )
-
 // 선택 카테고리, 페이지, 검색어, 등급 필터 변경 시 목록 조회
 watch(
   [selectedDetailCategory, currentPage, keyword, gradeFilter],
