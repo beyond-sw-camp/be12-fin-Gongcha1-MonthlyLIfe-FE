@@ -1,0 +1,165 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useSaleStore } from '../../store/useSaleStore'
+import { useProductStore } from '../../store/useProductStore'
+
+const route = useRoute()
+const saleStore = useSaleStore()
+const productStore = useProductStore()
+
+const categoryIdx = Number(route.params.categoryIdx)
+const saleIdx = Number(route.params.saleIdx)
+
+const activeIndex = ref(0)
+const selectedTerm = ref(3)
+
+const images = computed(() =>
+  saleStore.saleDetail.productList.map(p => {
+    const prod = productStore.products.find(prod => prod.code === p.productCode)
+    return prod?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'
+  })
+)
+
+const terms = computed(() => saleStore.saleDetail.priceList.map(p => p.period))
+
+const priceMap = computed(() =>
+  Object.fromEntries(saleStore.saleDetail.priceList.map(p => [p.period, p.price]))
+)
+
+onMounted(async () => {
+  await productStore.fetchProductList()
+  await saleStore.fetchSaleDetail(categoryIdx, saleIdx)
+})
+
+function nextSlide() {
+  activeIndex.value = (activeIndex.value + 1) % images.value.length
+}
+function prevSlide() {
+  activeIndex.value = (activeIndex.value - 1 + images.value.length) % images.value.length
+}
+function addToCart() {
+  alert('장바구니에 담았습니다!')
+
+}
+function subscribe() {
+  alert('구독 진행!')
+}
+</script>
+
+<template>
+  <section id="electronics-detail-view" class="py-5 bg-light">
+    <div class="container my-container">
+      <div class="row g-5 align-items-start">
+        <!-- 왼쪽: 제품 이미지 -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="card-title mb-0">제품 이미지</h5>
+            </div>
+            <div class="card-body p-0">
+              <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  <button
+                    v-for="(img, index) in images"
+                    :key="index"
+                    type="button"
+                    data-bs-target="#productCarousel"
+                    :data-bs-slide-to="index"
+                    :class="{ active: index === activeIndex }"
+                    :aria-current="index === activeIndex ? 'true' : null"
+                    :aria-label="'Slide ' + (index + 1)"
+                  ></button>
+                </div>
+                <div class="carousel-inner">
+                  <div
+                    v-for="(img, index) in images"
+                    :key="index"
+                    class="carousel-item"
+                    :class="{ active: index === activeIndex }"
+                  >
+                    <img :src="img" class="d-block w-100" alt="제품 이미지" />
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" @click="prevSlide">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">이전</span>
+                </button>
+                <button class="carousel-control-next" type="button" @click="nextSlide">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">다음</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 정보 -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">{{ saleStore.saleDetail.name }}</h2>
+              <!-- 렌탈 수가 필요한 경우, DTO와 스토어에 해당 필드를 추가하세요 -->
+              <!-- <p class="text-muted">렌탈 수 {{ saleStore.saleDetail.rentalCount }}회</p> -->
+
+              <div class="mt-3">
+                <span class="badge bg-secondary me-1">#가장 인기 있는</span>
+                <span class="badge bg-secondary">#가성비</span>
+              </div>
+
+              <hr />
+
+              <div class="mb-3">
+                <span class="fw-bold">약정기간:</span>
+                <div class="btn-group btn-group-sm ms-2">
+                  <button
+                    v-for="term in terms"
+                    :key="term"
+                    type="button"
+                    class="btn"
+                    :class="{
+                      'btn-primary': selectedTerm === term,
+                      'btn-outline-secondary': selectedTerm !== term
+                    }"
+                    @click="selectedTerm = term"
+                  >
+                    {{ term }}개월
+                  </button>
+                </div>
+              </div>
+
+              <p class="fw-bold mt-3">
+                월 {{ priceMap[selectedTerm]?.toLocaleString() || 0 }}원 / {{ selectedTerm }}개월
+              </p>
+
+              <div class="mb-3">
+                <button class="btn btn-danger me-2" @click="addToCart">장바구니</button>
+                <button class="btn btn-warning" @click="subscribe">구독</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+.my-container {
+  max-width: 1200px;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: brightness(0.5);
+}
+.card {
+  height: 500px;
+}
+.carousel-inner {
+  height: 400px;
+}
+.carousel-item img {
+  object-fit: cover;
+  height: 400px;
+}
+</style>
