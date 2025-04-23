@@ -13,6 +13,7 @@ spec:
     - monthlylife.kro.kr
     secretName: ml-front-tls-secret
   rules:
+  - host: monthlylife.kro.kr 
   - http:
       paths:
       - path: /
