@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
 const route = useRoute()
+const router = useRouter()
 const productId = route.params.id
 
 const loading = ref(false)
@@ -72,10 +73,20 @@ function showSuccessToast(message) {
   }, 2000)
 }
 
+function goBack() {
+  router.back()
+}
+
 onMounted(fetchStockDetails)
 </script>
 
 <template>
+  <div class="mb-3">
+    <button class="btn btn-outline-secondary btn-sm" @click="goBack">
+      ← 뒤로 가기
+    </button>
+  </div>
+
   <div class="screen">
     <div class="root-wrapper">
       <div class="root">

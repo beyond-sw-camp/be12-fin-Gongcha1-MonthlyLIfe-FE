@@ -1,35 +1,71 @@
 <script setup>
 
-import {ref} from "vue";
+import {ref, onMounted, reactive} from "vue";
+import axios from 'axios';
 
 const today = new Date().toISOString().split("T")[0]
-const users = ref([
-  {
-    id: 'gildong2',
-    email: 'honggildong@email.com',
-    name: '홍길동',
-    address1: '서울',
-    isOngoing: 'N',
-    tags: ['1인가구', '대학생'],
-    overdue: 'N',
-    subscriptionCount: 3,
-    joined: '2020-05-16 11:15:53',
-  },
 
-  {
-    id: 'ggukjeong',
-    email: 'ggukjeong@email.com',
-    name: '임꺽정',
-    address1: '부산',
-    isOngoing: 'Y',
-    tags: ['1인사무실'],
-    overdue: 'N',
-    subscriptionCount: 1,
-    joined: '2023-05-16 11:15:53',
-  },
-  // 더 추가 가능
-])
+const search = reactive({
+  sort: '최신 회원가입 순',
+  dateFrom: '',
+  dateTo: '',
+  searchType: 'ID',     // ID, 주소
+  searchQuery: '',
+  tags: [],             // 체크된 태그
+  overdueOnly: false
+})
 
+// 페이징 관련 상태
+const currentPage = ref(1);
+const pageSize = ref(10); // 페이지당 항목 수
+const totalPages = ref(1);
+const users = ref([]);
+
+
+
+// 유저 목록 가져오기 함수
+const fetchUsers = async () => {
+  try {
+    const res = await axios.get("/api/admin/users", {
+      params: {
+        page: currentPage.value - 1,
+        size: pageSize.value,
+        sort: search.sort,
+        searchType: search.searchType,
+        searchQuery: search.searchQuery?.trim() || null,
+        dateFrom: search.dateFrom || null,
+        dateTo: search.dateTo || null,
+        tags: search.tags.join(','),
+        overdueOnly: search.overdueOnly,
+      }
+    });
+
+    users.value = res.data.result.content;
+    totalPages.value = res.data.result.totalPages;
+  } catch (err) {
+    console.error("유저 목록 가져오기 실패", err);
+  }
+};
+
+
+// 페이지 이동
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    fetchUsers();
+  }
+};
+
+//검색시에 페이지 1로 다시 만듬
+function searchSubmit() {
+  currentPage.value = 1
+  fetchUsers()
+}
+
+// 초기 호출
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 <template>
@@ -63,23 +99,23 @@ const users = ref([
                   </div>
 
                   <div class="d-flex align-items-center gap-1">
-                    <input type="date" class="form-control form-control-sm" :value="today" style="max-width: 140px;">
+                    <input type="date" class="form-control form-control-sm" v-model="search.dateFrom" style="max-width: 140px;">
                     <span>~</span>
-                    <input type="date" class="form-control form-control-sm" :value="today" style="max-width: 140px;">
+                    <input type="date" class="form-control form-control-sm" v-model="search.dateTo" style="max-width: 140px;">
                   </div>
 
                   <div class="d-flex align-items-center gap-1 flex-nowrap">
                     <label class="form-label mb-0 text-nowrap" style="font-size: 12px">검색 구분</label>
                     <div class="dropdown">
                       <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        통합 검색
+                        {{ search.searchType }}
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">ID</a></li>
-                        <li><a class="dropdown-item" href="#">주소</a></li>
+                        <li><a class="dropdown-item" href="#" @click.prevent="search.searchType = 'ID'">ID</a></li>
+                        <li><a class="dropdown-item" href="#" @click.prevent="search.searchType = '주소'">주소</a></li>
                       </ul>
                     </div>
-                    <input type="text" class="form-control form-control-sm" placeholder="검색어" style="max-width: 200px;">
+                    <input type="text" class="form-control" v-model="search.searchQuery" placeholder="검색어">
                   </div>
                 </div>
 
@@ -91,6 +127,17 @@ const users = ref([
                       <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         태그
                       </button>
+
+<!-- TODO: 이거 추후 추가 -->
+<!--                      <input class="form-check-input" type="checkbox" id="check1" value="1인 사무실" v-model="search.tags">-->
+<!--                      <label class="form-check-label" for="check1">1인 사무실</label>-->
+<!--                      <input class="form-check-input" type="checkbox" id="check2" value="2인가구" v-model="search.tags">-->
+<!--                      <label class="form-check-label" for="check2">2인가구</label>-->
+<!--                      <input class="form-check-input" type="checkbox" id="check3" value="1인사무실" v-model="search.tags">-->
+<!--                      <label class="form-check-label" for="check3">1인사무실</label>-->
+
+
+
                       <ul class="dropdown-menu">
                         <li>
                           <div class="dropdown-item">
@@ -114,8 +161,7 @@ const users = ref([
                       <button class="btn btn-sm btn-secondory">초기화</button>
                     </div>
 
-
-                    <input class="form-check-input" type="checkbox" id="check4">
+                    <input class="form-check-input" type="checkbox" id="check4" v-model="search.overdueOnly">
                     <label class="form-check-label" for="check4">연체된 사용자</label>
 
                   </div>
@@ -124,7 +170,7 @@ const users = ref([
 
               <!-- 검색 버튼 (오른쪽) -->
               <div class="align-self-end">
-                <button type="submit" class="btn btn-secondary">검색</button>
+                <button type="submit" class="btn btn-secondary" @click="searchSubmit">검색</button>
               </div>
             </div>
           </div>
@@ -158,9 +204,9 @@ const users = ref([
               <td>{{ item.email }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.address1 }}</td>
-              <td>{{ item.isOngoing }}</td>
-              <td>{{ item.tags }}</td>
               <td>{{ item.overdue }}</td>
+              <td>{{ item.tags }}</td>
+              <td>{{ item.isDelayed }}</td>
               <td>{{ item.subscriptionCount }}</td>
               <td>{{ item.joined }}</td>
             </tr>

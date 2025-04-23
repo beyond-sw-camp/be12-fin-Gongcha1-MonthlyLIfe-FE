@@ -18,11 +18,11 @@ import AdminHome from "../admin/common/AdminHome.vue";
 import AdminLayout from "../admin/common/AdminLayout.vue";
 import ShopLayout from "../shop/common/ShopLayout.vue";
 import AdminItem from "../admin/item/AdminItem.vue";
-import AdminSale from "../admin/sale/AdminSale.vue";
+import AdminSale from "../admin/payment/AdminPayment.vue";
 import AdminSaleRegister from "../admin/sale/AdminSaleRegister.vue";
 import AdminCategory from "../admin/product/AdminCategory.vue";
 import AdminDelivery from "../admin/subscription/AdminDelivery.vue";
-import AdminSubscription from "../admin/subscription/AdminSubscription.vue";
+import AdminSubscription from "../admin/subscription/AdminSubscribe.vue";
 import AdminProductRegister from "../admin/product/AdminProductRegister.vue";
 import AdminProduct from "../admin/product/AdminProduct.vue";
 import AdminUser from "../admin/user/AdminUser.vue";
@@ -30,6 +30,8 @@ import UserLayout from "../shop/user/UserLayout.vue";
 import Home from "../shop/common/Home.vue";
 import AdminStatistics from "../admin/statistics/AdminStatistics.vue";
 import AdminItemDetail from "../admin/item/AdminItemDetail.vue";
+import AdminSubscriptionDetail from "../admin/subscription/AdminSubscriptionDetail.vue";
+import AdminSubscribe from "../admin/subscription/AdminSubscribe.vue";
 
 const routes = [
     {
@@ -101,12 +103,15 @@ const routes = [
             { path: 'category', component: AdminCategory },
             // 상품 관리 페이지 ( 상품 이름, 상품 코드 )
             { path: 'product', component: AdminProduct },
+
             // 상품 등록 페이지 (보류)
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
             { path: 'delivery-by-page', component: AdminDelivery },
             // 구독 관리 페이지
-            { path: 'subscription', component: AdminSubscription },
+            { path: 'subscribe', component: AdminSubscribe },
+            //구독 상세 페이지
+            { path: 'subscribe-detail/:subscribeId', component: AdminSubscriptionDetail},
             // 사용자 관리 페이지
             { path: 'user', component: AdminUser },
             //통계 리포트 페이지

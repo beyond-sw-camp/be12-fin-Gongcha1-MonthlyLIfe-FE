@@ -35,11 +35,14 @@ async function fetchOrders() {
       params: {
         page: currentPage.value - 1,
         size: pageSize,
+        searchType: search.searchType,
+        searchQuery: search.searchQuery?.trim() || null,
+        dateFrom: search.dateFrom || null,
+        dateTo: search.dateTo || null,
       }
     })
 
-    const result = response.data.result // ✅ 여기서 result 추출
-
+    const result = response.data.result
     orders.value = result.content
     totalPages.value = result.totalPages
   } catch (err) {
@@ -49,6 +52,7 @@ async function fetchOrders() {
     loading.value = false
   }
 }
+
 
 // 페이지 이동
 function goToPage(page) {

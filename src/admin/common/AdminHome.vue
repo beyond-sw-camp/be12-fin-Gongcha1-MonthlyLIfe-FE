@@ -3,36 +3,36 @@
     <!-- 상단 도넛 차트 영역: 한 줄에 두 개 배치 -->
     <div class="row g-3 mb-4">
       <!-- 도넛 차트: 매출 분포 -->
-      <div class="col-12 col-md-6">
-        <div class="chart-box shadow-sm">
-          <Doughnut :data="distributionData" :options="chartOptions" />
-        </div>
-      </div>
-      <!-- 월간 목표: 부트스트랩 Progress Bar 사용 -->
-      <div class="col-12 col-md-6">
-        <div class="card p-3 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">MONTHLY GOAL</h5>
-            <div class="progress" style="height: 30px;">
-              <div
-                  class="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  :style="{ width: goalPercentage + '%' }"
-                  :aria-valuenow="goalPercentage"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-              >
-                {{ goalPercentage }}%
-              </div>
-            </div>
-            <div class="mt-2">
-              <span>현재: {{ currentSales.toLocaleString() }}</span>
-              <span> / 목표: {{ monthlyGoal.toLocaleString() }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--      <div class="col-12 col-md-6">-->
+<!--        <div class="chart-box shadow-sm">-->
+<!--          <Doughnut :data="distributionData" :options="chartOptions" />-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash; 월간 목표: 부트스트랩 Progress Bar 사용 &ndash;&gt;-->
+<!--      <div class="col-12 col-md-6">-->
+<!--        <div class="card p-3 shadow-sm">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">MONTHLY GOAL</h5>-->
+<!--            <div class="progress" style="height: 30px;">-->
+<!--              <div-->
+<!--                  class="progress-bar progress-bar-striped progress-bar-animated"-->
+<!--                  role="progressbar"-->
+<!--                  :style="{ width: goalPercentage + '%' }"-->
+<!--                  :aria-valuenow="goalPercentage"-->
+<!--                  aria-valuemin="0"-->
+<!--                  aria-valuemax="100"-->
+<!--              >-->
+<!--                {{ goalPercentage }}%-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="mt-2">-->
+<!--              <span>현재: {{ currentSales.toLocaleString() }}</span>-->
+<!--              <span> / 목표: {{ monthlyGoal.toLocaleString() }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <!-- 2x2 카드뷰 영역 -->
 <!--    Todo: 추후 백엔드 연동-->
@@ -152,6 +152,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
