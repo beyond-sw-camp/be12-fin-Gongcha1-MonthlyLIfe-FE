@@ -14,7 +14,7 @@ spec:
     secretName: ml-front-tls-secret
   rules:
   - host: monthlylife.kro.kr 
-  - http:
+    http:
       paths:
       - path: /
         pathType: Prefix
