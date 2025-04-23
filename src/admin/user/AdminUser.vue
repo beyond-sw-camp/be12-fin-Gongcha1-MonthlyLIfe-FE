@@ -83,22 +83,23 @@ onMounted(() => {
               <div class="flex-grow-1">
                 <!-- 1행 -->
                 <div class="d-flex flex-nowrap align-items-center gap-2 mb-2">
-                  <div class="d-flex align-items-center gap-1">
-                    <label for="inputDate" class="form-label mb-0" >정렬</label>
-                    <div class="dropdown">
-                      <button class="btn btn-sm btn-secondary dropdown-toggle" id="inputDate" type="button" data-bs-toggle="dropdown">
-                        최신 회원가입 순
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">최신 회원가입 순</a></li>
-                        <li><a class="dropdown-item" href="#">최신 구독 순</a></li>
-                        <li><a class="dropdown-item" href="#">전체 구독 순</a></li>
-                      </ul>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-secondary">전체</button>
-                  </div>
+<!--                  <div class="d-flex align-items-center gap-1">-->
+<!--                    <label for="inputDate" class="form-label mb-0" >정렬</label>-->
+<!--                    <div class="dropdown">-->
+<!--                      <button class="btn btn-sm btn-secondary dropdown-toggle" id="inputDate" type="button" data-bs-toggle="dropdown">-->
+<!--                        최신 회원가입 순-->
+<!--                      </button>-->
+<!--                      <ul class="dropdown-menu">-->
+<!--                        <li><a class="dropdown-item" href="#">최신 회원가입 순</a></li>-->
+<!--                        <li><a class="dropdown-item" href="#">최신 구독 순</a></li>-->
+<!--                        <li><a class="dropdown-item" href="#">전체 구독 순</a></li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                    <button type="button" class="btn btn-sm btn-secondary">전체</button>-->
+<!--                  </div>-->
 
                   <div class="d-flex align-items-center gap-1">
+                    <label class="form-label mb-0 text-nowrap" style="font-size: 12px">가입 일자</label>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateFrom" style="max-width: 140px;">
                     <span>~</span>
                     <input type="date" class="form-control form-control-sm" v-model="search.dateTo" style="max-width: 140px;">
