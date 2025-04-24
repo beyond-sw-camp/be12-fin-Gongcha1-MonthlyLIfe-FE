@@ -16,8 +16,9 @@ const productDetail = ref({
   productName: '',
   productCode: '',
   productDescription: '',
+  productDescriptionImageUrl: '',
   manufacturer: '',
-  productImages: []
+  productImages: [],
 })
 
 const stockList = ref([])
@@ -55,20 +56,53 @@ function goToPage(page) {
 }
 
 
+// async function fetchStockDetails() {
+//   loading.value = true
+//   error.value = null
+
+//   try {
+//     const response = await axios.get(`/api/admin/item-detail/${productId}`)
+//     const result = response.data.result
+
+//     // productDetail.value = result.productDetail
+//     productDetail.value = {
+//       ...result.productDetail,
+//       productImages: result.productDetail.productImages || []
+//     }
+
+//     stockList.value = result.dtoList.map(item => ({
+//       ...item,
+//       editedCount: item.itemCount
+//     }))
+//   } catch (err) {
+//     console.error(err)
+//     error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
+//   } finally {
+//     loading.value = false
+//   }
+// }
+
 async function fetchStockDetails() {
   loading.value = true
   error.value = null
 
   try {
     const response = await axios.get(`/api/admin/item-detail/${productId}`)
+    console.log('▶ item-detail payload:', response.data.result.productDetail)
     const result = response.data.result
+    const pd = result.productDetail
 
-    // productDetail.value = result.productDetail
+    // productDetail 에 로컬 키와 백엔드 키를 매핑
     productDetail.value = {
-      ...result.productDetail,
-      productImages: result.productDetail.productImages || []
+      productName: pd.productName,
+      productCode: pd.productCode,
+      productDescription: pd.productDescription,
+      productDescriptionImageUrl: pd.productDescriptionImageUrl,
+      manufacturer: pd.manufacturer,
+      productImages: pd.productImages || []
     }
 
+    // 재고 리스트 초기화 (editedCount 포함)
     stockList.value = result.dtoList.map(item => ({
       ...item,
       editedCount: item.itemCount
@@ -80,6 +114,7 @@ async function fetchStockDetails() {
     loading.value = false
   }
 }
+
 
 async function saveCount(item) {
   try {
@@ -174,8 +209,18 @@ onMounted(async () => {
               <p class="mb-1"><strong>상품 코드:</strong> {{ productDetail.productCode }}</p>
               <p class="mb-1"><strong>제조사:</strong> {{ productDetail.manufacturer }}</p>
               <p class="mb-0"><strong>상품 설명:</strong> {{ productDetail.productDescription }}</p>
+
+
             </div>
           </div>
+
+          <div class="card mb-4 p-3 d-flex flex-row align-items-center gap-4">
+            <div class="mt-2 d-flex justify-content-center w-100">
+              <img :src="productDetail.productDescriptionImageUrl || ''" alt="설명 이미지"
+                style="max-width:100%; height:auto; object-fit:cover; margin-top:0.5rem" />
+            </div>
+          </div>
+
 
           <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
 
