@@ -1,5 +1,26 @@
 <script setup>
 
+
+import {onMounted, reactive} from "vue";
+import {useUserStore} from "../../store/useUserStore.js";
+
+const userStore = useUserStore();
+const user = reactive({
+  id: null,
+  name: null,
+  birth: null,
+  phoneNumber: null,
+  address1: null,
+  address2: null
+});
+
+onMounted(async () =>  {
+  Object.assign(user, await userStore.getUser());
+  console.log(user);
+})
+
+
+
 </script>
 
 <template>
@@ -22,21 +43,21 @@
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">이름</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="홍길동" disabled="true">
+                  <input class="form-control" style="width: 30em;" v-model="user.name" disabled="true">
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">아이디</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="gildong123" disabled="true">
+                  <input class="form-control" style="width: 30em;" v-model="user.id" disabled="true">
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">생년월일</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="20250403" disabled="true">
+                  <input class="form-control" style="width: 30em;" v-model="user.birth" disabled="true">
                 </div>
               </li>
 
@@ -44,28 +65,21 @@
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">연락처</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="01012345678" disabled="true">
+                  <input class="form-control" style="width: 30em;" v-model="user.phoneNumber" disabled="true">
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">주소</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="서울시 동작구 보라매로 87" disabled="true">
+                  <input class="form-control" style="width: 30em;"v-model="user.address1" disabled="true">
                 </div>
               </li>
 
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">상세주소</p>
                 <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="4층" disabled="true">
-                </div>
-              </li>
-
-              <li class="d-flex align-items-center mb-2">
-                <p class="mb-1">상세주소</p>
-                <div class="ms-auto d-flex flex-column">
-                  <input class="form-control" style="width: 30em;" value="4층" disabled="true">
+                  <input class="form-control" style="width: 30em;" v-model="user.address2" disabled="true">
                 </div>
               </li>
             </ul>

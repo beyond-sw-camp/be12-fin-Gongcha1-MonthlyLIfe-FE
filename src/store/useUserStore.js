@@ -9,10 +9,13 @@ export const useUserStore = defineStore("user", {
         storage: sessionStorage,
     },
     actions: {
-        async getExample(context) {
+        async getUser() {
             const response = await axios
-                .get(url);
-            return response.data;
+                .get('/api/user/detail',
+                    { withCredentials: true }
+                );
+            console.log(response);
+            return response.data.result;
         },
         async getExampleList(context) {
             const response = await axios
