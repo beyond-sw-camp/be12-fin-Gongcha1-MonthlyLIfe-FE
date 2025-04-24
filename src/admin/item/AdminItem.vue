@@ -2,7 +2,6 @@
 import {ref, reactive, onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
-import ProductModal from "../product/ProductModal.vue";
 import ItemModal from './itemModal.vue';
 
 const router = useRouter()

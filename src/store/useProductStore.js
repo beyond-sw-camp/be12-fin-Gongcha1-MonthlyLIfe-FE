@@ -60,6 +60,7 @@ export const useProductStore = defineStore('product', {
           name: item.name,
           categoryIdx: item.categoryIdx,
           description: item.description,
+          descriptionImageUrl: item.descriptionImageUrl,
           manufacturer: item.manufacturer,
           condition: item.condition,
           location: item.location,
