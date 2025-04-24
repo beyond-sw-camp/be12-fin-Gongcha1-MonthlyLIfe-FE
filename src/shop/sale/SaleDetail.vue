@@ -1,12 +1,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
 import { useProductStore } from '../../store/useProductStore'
-
+import { useSubscribeStore } from '../../store/useSubcribeStore'
+const router = useRouter()
 const route = useRoute()
 const saleStore = useSaleStore()
 const productStore = useProductStore()
+const subscribeStore = useSubscribeStore()
 
 const categoryIdx = Number(route.params.categoryIdx)
 const saleIdx = Number(route.params.saleIdx)
@@ -48,11 +50,55 @@ function prevSlide() {
 }
 
 function addToCart() {
-  alert('장바구니에 담았습니다!')
+  // 1) 선택된 기간의 price 객체 찾기
+  const sel = saleStore.saleDetail.priceList
+    .find(p => p.period === selectedTerm.value)
+
+  if (!sel?.salePriceIdx) {
+    return alert('잘못된 상품 정보입니다.')
+  }
+
+  // 2) 액션 호출 후 결과에 따라 알림
+  subscribeStore.addCartItem(sel.salePriceIdx)
+
+    .then(ok => {
+      if (ok) alert('장바구니에 담았습니다!')
+      else   alert(`장바구니 추가 실패: ${subscribeStore.cartError || ''}`)
+    })
 }
+
+
+
 function subscribe() {
-  alert('구독 진행!')
+  // 1) 선택된 기간(개월) 찾아서
+  const sel = saleStore.saleDetail.priceList.find(p => p.period === selectedTerm.value)
+  if (!sel?.salePriceIdx) {
+    return alert('잘못된 상품 정보입니다.')
+  }
+
+  const payload = [{
+    saleIdx:      saleStore.saleDetail.saleIdx,  // 판매 상품 ID
+    salePriceIdx: sel.salePriceIdx,              // 선택된 옵션의 PK
+    period:       sel.period,                    // 개월 수
+    price:        sel.price,                     // 월 가격
+  }]
+  router.push({
+    name: 'subscription',
+    query: {
+      items: encodeURIComponent(JSON.stringify(payload))
+    }
+  })
 }
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <template>
@@ -193,10 +239,6 @@ function subscribe() {
 }
 .info-card .card-body {
   overflow-y: auto;
-}
-
-/* description-card: 기본 auto height */
-.description-card {
 }
 
 /* 설명 이미지 스타일 */
