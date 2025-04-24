@@ -49,7 +49,7 @@ function goToPage(page) {
 }
 
 function markAsCompleted(id) {
-  axios.patch(`/api/admin/${search.type.toLowerCase()}/${id}/complete`)
+  axios.post(`/api/admin/${search.type.toLowerCase()}/${id}/complete`)
       .then(() => fetchRequests())
       .catch(err => console.error('상태 변경 실패', err))
 }
@@ -59,7 +59,21 @@ function filterList() {
   fetchRequests()
 }
 
-onMounted(fetchRequests)
+onMounted(() => {
+  fetchRequests();
+
+  requests.value = [{
+    id: 'id',
+    userName: '이름',
+    description: '설명',
+    createdAt:  '2025-04-24 12',
+    status: 'REQUESTED',
+    returnLocation: 'BEFORE_RETURN',
+  }]
+});
+
+
+
 </script>
 
 <template>
@@ -106,12 +120,13 @@ onMounted(fetchRequests)
           <th>요청내용</th>
           <th>요청일</th>
           <th>상태</th>
+          <th>반환장소</th>
           <th>처리</th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="requests.length === 0">
-          <td colspan="6">데이터가 없습니다.</td>
+          <td colspan="8">데이터가 없습니다.</td>
         </tr>
         <tr v-for="item in requests" :key="item.id">
           <td>{{ item.id }}</td>
@@ -120,7 +135,15 @@ onMounted(fetchRequests)
           <td>{{ item.createdAt.split('T')[0] }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <button v-if="item.status === 'REQUESTED'" class="btn btn-success btn-sm" @click="markAsCompleted(item.id)">완료 처리</button>
+            <select v-if="item.location === 'REQUESTED'" v-model="item.returnLocation">
+              <option value="WAREHOUSE">창고</option>
+              <option value="REPAIRING">수리중</option>
+            </select>
+            <p v-else>{{item.returnLocation}}</p>
+          </td>
+          <td>
+            <button v-if="item.status === 'REQUESTED'" class="btn btn-success btn-sm" @click="markAsCompleted(item)">완료 처리</button>
+            <p v-else>처리완료</p>
           </td>
         </tr>
         </tbody>
