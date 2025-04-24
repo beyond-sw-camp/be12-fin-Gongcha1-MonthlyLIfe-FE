@@ -19,6 +19,13 @@ export const useUserStore = defineStore("user", {
                 .get(url);
             return response.data;
         },
+        async postCheckId(id) {
+            const response = await axios
+                .post("/api/user/checkid",
+                    {id : id},
+                )
+            return response.data.result;
+        },
         async postSignup(user) {
             const response = await axios
                 .post("/api/user/register",
