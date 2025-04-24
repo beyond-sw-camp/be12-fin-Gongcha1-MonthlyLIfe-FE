@@ -3,6 +3,7 @@
 
 import {onMounted, reactive} from "vue";
 import {useUserStore} from "../../store/useUserStore.js";
+import router from "../../router/index.js";
 
 const userStore = useUserStore();
 const user = reactive({
@@ -19,7 +20,16 @@ onMounted(async () =>  {
   console.log(user);
 })
 
-
+const withdraw = () => {
+  const result = userStore.deleteUser();
+  if(result) {
+    userStore.getLogout();
+    router.push('/');
+  }
+  else {
+    alert('회원 탈퇴 실패, 잠시 후 다시 시도해주세요');
+  }
+}
 
 </script>
 
@@ -68,7 +78,12 @@ onMounted(async () =>  {
                   <input class="form-control" style="width: 30em;" v-model="user.phoneNumber" disabled="true">
                 </div>
               </li>
-
+              <li class="d-flex align-items-center mb-2">
+                <p class="mb-1">우편번호</p>
+                <div class="ms-auto d-flex flex-column">
+                  <input class="form-control" style="width: 30em;"v-model="user.postalCode" disabled="true">
+                </div>
+              </li>
               <li class="d-flex align-items-center mb-2">
                 <p class="mb-1">주소</p>
                 <div class="ms-auto d-flex flex-column">
@@ -157,9 +172,11 @@ onMounted(async () =>  {
       </div>
 
 
-      <!-- 더보기 버튼 -->
+      <!-- 회원탈퇴 버튼 -->
       <div class="text-end">
-        <button class="btn btn-link text-black text-decoration-underline btn-sm me-2 mb-1">회원탈퇴</button>
+        <button class="btn btn-link text-black text-decoration-underline btn-sm me-2 mb-1"
+                @click="withdraw"
+        >회원탈퇴</button>
       </div>
 
     </div>

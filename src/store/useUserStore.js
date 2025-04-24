@@ -67,12 +67,13 @@ export const useUserStore = defineStore("user", {
                 )
             return response.data;
         },
-        async deleteExample(context) {
+        async deleteUser() {
             const response = await axios
-                .delete(url,
+                .get('/api/user/withdraw',
                     { withCredentials: true }
-                )
-            return response.data;
+                );
+
+            return response.data.isSuccess;
         }
     }
 })
