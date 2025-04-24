@@ -3,6 +3,7 @@
 import {computed, ref} from "vue";
 import router from "../../router/index.js";
 import {useUserStore} from "../../store/useUserStore.js";
+import SignupAddressInput from "./component/SignupAddressInput.vue";
 
 const phoneNumber = ref('');
 const id = ref('');
@@ -119,17 +120,8 @@ const signup = async () => {
       <input type="password" class="underline-input">
     </div>
 
-    <div class="pb-3">
-      <small class="text-start d-block">주소</small>
-      <div class="d-flex">
-        <input type="text" v-model="address1" class="underline-input">
-        <button class="btn btn-dark text-nowrap btn-sm" style="font-size: 10px">검색</button>
-      </div>
-    </div>
-    <div class="pb-3">
-      <small class="text-start d-block">상세주소</small>
-      <input type="text" v-model="address2" class="underline-input">
-    </div>
+    <SignupAddressInput/>
+
 
     <small class="text-start d-block">태그</small>
     <div class="m-3">
