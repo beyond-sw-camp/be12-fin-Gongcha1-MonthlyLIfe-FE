@@ -44,7 +44,9 @@ const sendMessage = () => {
 }
 
 const setupSocket = () => {
-  socket = new WebSocket(`ws://localhost:8080/ws/chat`)
+  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+  const host = window.location.host
+  socket = new WebSocket(`${protocol}://${host}/api/ws/chat`)
 
   socket.onopen = () => console.log('✅ WebSocket 연결 성공')
 
@@ -58,6 +60,7 @@ const setupSocket = () => {
   socket.onclose = () => console.warn('❌ WebSocket 연결 종료')
   socket.onerror = err => console.error('WebSocket 에러:', err)
 }
+
 onMounted(() => {
 })
 
