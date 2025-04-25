@@ -33,7 +33,7 @@
       <tr>
         <td align="center">
           <a href="https://github.com/museongkim0" style="text-decoration: none; color: lightgray;">
-            <img src="https://i.namu.wiki/i/FgRvYsirraMEiQVb582pfenhZBYTUC6m4N4eQbzHOwr09jUKZMkbRhry-t4jHDUw9sPOCKfRWCgu6ubeBU2GmQ.gif" width="100px;" height="120px;" background-size="cover;" alt=""/><br />
+            <img src="https://mblogthumb-phinf.pstatic.net/MjAxNzA0MTNfMTQ2/MDAxNDkyMDg4OTU0NzU2.X-Ise8QGLx6BeA7f6y1lStSFaxdMRMNieJK_sB2sdokg.ll6BBI3GcX8hmiVP10LOy9b2rAZ2hHKnZFncXmzexsgg.JPEG.swhyun98/downloadfile.jpg?type=w420" width="100px;" height="120px;" background-size="cover;" alt=""/><br />
             <sub><b>  김경준</b></sub>
           </a><br />
         </td>
