@@ -2,7 +2,6 @@
 import {ref, reactive, onMounted} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
-import ProductModal from "../product/ProductModal.vue";
 import ItemModal from './itemModal.vue';
 
 const router = useRouter()
@@ -13,6 +12,10 @@ const search = reactive({
   productId: '',
   productName: '',
   seller: '',
+  searchType: 'productName', // 기본값
+  searchQuery: '',
+  startDate: '',
+  endDate: ''
 })
 
 const currentPage = ref(1)
@@ -31,14 +34,25 @@ async function fetchProducts() {
   loading.value = true
   error.value = null
 
+const params = {
+  page: currentPage.value - 1,
+  size: pageSize,
+  startDate: search.startDate,
+  endDate: search.endDate
+}
+
+// 👉 searchType에 따라 조건 파라미터 동적 할당
+if (search.searchType === 'productName') {
+  params.productName = search.searchQuery
+} else if (search.searchType === 'manufacturer') {
+  params.manufacturer = search.searchQuery
+}
+
+
   try {
     const response = await axios.get('/api/admin/product-by-page', {
-      params: {
-        page: currentPage.value - 1,
-        size: pageSize,
-      }
+   params
     })
-
     const result = response.data.result
     products.value = result.content
     totalPages.value = result.totalPages
@@ -76,7 +90,7 @@ function goToDetailPage(item) {
 </script>
 
 <template>
-  <div class="screen">
+  <div class="screen bg-light">
     <div class="root-wrapper">
       <div class="root">
         <!-- 검색 조건 -->
@@ -98,22 +112,21 @@ function goToDetailPage(item) {
                   <!--                  <button type="button" class="btn btn-sm btn-primary">전체</button>-->
                 </div>
                 <div class="d-flex align-items-center gap-1">
-                  <input type="date" class="form-control form-control-sm" value="2024-01-01"  :value="search.startDate" style="max-width: 140px;">
+                  <input type="date" class="form-control form-control-sm" v-model="search.startDate" style="max-width: 140px;">
                   <span>~</span>
-                  <input type="date" class="form-control form-control-sm" value="today" :value="search.endDate" style="max-width: 140px;">
+                  <input type="date" class="form-control form-control-sm" v-model="search.endDate" style="max-width: 140px;">
+
                 </div>
                 <div class="d-flex align-items-center gap-1 flex-nowrap">
                   <label class="form-label mb-0 text-nowrap" style="font-size: 12px">검색 구분</label>
                   <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                      상품명
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">상품명</a></li>
-                      <li><a class="dropdown-item" href="#">제조사</a></li>
-                    </ul>
+                    <select v-model="search.searchType" class="form-select form-select-sm" style="min-width: 100px;">
+                      <option value="productName">상품명</option>
+                      <option value="manufacturer">제조사</option>
+                    </select>
+
                   </div>
-                  <input type="text" class="form-control form-control-sm" placeholder="검색어" style="max-width: 200px;">
+                  <input type="text" v-model="search.searchQuery" class="form-control form-control-sm" placeholder="검색어" style="max-width: 200px;">
                 </div>
               </div>
             </div>
@@ -123,27 +136,29 @@ function goToDetailPage(item) {
           </div>
         </div>
 
-        <!-- 상품 등록 버튼 -->
-        <div class="d-flex justify-content-end px-3 my-2">
-          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
-            상품 등록
-          </button>
-        </div>
-
-
-        <!-- 데이터 영역 -->
-        <div class="p-3">
+        <!-- 전체 감싸기: 흰색 배경 카드 -->
+        <div class="bg-white rounded shadow-sm p-3">
+          <!-- 제목 영역 -->
           <div class="text-center border-top pt-3 mt-3 mb-2">
             <h5 class="fw-bold mb-0">상품 관리</h5>
           </div>
 
-          <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
-
-          <div v-if="loading" class="text-center my-3">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+          <!-- 상품 등록 버튼 -->
+          <div class="d-flex justify-content-end px-3 my-2">
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+              + 상품 등록
+            </button>
           </div>
+
+          <!-- 데이터 영역 -->
+          <div class="p-3">
+            <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
+
+            <div v-if="loading" class="text-center my-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
 
           <!-- ✅ 테이블 수정 -->
           <table v-if="!loading" class="table table-bordered table-hover text-center product-table">
@@ -182,20 +197,20 @@ function goToDetailPage(item) {
             </tbody>
           </table>
 
-          <!-- 페이지네이션 -->
-          <nav v-if="!loading && products.length > 0" class="d-flex justify-content-center">
-            <ul class="pagination">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">‹</a>
-              </li>
-              <li v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }" class="page-item">
-                <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">›</a>
-              </li>
-            </ul>
-          </nav>
+            <nav v-if="!loading && products.length > 0" class="d-flex justify-content-center">
+              <ul class="pagination">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                  <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">‹</a>
+                </li>
+                <li v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }" class="page-item">
+                  <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                  <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">›</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
