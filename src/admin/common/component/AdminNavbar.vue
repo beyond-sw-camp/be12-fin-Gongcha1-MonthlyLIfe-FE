@@ -48,6 +48,9 @@
             <li>
               <router-link to="/admin/delivery-by-page" class="nav-link text-white-50" >- 배송 스케줄 관리</router-link>
             </li>
+            <li>
+              <router-link to="/admin/return-request" class="nav-link text-white-50" >- 반납/수리 요청 관리</router-link>
+            </li>
           </ul>
         </li>
 

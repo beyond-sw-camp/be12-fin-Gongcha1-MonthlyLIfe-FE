@@ -32,6 +32,7 @@ import AdminSubscribe from "../admin/subscription/AdminSubscribe.vue";
 import Chat from "../chat.vue"
 import AdminChat from "../Adminchat.vue"
 import AdminPayment from "../admin/payment/AdminPayment.vue";
+import AdminReturnRequest from "../admin/subscription/AdminReturnRequest.vue";
 import {useUserStore} from "../store/useUserStore.js";
 
 
@@ -63,7 +64,6 @@ const adminCheck = async  (to, from, next) => {
         next('/auth/login');
     }
 }
-
 
 const routes = [
     {
@@ -143,6 +143,8 @@ const routes = [
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
             { path: 'delivery-by-page', component: AdminDelivery },
+            //반납/수리 요청 페이지
+            {path: 'return-request', component: AdminReturnRequest},
             // 구독 관리 페이지
             { path: 'subscribe', component: AdminSubscribe },
             //구독 상세 페이지
