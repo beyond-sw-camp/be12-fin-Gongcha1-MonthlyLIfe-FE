@@ -124,7 +124,7 @@ const routes = [
     {
         path: '/admin',
         component: AdminLayout, // 사이드바 포함된 레이아웃,
-        beforeEnter: adminCheck,
+        //beforeEnter: adminCheck,
         children: [
             //관리자 홈페이지
             { path: '', component: AdminHome },
