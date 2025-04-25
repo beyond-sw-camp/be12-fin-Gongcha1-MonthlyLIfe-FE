@@ -12,6 +12,7 @@ const form = reactive({
   name: '',
   code: '',
   description: '',
+  descriptionImageUrl: '',
   manufacturer: '',
   condition: '',
   location: '',
@@ -39,6 +40,7 @@ const submit = async () => {
       name: form.name,
       code: form.code,
       description: form.description,
+      descriptionImageUrl: form.descriptionImageUrl,
       manufacturer: form.manufacturer,
       condition: form.condition,
       location: form.location,
@@ -92,6 +94,12 @@ const submit = async () => {
           <div class="mb-2">
             <label class="form-label">설명</label>
             <textarea v-model="form.description" class="form-control"></textarea>
+          </div>
+          <!-- 설명 이미지 URL 입력란 추가 -->
+          <div class="mb-2">
+            <label class="form-label">설명 이미지 URL</label>
+            <input v-model="form.descriptionImageUrl" type="text" class="form-control"
+              placeholder="https://example.com/desc-img.png" />
           </div>
           <div class="mb-2">
             <label class="form-label">제조사</label>
@@ -147,13 +155,16 @@ const submit = async () => {
 .mb-2 {
   margin-bottom: 0.75rem;
 }
+
 .form-label {
   font-weight: 600;
 }
+
 ul {
   padding-left: 0;
   list-style: none;
 }
+
 ul li {
   padding: 0.5rem 1rem;
   border: 1px solid #ddd;
@@ -161,8 +172,8 @@ ul li {
   margin-bottom: 0.5rem;
   background: #f8f9fa;
 }
+
 .btn-outline-danger {
   font-size: 0.8rem;
 }
-
 </style>

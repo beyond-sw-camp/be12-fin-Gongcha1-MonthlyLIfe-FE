@@ -2,8 +2,13 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import axios from 'axios'
 
+
 const nickname = 'admin'
-const SOCKET_URL = `ws://localhost:8080/ws/adminchat?nickname=${nickname}`
+
+// 프로토콜 및 호스트 기반으로 WebSocket URL 동적 생성
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+const host = window.location.host
+const SOCKET_URL = `${protocol}://${host}/ws/adminchat?nickname=${nickname}`
 
 const activeUsers = ref([])
 const selectedUser = ref(null)

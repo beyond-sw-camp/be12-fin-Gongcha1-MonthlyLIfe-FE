@@ -9,15 +9,25 @@ export const useUserStore = defineStore("user", {
         storage: sessionStorage,
     },
     actions: {
-        async getExample(context) {
+        async getUser() {
             const response = await axios
-                .get(url);
-            return response.data;
+                .get('/api/user/detail',
+                    { withCredentials: true }
+                );
+            console.log(response);
+            return response.data.result;
         },
         async getExampleList(context) {
             const response = await axios
                 .get(url);
             return response.data;
+        },
+        async postCheckId(id) {
+            const response = await axios
+                .post("/api/user/checkid",
+                    {id : id},
+                )
+            return response.data.result;
         },
         async postSignup(user) {
             const response = await axios
@@ -64,12 +74,13 @@ export const useUserStore = defineStore("user", {
                 )
             return response.data;
         },
-        async deleteExample(context) {
+        async deleteUser() {
             const response = await axios
-                .delete(url,
+                .get('/api/user/withdraw',
                     { withCredentials: true }
-                )
-            return response.data;
+                );
+
+            return response.data.isSuccess;
         }
     }
 })
