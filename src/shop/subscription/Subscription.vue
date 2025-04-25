@@ -67,7 +67,7 @@ const submitCheckout = async () => {
     },
     billingKeyIdx: paymentMethodIdx.value
   })
-  await subscribeStore.postSubscribe(
+  const response = await subscribeStore.postSubscribe(
       {
         sales: sales,
         rentalDelivery: {
@@ -81,6 +81,16 @@ const submitCheckout = async () => {
         billingKeyIdx: paymentMethodIdx.value
       }
   );
+  if(response.isSuccess) {
+    alert("주문이 접수되었습니다!");
+    router.push('/user/subscription');
+  }
+  else {
+    alert(response.message)
+  }
+
+
+
 }
 
 const addPaymentMethod = async () => {
