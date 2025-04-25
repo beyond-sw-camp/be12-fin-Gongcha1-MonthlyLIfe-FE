@@ -33,11 +33,11 @@ import Chat from "../chat.vue"
 import AdminChat from "../Adminchat.vue"
 import AdminPayment from "../admin/payment/AdminPayment.vue";
 import AdminReturnRequest from "../admin/subscription/AdminReturnRequest.vue";
-import {useUserStore} from "../store/useUserStore.js";
+import { useUserStore } from "../store/useUserStore.js";
 
 
-const userStore = useUserStore();
 const loginCheck = async (to, from, next) => {
+    const userStore = useUserStore();
 
     const now = new Date();
 
@@ -56,6 +56,7 @@ const loginCheck = async (to, from, next) => {
 }
 
 const adminCheck = async  (to, from, next) => {
+    const userStore = useUserStore();
     if((userStore.isLogin === true) && (userStore.role === 'ROLE_ADMIN') ){
         next();
     }
