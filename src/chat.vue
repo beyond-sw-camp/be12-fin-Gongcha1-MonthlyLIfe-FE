@@ -30,7 +30,7 @@ const sendMessage = () => {
 }
 
 const setupSocket = () => {
-  const SOCKET_URL = `ws://localhost:8080/ws/chat?nickname=${nickname.value}`
+  // const SOCKET_URL = `ws://localhost:8080/ws/chat?nickname=${nickname.value}`
   socket = new WebSocket(SOCKET_URL)
 
   socket.onopen = () => console.log('✅ WebSocket 연결 성공')
