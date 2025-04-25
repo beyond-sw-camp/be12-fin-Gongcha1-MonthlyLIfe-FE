@@ -93,7 +93,7 @@ export const useSaleStore = defineStore('sale', {
     /** 판매상품 삭제 */
     async deleteSale(saleIdx) {
       try {
-        await axios.delete(`/api/sale/${saleIdx}`)
+        await axios.post(`/api/sale/${saleIdx}/delete`)
         // 삭제하고 나면 로컬 saleProducts에서도 제거
         this.saleProducts = this.saleProducts.filter(s => s.saleIdx !== saleIdx)
       } catch (err) {
@@ -105,7 +105,7 @@ export const useSaleStore = defineStore('sale', {
     /** 판매상품 수정 */
     async updateSale(categoryIdx, saleIdx, payload) {
       try {
-        const res = await axios.put(`/api/sale/${saleIdx}`, payload)
+        const res = await axios.post(`/api/sale/${saleIdx}/update`, payload)
         // 성공 시, store의 saleProducts 갱신(간단히 전체 다시 로드)
         await this.fetchSaleProductList()
         return res.data.result
