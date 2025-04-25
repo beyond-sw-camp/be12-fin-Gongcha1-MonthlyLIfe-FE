@@ -38,6 +38,7 @@ export const useSubscribeStore = defineStore('subscribe', {
             )
 
             console.log(response);
+            return response.data;
 
         },
 

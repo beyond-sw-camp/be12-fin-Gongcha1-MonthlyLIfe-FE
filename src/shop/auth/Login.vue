@@ -19,7 +19,7 @@ const login = async () => {
   );
   console.log(success);
   if(success) {
-    router.go(-1);
+    // router.go(-1);
   }
   else {
     loginFailed.value=true;
