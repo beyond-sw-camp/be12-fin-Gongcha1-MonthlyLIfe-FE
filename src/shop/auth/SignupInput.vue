@@ -3,10 +3,14 @@
 import {computed, ref} from "vue";
 import router from "../../router/index.js";
 import {useUserStore} from "../../store/useUserStore.js";
+import SignupAddressInput from "./component/SignupAddressInput.vue";
+
+const addressInputRef = ref(null)
 
 const phoneNumber = ref('');
 const id = ref('');
 const password = ref('');
+const passwordCheck = ref('');
 const name = ref('');
 
 const emailFirst = ref('');
@@ -22,26 +26,73 @@ const email = computed(() => {
   }
 });
 
-const address1 = ref('');
-const address2 = ref('');
 const birth = ref('');
 
+const isId = computed(() =>
+    id.value !== ''
+)
+const isIdValid = computed(() =>
+  /^[a-zA-Z0-9]{6,20}$/.test(id.value)
+)
+
+const isPassword = computed(() =>
+    password.value !== ''
+)
+const isPasswordValid = computed(() =>
+    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}|:;<>,.?/~`]{8,20}$/.test(password.value)
+)
+const isPasswordChecked = computed(() =>
+  passwordCheck.value !== ''
+)
+const isPasswordMatch = computed(() => {
+  return password.value !== '' && passwordCheck.value === password.value
+}
+)
+const idChecked = ref(false);
 const userStore = useUserStore();
-const signup = async () => {
-  const user = {
-    "id": id.value,
-    "phoneNumber": phoneNumber.value,
-    "password": password.value,
-    "name": name.value,
-    "email": email.value,
-    "address1": address1.value,
-    "address2": address2.value,
-    "birth": birth.value
+
+
+const checkId = async () => {
+  if(isIdValid.value) {
+    const ret = await userStore.postCheckId(id.value);
+    if(ret) {
+      idChecked.value = true;
+    }
+    else {
+      alert('존재하는 id 입니다.')
+    }
   }
-  console.log(user);
-  const success = await userStore.postSignup(user);
-  if(success) {
-    router.push('/auth/signup/end')
+}
+const signup = async () => {
+  if(
+      idChecked.value &&
+      name.value !== '' &&
+      phoneNumber.value !== '' &&
+      email.value !== '' &&
+      isPasswordValid.value &&
+      isPasswordMatch.value
+  ) {
+    const { postalCode, address1, address2 } = addressInputRef.value;
+    const user = {
+      "id": id.value,
+      "phoneNumber": phoneNumber.value,
+      "password": password.value,
+      "name": name.value,
+      "email": email.value,
+      "postalCode": postalCode,
+      "address1": address1,
+      "address2": address2,
+      "birth": birth.value
+    }
+    console.log(user);
+    const success = await userStore.postSignup(user);
+    if(success) {
+      router.push('/auth/signup/end')
+    }
+  }
+  else {
+    alert('아이디, 이름, 이메일, 비밀번호, 휴대폰 번호는 필수입력입니다.')
+    window.scroll({ top: 0, behavior: 'smooth' })
   }
 };
 
@@ -91,12 +142,16 @@ const signup = async () => {
     </div>
 
 
-    <div class="pb-3">
+    <div class="pb-3 text-start" >
       <small class="text-start d-block">아이디</small>
       <div class="d-flex">
-        <input type="text" v-model="id" class="underline-input">
-        <button class="btn btn-dark text-nowrap btn-sm" style="font-size: 10px">중복체크</button>
+        <input type="text" v-model="id" class="underline-input" :disabled="idChecked">
+        <button class="btn btn-dark text-nowrap btn-sm" @click="checkId" style="font-size: 10px">중복체크</button>
       </div>
+      <small v-if="isId && !isIdValid " class="m-0  text-danger">6~20자 사이의 영문, 숫자</small>
+      <small v-if="idChecked" class="m-0 text-primary">사용 가능한 id입니다.</small>
+      <small v-else class="m-0 text-white">공백</small>
+
     </div>
 
     <div class="pb-3 d-flex justify-content-between">
@@ -111,25 +166,20 @@ const signup = async () => {
 
     <div class="pb-3">
       <small class="text-start d-block">비밀번호</small>
-        <input type="password" v-model="password" class="underline-input">
+      <input type="password" v-model="password" class="underline-input">
+      <small v-if="isPassword && !isPasswordValid " class="m-0 text-start text-danger">8~20자 사이의 영문, 숫자 1개이상</small>
+      <small v-else class="m-0 text-start text-white">공백</small>
     </div>
 
     <div class="pb-3">
       <small class="text-start d-block">비밀번호확인</small>
-      <input type="password" class="underline-input">
+      <input type="password" v-model="passwordCheck" class="underline-input">
+      <small v-if="!isPasswordMatch && isPasswordChecked" class="m-0 text-start text-danger">비밀번호가 일치하지 않습니다.</small>
+      <small v-else class="m-0 text-start text-white">공백</small>
     </div>
 
-    <div class="pb-3">
-      <small class="text-start d-block">주소</small>
-      <div class="d-flex">
-        <input type="text" v-model="address1" class="underline-input">
-        <button class="btn btn-dark text-nowrap btn-sm" style="font-size: 10px">검색</button>
-      </div>
-    </div>
-    <div class="pb-3">
-      <small class="text-start d-block">상세주소</small>
-      <input type="text" v-model="address2" class="underline-input">
-    </div>
+    <SignupAddressInput ref="addressInputRef"/>
+
 
     <small class="text-start d-block">태그</small>
     <div class="m-3">
