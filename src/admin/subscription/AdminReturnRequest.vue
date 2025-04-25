@@ -29,7 +29,7 @@ async function fetchRequests() {
   error.value = null
 
   try {
-    const response = await axios.get(`/api/admin/${getTypePath(search.type)}-request`, {
+    const response = await axios.get(`/api/admin/${getTypePath(search.status)}-request`, {
       params: {
         page: currentPage.value - 1,
         size: pageSize,
@@ -104,9 +104,9 @@ onMounted(() => {
       <div class="d-flex flex-wrap gap-3 align-items-center">
         <div class="d-flex gap-2">
           <!-- 대분류 필터: RETURN / REPAIR -->
-          <select v-model="search.type" class="form-select form-select-sm" @change="filterList">
-            <option value="RETURN">반납 전체</option>
-            <option value="REPAIR">수리 전체</option>
+          <select v-model="search.status" class="form-select form-select-sm" @change="filterList">
+            <option value="RETURN_REQUESTED">반납 전체</option>
+            <option value="REPAIR_REQUESTED">수리 전체</option>
           </select>
 
 
