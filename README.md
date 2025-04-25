@@ -158,7 +158,7 @@ DB<br>
 ## 📃 API 명세서
 
 API 명세서 준비중
-- Swagger https://monthlylife.kro.kr](https://monthlylife.kro.kr/api/swagger-ui/index.html
+- Swagger https://monthlylife.kro.kr/api/swagger-ui/index.html
 
 ## 🚀 향후 계획
 
