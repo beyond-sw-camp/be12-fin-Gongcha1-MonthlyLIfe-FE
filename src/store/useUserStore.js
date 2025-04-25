@@ -3,7 +3,7 @@ import axios from "axios";
 import {createPersistedState} from "pinia-plugin-persistedstate";
 
 export const useUserStore = defineStore("user", {
-    state: () => ({ isLogin: false, id: "" }),
+    state: () => ({ isLogin: false, id: "", role: "", expired: 0 }),
     //persist하게 할거면 사용
     persist: {
         storage: sessionStorage,
@@ -35,6 +35,8 @@ export const useUserStore = defineStore("user", {
             if(response.data.isSuccess) {
                 this.isLogin = false;
                 this.id = '';
+                this.expired = 0;
+                this.role = '';
             }
             return response.data.isSuccess;
         },
@@ -44,9 +46,14 @@ export const useUserStore = defineStore("user", {
                     .post("/api/auth/login",
                         user,
                     );
+                console.log(response);
                 if(response.data.isSuccess) {
-                    this.id = user.id;
+                    const dto = response.data.result;
+                    this.id = dto.id;
+                    this.expired = dto.expired;
+                    this.role = dto.role;
                     this.isLogin = true;
+
                 }
                 return response.data.isSuccess;
             } catch (error) {
