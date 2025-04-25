@@ -32,6 +32,38 @@ import AdminSubscribe from "../admin/subscription/AdminSubscribe.vue";
 import Chat from "../chat.vue"
 import AdminChat from "../Adminchat.vue"
 import AdminPayment from "../admin/payment/AdminPayment.vue";
+import AdminReturnRequest from "../admin/subscription/AdminReturnRequest.vue";
+import {useUserStore} from "../store/useUserStore.js";
+
+
+const userStore = useUserStore();
+const loginCheck = async (to, from, next) => {
+
+    const now = new Date();
+
+    if((userStore.isLogin === true) && (now.getTime() > userStore.expired) ){
+        alert('로그인이 만료되었습니다.');
+        await userStore.getLogout();
+    }
+
+    if(userStore.isLogin) {
+        next();
+    }
+    else {
+        alert('로그인이 필요한 페이지 입니다.')
+        next('/auth/login');
+    }
+}
+
+const adminCheck = async  (to, from, next) => {
+    if((userStore.isLogin === true) && (userStore.role === 'ROLE_ADMIN') ){
+        next();
+    }
+    else {
+        alert('관리자 권한이 필요한 페이지 입니다.')
+        next('/auth/login');
+    }
+}
 
 const routes = [
     {
@@ -51,6 +83,7 @@ const routes = [
             {
                 path: 'user',
                 component: UserLayout,
+                beforeEnter: loginCheck,
                 children: [
                     // 개인 상세 페이지
                     { path: 'detail', component: UserDetail },
@@ -89,7 +122,8 @@ const routes = [
     },
     {
         path: '/admin',
-        component: AdminLayout, // 사이드바 포함된 레이아웃
+        component: AdminLayout, // 사이드바 포함된 레이아웃,
+        beforeEnter: adminCheck,
         children: [
             //관리자 홈페이지
             { path: '', component: AdminHome },
@@ -109,6 +143,8 @@ const routes = [
             // { path: '/product/register', component: AdminProductRegister },
             // 배송 관리 페이지
             { path: 'delivery-by-page', component: AdminDelivery },
+            //반납/수리 요청 페이지
+            {path: 'return-request', component: AdminReturnRequest},
             // 구독 관리 페이지
             { path: 'subscribe', component: AdminSubscribe },
             //구독 상세 페이지
@@ -129,5 +165,22 @@ const router = createRouter({
         return { top: 0 }
     }
 });
+
+
+
+// router.beforeEach((to, from, next) => {
+//     const isAuthenticated = !!localStorage.getItem('accessToken'); // 예시: 토큰으로 로그인 여부 판단
+//
+//     // 보호가 필요한 경로들 (로그인이 필요한 페이지들)
+//     const protectedPaths = ['/user', '/subscription'];
+//
+//     const requiresAuth = protectedPaths.some((path) => to.path.startsWith(path));
+//
+//     if (requiresAuth && !isAuthenticated) {
+//         next('/auth/login'); // 로그인 안되어 있으면 로그인 페이지로
+//     } else {
+//         next(); // 그 외에는 정상 진행
+//     }
+// });
 
 export default router;
