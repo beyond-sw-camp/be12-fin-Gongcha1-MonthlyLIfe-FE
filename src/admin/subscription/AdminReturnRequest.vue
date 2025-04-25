@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import {ref, reactive, onMounted, watch} from 'vue'
 import axios from 'axios'
 
 const today = new Date().toISOString().split('T')[0]
@@ -11,18 +11,25 @@ const loading = ref(false)
 const error = ref(null)
 
 const search = reactive({
-  type: 'REPAIR', // 'REPAIR' or 'RETURN'
+  type: 'RETURN', // 'REPAIR' or 'RETURN'
   dateFrom: '',
   dateTo: '',
-  status: 'REQUESTED',
+  status: 'RETURN_REQUESTED',
 })
 
+
+
+function getTypePath(status) {
+  if (status.startsWith('REPAIR')) return 'repair';
+  if (status.startsWith('RETURN')) return 'return';
+  return '';
+}
 async function fetchRequests() {
   loading.value = true
   error.value = null
 
   try {
-    const response = await axios.get(`/api/admin/${search.type.toLowerCase()}-list`, {
+    const response = await axios.get(`/api/admin/${getTypePath(search.status)}-request`, {
       params: {
         page: currentPage.value - 1,
         size: pageSize,
@@ -41,15 +48,30 @@ async function fetchRequests() {
     loading.value = false
   }
 }
-
+watch(() => search.status, (newStatus) => {
+  if (newStatus.startsWith('REPAIR')) {
+    search.type = 'repair'
+  } else if (newStatus.startsWith('RETURN')) {
+    search.type = 'return'
+  } else {
+    search.type = ''
+  }
+})
 function goToPage(page) {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
   fetchRequests()
 }
 
-function markAsCompleted(id) {
-  axios.post(`/api/admin/${search.type.toLowerCase()}/${id}/complete`)
+function markAsCompleted(item) {
+  axios.post(`/api/admin/${getTypePath(search.type)}/${item.id}`
+      ,{
+    status: item.status,
+    returnLocation: item.returnLocation
+      } ,
+      {headers: {
+    'Content-Type': 'application/json'
+  }})
       .then(() => fetchRequests())
       .catch(err => console.error('상태 변경 실패', err))
 }
@@ -62,14 +84,14 @@ function filterList() {
 onMounted(() => {
   fetchRequests();
 
-  requests.value = [{
-    id: 'id',
-    userName: '이름',
-    description: '설명',
-    createdAt:  '2025-04-24 12',
-    status: 'REQUESTED',
-    returnLocation: 'BEFORE_RETURN',
-  }]
+  // requests.value = [{
+  //   id: 'id',
+  //   userName: '이름',
+  //   description: '설명',
+  //   createdAt:  '2025-04-24 12',
+  //   status: 'REQUESTED',
+  //   returnLocation: 'BEFORE_RETURN',
+  // }]
 });
 
 
@@ -81,23 +103,25 @@ onMounted(() => {
     <div class="bg-white p-3 rounded shadow-sm mb-3">
       <div class="d-flex flex-wrap gap-3 align-items-center">
         <div class="d-flex gap-2">
-          <select v-model="search.type" class="form-select form-select-sm" @change="filterList">
-            <option value="RETURN_REQUESTED">반납 요청</option>
-            <option value="REPAIR_REQUESTED">수리 요청</option>
+          <!-- 대분류 필터: RETURN / REPAIR -->
+          <select v-model="search.status" class="form-select form-select-sm" @change="filterList">
+            <option value="RETURN_REQUESTED">반납 전체</option>
+            <option value="REPAIR_REQUESTED">수리 전체</option>
           </select>
+
 
           <input type="date" class="form-control form-control-sm" v-model="search.dateFrom" />
           <span>~</span>
           <input type="date" class="form-control form-control-sm" v-model="search.dateTo" />
 
-          <select v-model="search.status" class="form-select form-select-sm">
-            <option value="RETURN_REQUESTED">요청됨</option>
-            <option value="REPAIR_REQUESTED">요청됨</option>
-            <option value="RETURN_COMPLETED">완료됨</option>
-            <option value="REPAIR_COMPLETED">완료됨</option>
-            <option value="RETURN_CANCELED">취소됨</option>
-            <option value="REPAIR_CANCELED">취소됨</option>
-          </select>
+<!--          <select v-model="search.status" class="form-select form-select-sm">-->
+<!--            <option value="RETURN_REQUESTED">요청됨</option>-->
+<!--            <option value="REPAIR_REQUESTED">요청됨</option>-->
+<!--            <option value="RETURN_COMPLETED">완료됨</option>-->
+<!--            <option value="REPAIR_COMPLETED">완료됨</option>-->
+<!--            <option value="RETURN_CANCELED">취소됨</option>-->
+<!--            <option value="REPAIR_CANCELED">취소됨</option>-->
+<!--          </select>-->
 
           <button class="btn btn-primary btn-sm text-nowrap" @click="filterList">검색</button>
         </div>
@@ -105,7 +129,7 @@ onMounted(() => {
     </div>
 
     <div class="bg-white p-3 rounded shadow-sm">
-      <h5 class="text-center border-top pt-3 mt-3">{{ search.type === 'REPAIR' ? '수리 요청 관리' : '반납 요청 관리' }}</h5>
+      <h5 class="text-center border-top pt-3 mt-3">{{ getTypePath(search.status) === "repair" ? '수리 요청 관리' : '반납 요청 관리' }}</h5>
 
       <div v-if="error" class="alert alert-danger text-center my-3">{{ error }}</div>
       <div v-if="loading" class="text-center my-3">
@@ -135,14 +159,29 @@ onMounted(() => {
           <td>{{ item.createdAt.split('T')[0] }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <select v-if="item.location === 'REQUESTED'" v-model="item.returnLocation">
+            <!-- 상태가 RETURN_REQUESTED일 때만 select 표시 -->
+            <select
+                v-if="item.status === 'RETURN_REQUESTED'"
+                v-model="item.returnLocation"
+                class="form-select form-select-sm"
+            >
               <option value="WAREHOUSE">창고</option>
               <option value="REPAIRING">수리중</option>
             </select>
-            <p v-else>{{item.returnLocation}}</p>
+
+            <!-- 상태가 REPAIR_REQUESTED이고 BEFORE_RETURN이면 강조 표시 -->
+            <p v-else-if="item.status === 'REPAIR_REQUESTED' && item.returnLocation === 'BEFORE_RETURN'" class="text-warning mb-0">
+              반환 전 상태
+            </p>
+
+            <!-- 그 외 모든 경우는 일반 텍스트 출력 -->
+            <p v-else class="mb-0">
+              {{ item.returnLocation }}
+            </p>
           </td>
+
           <td>
-            <button v-if="item.status === 'REQUESTED'" class="btn btn-success btn-sm" @click="markAsCompleted(item)">완료 처리</button>
+            <button v-if="(item.status === 'RETURN_REQUESTED') || (item.status === 'REPAIR_REQUESTED')" class="btn btn-success btn-sm" @click="markAsCompleted(item)">완료 처리</button>
             <p v-else>처리완료</p>
           </td>
         </tr>
