@@ -69,7 +69,7 @@
 - 프론트 엔드 https://monthlylife.kro.kr
 
     - 사용자: test01
-    - 관리자: 
+    - 관리자:  admin1
     - 비밀번호: qwer1234
 
 <br>
