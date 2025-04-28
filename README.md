@@ -68,9 +68,9 @@
 
 - 프론트 엔드 https://monthlylife.kro.kr
 
-    - 사용자: [user@test.com](mailto\:user@test.com)
-    - 관리자: [admin@test.com](mailto\:admin@test.com)
-    - 비밀번호: password123
+    - 사용자: test01
+    - 관리자: 
+    - 비밀번호: qwer1234
 
 <br>
 
