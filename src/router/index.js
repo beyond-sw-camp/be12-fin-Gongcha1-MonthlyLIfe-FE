@@ -96,7 +96,7 @@ const routes = [
                     { path: 'detail', component: UserDetail },
                     // 개인 구독정보 페이지
                     { path: 'subscription', component: UserSubscription },
-                    { path: 'delivery', component: DeliveryTracking },
+                    { path: 'delivery/:detailIdx', component: DeliveryTracking },
 
                 ]
             },
