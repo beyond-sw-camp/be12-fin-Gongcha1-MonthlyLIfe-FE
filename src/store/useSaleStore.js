@@ -121,6 +121,7 @@ export const useSaleStore = defineStore('sale', {
      * 전체 상품 조회 (카테고리 구분 없이 페이징)
      * @param {Number} page 
      * @param {Number} size 
+     * @param {String} keyword 
      */
     async fetchAllSales(page = 0, size = 6) {
       try {
@@ -155,6 +156,23 @@ export const useSaleStore = defineStore('sale', {
     async fetchPackageSales(page = 0, size = 6) {
       const res = await axios.get('/api/sale/packages', { params: { page, size } })
       this.packageList = res.data.result
+    },
+
+    /**
+     * 키워드 검색 조회
+     * @param {Number} page 
+     * @param {Number} size 
+     * @param {String} keyword 
+     */
+    async fetchSalesByKeyword(page = 0, size = 6, keyword = '') {
+      try {
+        const res = await axios.get('/api/sale/searchall', {
+          params: { page, size, keyword }
+        })
+        this.saleList = res.data.result || { content: [], totalPages: 0 }
+      } catch {
+        this.saleList = { content: [], totalPages: 0 }
+      }
     }
 
 
