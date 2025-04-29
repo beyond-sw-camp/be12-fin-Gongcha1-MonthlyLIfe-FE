@@ -17,15 +17,18 @@ export const useUserStore = defineStore("user", {
             console.log(response);
             return response.data.result;
         },
-        async getExampleList(context) {
-            const response = await axios
-                .get(url);
-            return response.data;
-        },
         async postCheckId(id) {
             const response = await axios
-                .post("/api/user/checkid",
+                .post("/api/user/check/id",
                     {id : id},
+                )
+            return response.data.result;
+        },
+        async postCheckPhoneNumber(phone) {
+            console.log(phone);
+            const response = await axios
+                .post("/api/user/check/phone",
+                    phone,
                 )
             return response.data.result;
         },
