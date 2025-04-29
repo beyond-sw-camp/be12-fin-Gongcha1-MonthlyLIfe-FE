@@ -49,7 +49,17 @@ onMounted(() => {
 </script>
 
 <template>
+  <div container-fluid p-0>
+    <section class="banner-section">
+      <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지"
+        class="banner-image" />
+      <div class="text-area">
+        <div class="text02"><strong>렌탈&amp;구독</strong></div>
+      </div>
+    </section>
+  </div>
   <div class="container py-5">
+    
     <h4 class="fw-bold mb-3">모든 상품을 한눈에</h4>
 
     <div v-if="saleContent.length" class="row g-4">
@@ -110,5 +120,28 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* 기존 스타일 그대로 사용 */
+.banner-section {
+  position: relative;
+  height: 300px;
+  background-color: #c4c9c3;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.text-area {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  color: #000;
+}
+.text02 {
+  font-size: 2rem;
+  font-weight: bold;
+}
 </style>
