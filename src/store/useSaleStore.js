@@ -13,7 +13,8 @@ export const useSaleStore = defineStore('sale', {
       productList: [],
       priceList: []
     },
-    bestSales: []
+    bestSales: [],
+    packageList: {content: [], totalPages: 0}
   }),
 
   actions: {
@@ -149,6 +150,11 @@ export const useSaleStore = defineStore('sale', {
         console.error('베스트 상품 조회 실패', err)
         this.bestSales = []
       }
+    },
+
+    async fetchPackageSales(page = 0, size = 6) {
+      const res = await axios.get('/api/sale/packages', { params: { page, size } })
+      this.packageList = res.data.result
     }
 
 
