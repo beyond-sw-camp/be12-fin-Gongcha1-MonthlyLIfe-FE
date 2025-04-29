@@ -34,6 +34,8 @@ import AdminChat from "../Adminchat.vue"
 import AdminPayment from "../admin/payment/AdminPayment.vue";
 import AdminReturnRequest from "../admin/subscription/AdminReturnRequest.vue";
 import { useUserStore } from "../store/useUserStore.js";
+import Sale from "../shop/sale/Sale.vue";
+import BestSale from "../shop/sale/BestSale.vue";
 
 
 const loginCheck = async (to, from, next) => {
@@ -103,6 +105,9 @@ const routes = [
                 path: 'sale/detail/:categoryIdx/:saleIdx',
                 component: SaleDetail
             },
+            // 전체 렌탈 상품 페이지
+            { path: 'sale/list', component: Sale },
+            { path: 'sale/best', component: BestSale },
 
             // 장바구니 페이지
             { path: 'cart', component: Cart },

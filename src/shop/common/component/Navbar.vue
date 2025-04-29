@@ -93,10 +93,10 @@ const logout = async () => {
         </div>
         <ul class="nav flex-row mb-0 flex-nowrap text-nowrap">
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">전체렌탈상품</a>
+            <router-link to="/sale/list" class="nav-link text-dark fw-semibold custom-nav-link">전체 렌탈 상품</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">BEST</a>
+            <RouterLink to="/sale/best" class="nav-link text-dark fw-semibold custom-nav-link">베스트 상품</RouterLink>
           </li>
           <li class="nav-item">
             <router-link to="/sale/2" class="nav-link text-dark fw-semibold custom-nav-link">패키지 특가</router-link>
