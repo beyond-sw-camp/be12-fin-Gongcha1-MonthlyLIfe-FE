@@ -81,7 +81,7 @@ onMounted(() => {
         class="banner-image"
       />
       <div class="text-area">
-        <div class="text02"><strong>렌탈&amp;구독</strong></div>
+        <div class="text02"><strong>원하는 모든 제품, 렌탈로 쉽게</strong></div>
       </div>
     </section>
 
@@ -186,5 +186,17 @@ onMounted(() => {
 .text02 {
   font-size: 2rem;
   font-weight: bold;
+}
+/* 기본 트랜지션 설정 */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1;
+}
+
+/* 호버 시 살짝 커지면서 떠오르는 효과 */
+.card:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 </style>
