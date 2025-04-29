@@ -56,7 +56,7 @@ watch(currentPage, page => {
       <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지"
         class="banner-image" />
       <div class="text-area">
-        <div class="text02"><strong>렌탈&amp;구독</strong></div>
+        <div class="text02"><strong>더 알뜰하게, 더 편리하게</strong></div>
       </div>
     </section>
   </div>

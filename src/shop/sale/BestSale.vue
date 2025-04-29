@@ -38,6 +38,16 @@ function conditionColorClass(cond) {
 </script>
 
 <template>
+  <section class="banner-section">
+      <img
+        src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg"
+        alt="배너 이미지"
+        class="banner-image"
+      />
+      <div class="text-area">
+        <div class="text02"><strong>지금 가장 인기 있는 렌탈 TOP5</strong></div>
+      </div>
+    </section>
   <div class="container py-5">
     <h4 class="fw-bold mb-4">🔥 Best 상품 Top 5</h4>
 
@@ -109,8 +119,42 @@ function conditionColorClass(cond) {
 </template>
 
 <style scoped>
+.banner-section {
+  position: relative;
+  height: 300px;
+  background-color: #c4c9c3;
+  overflow: hidden;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.text-area {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  color: #000;
+}
+
+.text02 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+/* 기본 트랜지션 설정 */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1;
+}
+
+/* 호버 시 살짝 커지면서 떠오르는 효과 */
 .card:hover {
-  transform: translateY(-4px);
-  transition: 0.2s;
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 </style>
