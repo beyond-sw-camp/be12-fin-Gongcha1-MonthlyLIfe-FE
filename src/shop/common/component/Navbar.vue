@@ -98,7 +98,7 @@ const logout   = async () => { await userStore.getLogout(); router.go(0) }
             <router-link to="/sale/package" class="nav-link text-dark fw-semibold">패키지 특가</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">구매가이드</a>
+            <router-link to="/guide" class="nav-link text-dark fw-semibold">구매 가이드</router-link>
           </li>
         </ul>
       </div>
