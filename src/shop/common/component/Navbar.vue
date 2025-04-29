@@ -46,8 +46,6 @@ const logout = async () => {
 
         <!-- 오른쪽: 메뉴 아이템 -->
         <div class="d-flex align-items-center small flex-nowrap text-nowrap">
-          <div class="me-3">고객지원</div>
-
           <div v-if="userStore.isLogin" class="me-3"><router-link to="/user/detail" class="nav-link" >마이페이지</router-link></div>
           
           <font-awesome-icon
@@ -102,13 +100,7 @@ const logout = async () => {
             <router-link to="/sale/package" class="nav-link text-dark fw-semibold custom-nav-link">패키지 특가</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">이벤트/혜택</a>
-          </li>
-          <li class="nav-item">
             <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">구매가이드</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">할인카드</a>
           </li>
         </ul>
       </div>

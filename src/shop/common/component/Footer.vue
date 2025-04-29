@@ -24,23 +24,23 @@
         <div class="col-md-3 mb-4 ">
           <h6 class="fw-bold mb-2">이용안내</h6>
           <p class="mb-1">
-            <a href="#" class="text-decoration-none text-dark">이용약관</a> |
-            <a href="#" class="text-decoration-none text-dark">개인정보처리방침</a>
+            <router-link to="/terms" class="text-decoration-none text-dark">이용약관</router-link> |
+            <router-link to="/policy" class="text-decoration-none text-dark">개인정보처리방침</router-link>
           </p>
 
         </div>
         <div class="col-md-3 mb-4 ">
           <h5 class="fw-bold mb-3">Follow Us</h5>
-          <a href="#" class=" me-3">
+          <a href="https://www.facebook.com" class=" me-3">
             <font-awesome-icon :icon="['fab', 'facebook']" />
           </a>
-          <a href="#" class=" me-3 insta" >
+          <a href="https://www.instagram.com" class=" me-3 insta" >
             <font-awesome-icon :icon="['fab', 'square-instagram']" />
           </a>
-          <a href="#" class=" me-3" style="color: red">
+          <a href="https://www.youtube.com/@bom2sarang" class=" me-3" style="color: red">
             <font-awesome-icon :icon="['fab', 'youtube']" />
           </a>
-          <a href="#" class="" style="color: black">
+          <a href="https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-FE" class="" style="color: black">
             <font-awesome-icon :icon="['fab', 'github']" />
           </a>
         </div>

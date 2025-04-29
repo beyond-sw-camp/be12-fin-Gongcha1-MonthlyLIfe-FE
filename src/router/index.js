@@ -37,6 +37,9 @@ import { useUserStore } from "../store/useUserStore.js";
 import Sale from "../shop/sale/Sale.vue";
 import BestSale from "../shop/sale/BestSale.vue";
 import PackageSale from "../shop/sale/PackageSale.vue";
+import PurchaseGuide from "../shop/etc/PurchaseGuide.vue";
+import Terms from "../shop/etc/Terms.vue";
+import PrivacyPolicy from "../shop/etc/PrivacyPolicy.vue";
 
 
 const loginCheck = async (to, from, next) => {
@@ -127,6 +130,11 @@ const routes = [
             { path: 'subscription/:detailIdx/repair', component: RepairRequest },
             // 배송 조회 페이지
             { path: 'subscription/:idx/delivery', component: DeliveryTracking },
+
+            //기타 페이지들
+            { path: 'guide', component: PurchaseGuide },
+            { path: 'terms', component: Terms },
+            { path: 'policy', component: PrivacyPolicy },
         ]
 
     },
