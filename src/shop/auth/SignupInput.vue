@@ -51,6 +51,14 @@ const isPasswordMatch = computed(() => {
 const idChecked = ref(false);
 const userStore = useUserStore();
 
+const telecomCompany = ref('SKT');
+const phoneNumberInput = () => {
+  phoneNumber.value = phoneNumber.value.replace(/[^0-9]/g, '');
+  phoneNumber.value = phoneNumber.value.substr(0, 11);
+}
+const nameInput = () => {
+  name.value = name.value.replace(/[^가-힣]/g, '');
+}
 
 const checkId = async () => {
   if(isIdValid.value) {
@@ -63,6 +71,22 @@ const checkId = async () => {
     }
   }
 }
+
+const checkPhone = async () => {
+  console.log(phoneNumber.value.length)
+  if(phoneNumber.value.length > 9) {
+    console.log('hi')
+    const phone = {
+      telecomCompany: telecomCompany.value,
+      phoneNumber: phoneNumber.value
+    }
+    await userStore.postCheckPhoneNumber(phone);
+  }
+  else {
+
+  }
+}
+
 const signup = async () => {
   if(
       idChecked.value &&
@@ -108,14 +132,21 @@ const signup = async () => {
     <small class="text-start d-block">MonthlyLife 가입을 위해 정보를 입력해 주세요.</small>
 
     <div class="pt-3 pb-3">
-      <small class="text-start d-block">휴대폰번호</small>
+      <small class="text-start d-block" >휴대폰번호</small>
 <!-- 나중에 휴대폰 인증을 구현하면 disabled를 true로 해야함-->
-      <input type="text" class="form-control" v-model="phoneNumber" :disabled="false" placeholder="01012345678">
-    </div>
+      <div class="d-flex input-group">
+          <select class="input-group-text no-arrow ps-1 pe-2" v-model="telecomCompany">
+            <option value="SKT">SKT</option>
+            <option value="KT">KT</option>
+            <option value="LG">LG</option>
+          </select>
+        <input type="text" class="form-control" v-model="phoneNumber"  @input="phoneNumberInput" :disabled="false" placeholder="01012345678">
+      </div>
+      </div>
 
     <div class="pb-3">
       <small class="text-start d-block">이름</small>
-      <input type="text" v-model="name" class="underline-input">
+      <input type="text" v-model="name" @input="nameInput" class="underline-input">
     </div>
 
     <div class="pb-3">
@@ -213,5 +244,12 @@ const signup = async () => {
   padding: 5px 0; /* 위아래 여백 조절 */
   background: transparent; /* 배경 제거 */
   font-size: 16px;
+}
+
+.no-arrow {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  -moz-appearance: none;    /* Firefox */
+  appearance: none;         /* 최신 브라우저 */
+  background: none;         /* 필요에 따라 */
 }
 </style>
