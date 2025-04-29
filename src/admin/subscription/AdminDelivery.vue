@@ -43,6 +43,7 @@ async function fetchOrders() {
     })
 
     const result = response.data.result
+    console.log(result);
     orders.value = result.content
     totalPages.value = result.totalPages
   } catch (err) {

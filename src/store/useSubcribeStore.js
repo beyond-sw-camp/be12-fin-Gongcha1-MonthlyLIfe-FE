@@ -35,9 +35,12 @@ export const useSubscribeStore = defineStore('subscribe', {
             const response = await axios.post('/api/subscribe/subscribe',
                 subscribe,
                 { withCredentials: true }
-            )
+            ).catch((error) => {
+                console.error(error);
+                return error.response;
+            })
 
-            console.log(response);
+            // console.log(response);
             return response.data;
 
         },
