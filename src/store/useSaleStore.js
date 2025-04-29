@@ -12,7 +12,8 @@ export const useSaleStore = defineStore('sale', {
       saleIdx: null,
       productList: [],
       priceList: []
-    }
+    },
+    bestSales: []
   }),
 
   actions: {
@@ -132,6 +133,24 @@ export const useSaleStore = defineStore('sale', {
         this.saleList = { content: [], totalPages: 0 }
       }
     },
+        // ★ 베스트 상품 조회 액션 추가
+    /**
+     * 구독 수 기준 Best 상품 조회
+     * @param {Number} limit - 상위 N개
+     */
+    async fetchBestSales(limit = 5) {
+      try {
+        const res = await axios.get('/api/sale/best', {
+          params: { limit }
+        })
+        // 백엔드에서 BaseResponse<List<BestSaleRes>> 형태로 내려줌
+        this.bestSales = res.data.result || []
+      } catch (err) {
+        console.error('베스트 상품 조회 실패', err)
+        this.bestSales = []
+      }
+    }
+
 
 
 
