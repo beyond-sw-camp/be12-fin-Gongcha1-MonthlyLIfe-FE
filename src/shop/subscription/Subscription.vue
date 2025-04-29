@@ -50,7 +50,6 @@ const submitCheckout = async () => {
 
   const { postcode, address1, address2 } = addressInputRef.value;
 
-
   const sales = cartItems.value.map(item => ({
     saleIdx: item.saleIdx,
     period: item.period
@@ -86,7 +85,11 @@ const submitCheckout = async () => {
     router.push('/user/subscription');
   }
   else {
-    alert(response.message)
+    if(response.result !== null) {
+      alert(response.result.billingKeyIdx);
+    } else {
+      alert(response.message);
+    }
   }
 
 

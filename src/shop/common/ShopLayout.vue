@@ -140,7 +140,7 @@ onUnmounted(() => socket?.close())
 .main-content {
   text-align: center;
   flex: 1;
-  padding-top: 150px;
+   
   margin: 0 auto;
 }
 

@@ -36,6 +36,10 @@ import AdminReturnRequest from "../admin/subscription/AdminReturnRequest.vue";
 import { useUserStore } from "../store/useUserStore.js";
 import Sale from "../shop/sale/Sale.vue";
 import BestSale from "../shop/sale/BestSale.vue";
+import PackageSale from "../shop/sale/PackageSale.vue";
+import PurchaseGuide from "../shop/etc/PurchaseGuide.vue";
+import Terms from "../shop/etc/Terms.vue";
+import PrivacyPolicy from "../shop/etc/PrivacyPolicy.vue";
 
 
 const loginCheck = async (to, from, next) => {
@@ -43,12 +47,12 @@ const loginCheck = async (to, from, next) => {
 
     const now = new Date();
 
-    if((userStore.isLogin === true) && (now.getTime() > userStore.expired) ){
+    if ((userStore.isLogin === true) && (now.getTime() > userStore.expired)) {
         alert('로그인이 만료되었습니다.');
         await userStore.getLogout();
     }
 
-    if(userStore.isLogin) {
+    if (userStore.isLogin) {
         next();
     }
     else {
@@ -57,9 +61,9 @@ const loginCheck = async (to, from, next) => {
     }
 }
 
-const adminCheck = async  (to, from, next) => {
+const adminCheck = async (to, from, next) => {
     const userStore = useUserStore();
-    if((userStore.isLogin === true) && (userStore.role === 'ROLE_ADMIN') ){
+    if ((userStore.isLogin === true) && (userStore.role === 'ROLE_ADMIN')) {
         next();
     }
     else {
@@ -97,17 +101,20 @@ const routes = [
                 ]
             },
 
-            // 판매 상세 페이지
-            { path: 'sale/detail/:idx', component: SaleDetail },
-            // 카테고리별 판매 목록 페이지
-            { path: 'sale/:categoryIdx', component: SaleList },
-            {
-                path: 'sale/detail/:categoryIdx/:saleIdx',
-                component: SaleDetail
-            },
-            // 전체 렌탈 상품 페이지
+            // 전체 렌탈상품 페이지
             { path: 'sale/list', component: Sale },
+            // 베스트 상품 페이지
             { path: 'sale/best', component: BestSale },
+            // 패키지 특가 페이지
+            { path: 'sale/package', component: PackageSale },
+
+            // 판매 상세 
+            { path: 'sale/detail/:idx', component: SaleDetail },
+            { path: 'sale/detail/:categoryIdx/:saleIdx', component: SaleDetail },
+
+            // 카테고리별 목록 
+            { path: 'sale/:categoryIdx', component: SaleList },
+            { path: 'sale/package', component: PackageSale },
 
             // 장바구니 페이지
             { path: 'cart', component: Cart },
@@ -123,6 +130,11 @@ const routes = [
             { path: 'subscription/:detailIdx/repair', component: RepairRequest },
             // 배송 조회 페이지
             { path: 'subscription/:idx/delivery', component: DeliveryTracking },
+
+            //기타 페이지들
+            { path: 'guide', component: PurchaseGuide },
+            { path: 'terms', component: Terms },
+            { path: 'policy', component: PrivacyPolicy },
         ]
 
     },
@@ -150,11 +162,11 @@ const routes = [
             // 배송 관리 페이지
             { path: 'delivery-by-page', component: AdminDelivery },
             //반납/수리 요청 페이지
-            {path: 'return-request', component: AdminReturnRequest},
+            { path: 'return-request', component: AdminReturnRequest },
             // 구독 관리 페이지
             { path: 'subscribe', component: AdminSubscribe },
             //구독 상세 페이지
-            { path: 'subscribe-detail/:subscribeId', component: AdminSubscriptionDetail},
+            { path: 'subscribe-detail/:subscribeId', component: AdminSubscriptionDetail },
             // 사용자 관리 페이지
             { path: 'user', component: AdminUser },
             //통계 리포트 페이지
