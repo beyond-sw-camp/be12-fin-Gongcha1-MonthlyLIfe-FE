@@ -56,7 +56,7 @@
               <tr v-for="user in recentUsers" :key="user.id">
                 <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
-                <td>{{ user.dateJoined }}</td>
+                <td>{{ user.dateJoined.split('T')[0] }}</td>
               </tr>
               </tbody>
             </table>
@@ -81,7 +81,7 @@
               <tr v-for="order in recentOrders" :key="order.id">
                 <td>{{ order.id }}</td>
                 <td>{{ order.customerName }}</td>
-                <td>{{ order.amount }}</td>
+                <td>{{ order.amount }}원</td>
                 <td>{{ order.status }}</td>
               </tr>
               </tbody>
@@ -98,73 +98,140 @@
 import { ref, onMounted } from 'vue'
 import Chart from 'chart.js/auto'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import axios from "axios";
 
 const cards = ref([
-  { title: '총 매출', value: '3,500,000원', color: '#00a8ff', icon: ['fas', 'wallet'] },
-  { title: '문의 답변', value: 85, color: '#f6b93b', icon: ['fas', 'comments'] },
-  { title: '고객 문의', value: 12, color: '#ff9f43', icon: ['fas', 'question-circle'] },
-  { title: '총 주문 수', value: 58, color: '#38ada9', icon: ['fas', 'shopping-cart'] },
-  { title: '연체 주문', value: 3, color: '#e55039', icon: ['fas', 'exclamation-circle'] },
+  { title: '올해 누적 매출', value: '3,500,000원', color: '#00a8ff', icon: ['fas', 'wallet'] },
+  { title: '누적 사용자 수', value: 85, color: '#f6b93b', icon: ['fas', 'user'] },
+  { title: '진행중인 구독 수', value: 12, color: '#ff9f43', icon: ['fas', 'shopping-cart'] },
+  { title: '수리/반납 요청 수', value: 58, color: '#38ada9', icon: ['fas', 'truck'] },
+  { title: '총 상품 수', value: 3, color: '#e55039', icon: ['fas', 'box'] },
 ])
 
-const recentUsers = ref([
-  { id: 1, name: '홍길동', dateJoined: '2025-04-07' },
-  { id: 2, name: '임꺽정', dateJoined: '2025-04-06' },
-  { id: 3, name: '김철수', dateJoined: '2025-04-05' },
-])
 
-const recentOrders = ref([
-  { id: 101, customerName: '홍길동', amount: '500,000원', status: '결제완료' },
-  { id: 102, customerName: '임꺽정', amount: '250,000원', status: '결제완료' },
-  { id: 103, customerName: '김철수', amount: '750,000원', status: '결제완료' },
-])
+
+
 
 const salesLabels = ['1월', '2월', '3월', '4월', '5월', '6월']
 const salesData = [500000, 750000, 1200000, 900000, 1500000, 1700000]
 
-const userLabels = ['1월', '2월', '3월', '4월', '5월', '6월']
-const userData = [10, 15, 8, 20, 18, 25]
+const monthLabels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+
+function fillMonthlyData(rawData) {
+  const filledData = Array(12).fill(0) // 1~12월 모두 0으로 초기화
+
+  for (const item of rawData) {
+    const month = item.month - 1 // 1월이면 인덱스 0
+    filledData[month] = item.value
+  }
+
+  return filledData
+}const userData = [10, 15, 8, 20, 18, 25]
+
+async function fetchCardData() {
+  try {
+    const response = await axios.get('/api/admin/statistics/cardview')
+    const data = response.data.result
+    cards.value[0].value = data.totalRevenue.toLocaleString()
+    cards.value[1].value = data.userCount
+    cards.value[2].value = data.activeSubscriptions
+    cards.value[3].value = data.repairAndReturnRequests
+    cards.value[4].value = data.productCount
+  } catch (err) {
+    console.error('카드 데이터 로딩 실패', err)
+  }
+}
+
+const monthlySales = ref([])
+const monthlyNewUsers = ref([])
+
+async function fetchStatistics() {
+  try {
+    const response = await axios.get('/api/admin/statistics')
+    const data = response.data.result
+
+    monthlySales.value = data.monthlySales
+    monthlyNewUsers.value = data.monthlyNewUsers
+  } catch (err) {
+    console.error('통계 데이터 로딩 실패', err)
+  }
+}
+
+
+const recentOrders = ref([])
+
+async function fetchRecentPayments() {
+  try {
+    const response = await axios.get('/api/admin/statistics/recent-payments')
+    recentOrders.value = response.data.result
+  } catch (err) {
+    console.error('최근 결제 불러오기 실패', err)
+  }
+}
+
+
+
+const recentUsers = ref([])
+
+async function fetchRecentUsers() {
+  try {
+    const response = await axios.get('/api/admin/statistics/recent-users')
+    recentUsers.value = response.data.result
+  } catch (err) {
+    console.error('최근 가입 유저 불러오기 실패', err)
+  }
+}
+
+
 
 onMounted(() => {
-  new Chart(document.getElementById('salesChart'), {
-    type: 'line',
-    data: {
-      labels: salesLabels,
-      datasets: [{
-        label: '매출 (원)',
-        data: salesData,
-        backgroundColor: 'rgba(0,168,255,0.2)',
-        borderColor: 'rgba(0,168,255,1)',
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } }
-    }
-  })
+  fetchCardData()
+  fetchStatistics().then(() => {
+    new Chart(document.getElementById('salesChart'), {
+      type: 'line',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: '매출 (원)',
+          data: monthlySales.value,
+          backgroundColor: 'rgba(0,168,255,0.2)',
+          borderColor: 'rgba(0,168,255,1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    })
 
-  new Chart(document.getElementById('userChart'), {
-    type: 'bar',
-    data: {
-      labels: userLabels,
-      datasets: [{
-        label: '신규 가입자 (명)',
-        data: userData,
-        backgroundColor: 'rgba(255,159,67,0.5)',
-        borderColor: 'rgba(255,159,67,1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } }
-    }
+    new Chart(document.getElementById('userChart'), {
+      type: 'bar',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: '신규 가입자 (명)',
+          data: monthlyNewUsers.value,
+          backgroundColor: 'rgba(255,159,67,0.5)',
+          borderColor: 'rgba(255,159,67,1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    })
+
+    // 추가 차트도 이 방식으로 그릴 수 있음 (구독, 수리/반납, 성공률)
   })
+  fetchRecentPayments()
+  fetchRecentUsers()
 })
+
 </script>
 
 <style scoped>
