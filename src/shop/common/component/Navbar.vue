@@ -93,7 +93,7 @@ const logout = async () => {
         </div>
         <ul class="nav flex-row mb-0 flex-nowrap text-nowrap">
           <li class="nav-item">
-            <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">전체렌탈상품</a>
+            <router-link to="/sale/list" class="nav-link text-dark fw-semibold custom-nav-link">전체 렌탈 상품</router-link>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link text-dark fw-semibold custom-nav-link">BEST</a>

@@ -113,7 +113,25 @@ export const useSaleStore = defineStore('sale', {
         console.error('판매상품 수정 실패', err)
         throw err
       }
-    }
+    },
+
+    /**
+     * 전체 상품 조회 (카테고리 구분 없이 페이징)
+     * @param {Number} page 
+     * @param {Number} size 
+     */
+    async fetchAllSales(page = 0, size = 6) {
+      try {
+        const res = await axios.get('/api/sale/list', {
+          params: { page, size }
+        })
+        // 백엔드가 { result: { content: [...], totalPages: n } } 형태로 내려준다고 가정
+        this.saleList = res.data.result || { content: [], totalPages: 0 }
+      } catch (err) {
+        console.error('전체 판매 목록 조회 실패', err)
+        this.saleList = { content: [], totalPages: 0 }
+      }
+    },
 
 
 
