@@ -156,6 +156,25 @@ export const useSaleStore = defineStore('sale', {
       } catch {
         this.saleList = { content: [], totalPages: 0 }
       }
-    }
+    },
+
+/**
+    * 전체 판매상품(페이징 응답) 조회
+    * @param {number} page 0-based 페이지
+    * @param {number} size 한 페이지당 아이템 수
+    */
+   async fetchSaleProductsList(page = 0, size = 6) {
+       try {
+         const res = await axios.get('/api/sale/list', { params: { page, size } })
+         // res.data.result === { content: [...], totalPages: N }
+         const pageData = res.data.result || { content: [], totalPages: 0 }
+         this.saleProducts = pageData.content
+       } catch (error) {
+         console.error('판매 상품 목록 조회 실패', error)
+         this.saleProducts = []
+       }
+     },
+
+
   }
 })
