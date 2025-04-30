@@ -23,7 +23,7 @@
           </router-link>
         </li>
         <li>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/admin/product-by-page">
             <font-awesome-icon :icon="['fas', 'box-open']" /> 상품 재고 관리
           </a>
           <ul class="nav flex-column ms-4 small">
@@ -38,7 +38,7 @@
 
         <!-- 구독관리 -->
         <li>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/admin/sale">
             <font-awesome-icon :icon="['fas', 'clipboard-check']" /> 결제 관리
           </a>
           <ul class="nav flex-column ms-4 small">
@@ -70,14 +70,14 @@
 
         <!-- 홈페이지 관리 -->
         <li>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/admin/sale/register">
             <font-awesome-icon :icon="['fas', 'globe']" /> 홈페이지 관리
           </a>
           <ul class="nav flex-column ms-4 small">
             <li><router-link to="/admin/sale/register" class="nav-link text-white-50" >- 판매 관리</router-link></li>
             <li><router-link to="/admin/category" class="nav-link text-white-50" >- 카테고리 관리</router-link></li>
-            <li><a class="nav-link text-white-50" href="#">- FAQ 관리</a></li>
-            <li><a class="nav-link text-white-50" href="#">- 공지사항 관리</a></li>
+<!--            <li><a class="nav-link text-white-50" href="#">- FAQ 관리</a></li>-->
+<!--            <li><a class="nav-link text-white-50" href="#">- 공지사항 관리</a></li>-->
           </ul>
         </li>
 

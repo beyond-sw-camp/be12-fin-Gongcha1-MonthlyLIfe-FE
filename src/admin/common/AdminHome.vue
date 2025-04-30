@@ -160,7 +160,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-import { Doughnut } from 'vue-chartjs'
+// import { Doughnut } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   Title,
@@ -187,19 +187,16 @@ const chartOptions = {
   plugins: { legend: { position: 'bottom' } }
 }
 
-const totalMembers = ref(120)
-const totalSalesValue = ref(2302735)
-const answeredInquiries = ref(45)
-const customerInquiries = ref(10)
+
 
 // Todo: 추후 백엔드 연동시 삭제
-const cards = [
-  { icon: ['fas', 'user'], value: totalMembers.value, label: '회원수', color: '#4ea8de' },
-  { icon: ['fas', 'won-sign'], value: totalSalesValue.value.toLocaleString(), label: '총 매출', color: '#57c478' },
-  { icon: ['fas', 'comments'], value: answeredInquiries.value, label: '문의 답변', color: '#f6b93b' },
-  { icon: ['fas', 'q'], value: customerInquiries.value, label: '고객 문의', color: '#ff9f43' }
-]
-
+// cards 관련 상태
+const cards = ref([
+  { icon: ['fas', 'user'], value: 0, label: '회원수', color: '#4ea8de' },
+  { icon: ['fas', 'won-sign'], value: 0, label: '이번달 예상 매출', color: '#57c478' },
+  { icon: ['fas', 'comments'], value: 45, label: '문의 답변', color: '#f6b93b' },
+  { icon: ['fas', 'q'], value: 10, label: '고객 문의', color: '#ff9f43' }
+])
 const products = ref([])
 const orders = ref([])
 const selectedOrder = ref({})
@@ -207,6 +204,16 @@ const orderModal = ref(null)
 const loading = ref(false)
 const error = ref(null)
 
+async function fetchCardData() {
+  try {
+    const response = await axios.get('/api/admin/cardview')
+    const data = response.data.result
+    cards.value[0].value = data.userCount
+    cards.value[1].value = data.revenue.toLocaleString() // 매출은 천 단위 콤마 붙이기
+  } catch (err) {
+    console.error('카드 데이터 불러오기 실패', err)
+  }
+}
 
 
 async function fetchStockList() {
@@ -231,6 +238,7 @@ async function fetchOrders() {
   }
 }
 onMounted(() => {
+  fetchCardData()
   fetchStockList()
   fetchOrders()
 })
