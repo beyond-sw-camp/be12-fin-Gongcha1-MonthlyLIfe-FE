@@ -58,6 +58,8 @@
                     기간: {{ detail.period }}개월
                   </small>
                 </div>
+                <!-- 배송 중일 때만 -->
+
 
                 <div class="ms-auto d-flex flex-column align-items-end gap-2">
                   <small class="text-muted fst-italic">
@@ -79,13 +81,24 @@
                   </small>
 
                   <!-- 구독 중일 때만 -->
+                  <!-- 수리·분실신고 버튼 (배송 중일 땐 숨김) -->
                   <button
-                      v-if="detail.status === 'SUBSCRIBING'"
+                      v-if="detail.status === 'SUBSCRIBING' && detail.rentalStatus !== 'SHIPPING'"
                       @click="goRepair(detail.subscribeDetailIdx)"
                       class="btn btn-outline-secondary btn-sm"
                   >
                     수리·분실신고
                   </button>
+
+                  <!-- 배송 조회 버튼 (배송 중일 때만 노출) -->
+                  <button
+                      v-if="detail.rentalStatus === 'SHIPPING'"
+                      @click="goToDelivery(detail.subscribeDetailIdx)"
+                      class="btn btn-outline-info btn-sm"
+                  >
+                    배송 조회
+                  </button>
+
                   <button
                       v-if="detail.status === 'SUBSCRIBING' && isExtendable(detail.endAt)"
                       @click="onExtend(detail.subscribeDetailIdx)"
@@ -186,7 +199,10 @@ function goCancel(detailIdx) {
       .catch(() => alert('반납 취소 실패'))
       .finally(() => (isCancelling.value = false))
 }
-
+function goToDelivery(detailIdx) {
+  console.log(detailIdx)
+  router.push(`/user/delivery/${detailIdx}`)
+}
 function goToReturn(detailIdx) {
   router.push(`/subscription/${detailIdx}/return`)
 }
