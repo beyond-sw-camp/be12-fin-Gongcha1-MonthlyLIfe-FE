@@ -61,10 +61,17 @@ function getMinPrice(sale) {
 
 <template>
   <div class="best-banner">
-    <h4>Best</h4>
-    <p>지금 가장 인기 있는 건 뭘까?</p>
+
     <div class="best-layout">
       <ul class="category-buttons">
+        <div class="best-header">
+          <div class="best-text">
+          <h4>Best</h4>
+          <p>지금 가장 인기 있는 건 뭘까?</p>
+        </div>
+        </div>
+        
+
         <li v-for="cat in categories" :key="cat.idx">
           <button :class="{ active: cat.idx === selectedCategoryIdx }" @click="selectedCategoryIdx = cat.idx">
             {{ cat.name }}
@@ -77,15 +84,11 @@ function getMinPrice(sale) {
           해당 카테고리에 상품이 없습니다.
         </div>
         <div v-else>
-          <div ref="prevEl" class="swiper-button-prev swiper-nav-button prev me"> <font-awesome-icon :icon="['fas', 'angle-left']" /></div>
-          <Swiper
-            :modules="[Navigation]"
-            :navigation="{ nextEl, prevEl }"
-            :slides-per-view="'auto'"
-            :space-between="28"
-            :observer="true"
-            :observe-parents="true"
-          >
+          <div ref="prevEl" class="swiper-nav-btn prev">
+            <font-awesome-icon :icon="['fas', 'angle-left']" />
+          </div>
+          <Swiper :modules="[Navigation]" :navigation="{ nextEl, prevEl }" :slides-per-view="'auto'" :space-between="28"
+            :observer="true" :observe-parents="true">
             <SwiperSlide v-for="(sale, i) in bestSales" :key="sale.idx" class="custom-slide">
               <div class="product-card" @click="goDetail(sale)">
                 <em class="slide-num">{{ String(i + 1).padStart(2, '0') }}</em>
@@ -113,7 +116,7 @@ function getMinPrice(sale) {
               </div>
             </SwiperSlide>
           </Swiper>
-          <div ref="nextEl" class="swiper-button-next swiper-nav-button next">
+          <div ref="nextEl" class="swiper-nav-btn next">
             <font-awesome-icon :icon="['fas', 'angle-right']" />
           </div>
         </div>
@@ -130,6 +133,7 @@ function getMinPrice(sale) {
 
 .best-banner {
   padding: 2rem;
+  min-height: 500px;
 }
 
 .best-layout {
@@ -137,35 +141,46 @@ function getMinPrice(sale) {
   gap: 2rem;
   align-items: flex-start;
 }
-.swiper-nav-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+/* 헤더: 제목 + 카테고리 */
+.best-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 18px;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s ease;
-  padding: 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
+/* 이미지와 같은 폰트 스타일 */
+.best-text h4 {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: #111;
+  line-height: 1.1;
+}
+
+.best-text p {
+  margin: 0.3rem 0 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  color: #666;
+  line-height: 1.4;
+}
+
+
+
 .category-buttons {
-  flex: 1;
+  flex: 2;
   list-style: none;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  max-width: 800px;
+  max-width: 6000px;
 }
 
 .category-buttons button {
@@ -185,29 +200,9 @@ function getMinPrice(sale) {
 }
 
 .product-slide-area {
-  flex: 3;
+  flex: 5;
   overflow: hidden;
   position: relative;
-}
-
-.swiper-button-prev.prev {
-  left: 8px;
-}
-
-.swiper-button-next.next {
-  right: 8px;
-}
-
-.swiper-button-prev.prev::after {
-  content: none;
-  font-size: 18px;
-  color: #fff;
-}
-
-.swiper-button-next.next::after {
-  content: none;
-  font-size: 18px;
-  color: #fff;
 }
 
 .product-card {
@@ -235,7 +230,7 @@ function getMinPrice(sale) {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 300px;
+  height: 355px;
 }
 
 .img-wrap img {
@@ -281,9 +276,41 @@ function getMinPrice(sale) {
   color: #ccc;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
-/* FontAwesome 아이콘 크기 조정 */
-.swiper-nav-button font-awesome-icon {
-  font-size: 10px; /* ✅ 아이콘 크기 */
+
+/* ——— 새 네비게이션 버튼 스타일 ——— */
+.swiper-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.swiper-nav-btn.prev {
+  left: 8px;
+}
+
+.swiper-nav-btn.next {
+  right: 8px;
+}
+
+.swiper-nav-btn font-awesome-icon {
+  font-size: 18px;
   width: 18px;
   height: 18px;
 }
