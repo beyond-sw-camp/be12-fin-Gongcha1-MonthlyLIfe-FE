@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useCategoryStore } from '../../store/useCategoryStore'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/vue-splide/css'
+import Recommend from './Recommend.vue'
 
 const router = useRouter()
 const store = useCategoryStore()
@@ -85,6 +86,7 @@ function goToCategory(idx) {
       </div>
     </div>
   </div>
+  <Recommend class="home-main-banner"></Recommend>
 </template>
 
 <style scoped>
