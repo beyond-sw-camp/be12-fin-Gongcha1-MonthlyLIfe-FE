@@ -5,6 +5,7 @@ import { useCategoryStore } from '../../store/useCategoryStore'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/vue-splide/css'
 import Recommend from './Recommend.vue'
+import NewArrival from './NewArrival.vue'
 
 const router = useRouter()
 const store = useCategoryStore()
@@ -87,6 +88,7 @@ function goToCategory(idx) {
     </div>
   </div>
   <Recommend class="home-main-banner"></Recommend>
+  <NewArrival class="home-main-banner"></NewArrival>
 </template>
 
 <style scoped>
