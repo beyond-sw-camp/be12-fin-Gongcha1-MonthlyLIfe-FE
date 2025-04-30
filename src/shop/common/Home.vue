@@ -27,9 +27,63 @@ const banners = ref([
 function goTo(path) {
   router.push(path)
 }
+
 function goToCategory(idx) {
   router.push(`/sale/${idx}`)
 }
+
+
+// 배너 스크립트
+
+const summerSection = ref(null)
+
+onMounted(() => {
+  let alreadySnapped = false;
+  let ticking = false; // ✅ 이거 빠져 있었음!
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const rect = summerSection.value.getBoundingClientRect();
+        const vh = window.innerHeight;
+
+        // 스크롤 내려서 화면 70% 안에 들어왔으면 스냅
+        if (rect.top < vh * 0.7 && !alreadySnapped && rect.bottom > 0) {
+          summerSection.value.scrollIntoView({behavior: 'smooth'});
+          alreadySnapped = true;
+        }
+
+        // 스크롤 위로 올라가서 화면에서 완전히 사라지면 초기화
+        if (rect.top > vh) {
+          alreadySnapped = false;
+        }
+
+        ticking = false;
+      });
+
+      ticking = true;
+    }
+  })
+})
+const sampleItems = [
+  {
+    title: 'BJ철구',
+    desc: '아 행님들',
+    img: 'https://i.namu.wiki/i/sCxmclPP1g_eC7klSqKNaSCNH0O2JDEA0GzNzq7YVhJMgr_ErFY5yehDJE971uYGpe4q6-fugm2NwojcG-Ezlw.webp',
+  },
+  {
+    title: '야외 캠핑 쿨매트',
+    desc: '뜨거운 텐트 바닥은 이제 그만!',
+    img: 'https://i.namu.wiki/i/sCxmclPP1g_eC7klSqKNaSCNH0O2JDEA0GzNzq7YVhJMgr_ErFY5yehDJE971uYGpe4q6-fugm2NwojcG-Ezlw.webp',
+  },
+  {
+    title: '서큘레이터',
+    desc: '공기순환으로 에어컨 효율 UP!',
+    img: 'https://i.namu.wiki/i/sCxmclPP1g_eC7klSqKNaSCNH0O2JDEA0GzNzq7YVhJMgr_ErFY5yehDJE971uYGpe4q6-fugm2NwojcG-Ezlw.webp',
+  }
+]
+
+
 </script>
 
 <template>
@@ -88,10 +142,113 @@ function goToCategory(idx) {
     </div>
   </div>
   <Recommend class="home-main-banner"></Recommend>
+  <section ref="summerSection" class="full-width-banner">
+    <div class="banner-text">
+      <h1>여름 특가</h1>
+      <p>시원한 상품 만나보세요</p>
+      <!-- 여기 ↓ -->
+
+      <div class="summer-items">
+        <div class="item-card" v-for="item in sampleItems" :key="item.title">
+          <img :src="item.img" :alt="item.title"/>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.desc }}</p>
+          <button class="buy-btn">보러가기 →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <NewArrival class="home-main-banner"></NewArrival>
 </template>
 
 <style scoped>
+
+.summer-items {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.item-card {
+  width: 250px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1.2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.item-card:hover {
+  transform: translateY(-8px);
+}
+
+.item-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.item-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.item-card p {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.buy-btn {
+  padding: 0.5rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.buy-btn:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+
+.full-width-banner {
+  margin-top: 20vh;
+  margin-bottom: 1000px;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../../../assets/images/summer.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.banner-text h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.banner-text p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+
 .home-main-banner {
   max-width: 1140px;
   margin: 0 auto;
