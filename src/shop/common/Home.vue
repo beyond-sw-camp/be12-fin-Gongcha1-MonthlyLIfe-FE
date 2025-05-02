@@ -6,6 +6,8 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/vue-splide/css'
 import Recommend from './Recommend.vue'
 import NewArrival from './NewArrival.vue'
+import BestSales from '../common/BestSales.vue'
+
 
 const router = useRouter()
 const store = useCategoryStore()
@@ -142,6 +144,8 @@ const sampleItems = [
     </div>
   </div>
   <Recommend class="home-main-banner"></Recommend>
+  <NewArrival class="home-main-banner"></NewArrival>
+  <BestSales class="home-main-banner"></BestSales>
   <section ref="summerSection" class="full-width-banner">
     <div class="banner-text">
       <h1>여름 특가</h1>
@@ -159,7 +163,7 @@ const sampleItems = [
     </div>
   </section>
 
-  <NewArrival class="home-main-banner"></NewArrival>
+  
 </template>
 
 <style scoped>
@@ -255,7 +259,9 @@ const sampleItems = [
   height: 400px;      /* 배너 높이 고정 */
   overflow: hidden;
 }
-
+.home-main-banner-best{
+  height: auto;
+}
 /* Splide 컨테이너 전체 높이를 차지하도록 */
 :deep(.splide)             { height: 100%; }
 :deep(.splide__track)     { height: 100%; }
