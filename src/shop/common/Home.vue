@@ -40,7 +40,7 @@ function goToCategory(idx) {
   <div class="home-wrapper">
     <div class="container">
       <!-- 1) 배너 섹션 -->
-      <section class="home-main-banner bg-light px-5 py-5">
+      <section class="home-main-banner bg-light px-5 py-2">
         <Splide :options="{
           type: 'loop',
           perPage: 1,
@@ -101,7 +101,7 @@ function goToCategory(idx) {
 .home-main-banner {
   max-width: 1140px;
   margin: 0 auto;
-  height: 300px;
+  height: 350px;
   overflow: hidden;
 }
 
