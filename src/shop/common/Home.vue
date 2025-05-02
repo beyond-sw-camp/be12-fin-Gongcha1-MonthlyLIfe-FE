@@ -101,7 +101,7 @@ function goToCategory(idx) {
 .home-main-banner {
   max-width: 1140px;
   margin: 0 auto;
-  height: auto;
+  height: 400px;
   overflow: hidden;
 }
 
