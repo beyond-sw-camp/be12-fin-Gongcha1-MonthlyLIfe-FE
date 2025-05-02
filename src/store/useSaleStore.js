@@ -14,7 +14,8 @@ export const useSaleStore = defineStore('sale', {
       priceList: []
     },
     bestSales: [],
-    packageList: { content: [], totalPages: 0 }
+    packageList: { content: [], totalPages: 0 },
+    categorySales: {}
   }),
 
   actions: {
@@ -158,23 +159,28 @@ export const useSaleStore = defineStore('sale', {
       }
     },
 
-/**
-    * 전체 판매상품(페이징 응답) 조회
-    * @param {number} page 0-based 페이지
-    * @param {number} size 한 페이지당 아이템 수
-    */
-   async fetchSaleProductsList(page = 0, size = 6) {
-       try {
-         const res = await axios.get('/api/sale/list', { params: { page, size } })
-         // res.data.result === { content: [...], totalPages: N }
-         const pageData = res.data.result || { content: [], totalPages: 0 }
-         this.saleProducts = pageData.content
-       } catch (error) {
-         console.error('판매 상품 목록 조회 실패', error)
-         this.saleProducts = []
-       }
-     },
+    /**
+        * 전체 판매상품(페이징 응답) 조회
+        * @param {number} page 0-based 페이지
+        * @param {number} size 한 페이지당 아이템 수
+        */
+    async fetchSaleProductsList(page = 0, size = 6) {
+      try {
+        const res = await axios.get('/api/sale/list', { params: { page, size } })
+        // res.data.result === { content: [...], totalPages: N }
+        const pageData = res.data.result || { content: [], totalPages: 0 }
+        this.saleProducts = pageData.content
+      } catch (error) {
+        console.error('판매 상품 목록 조회 실패', error)
+        this.saleProducts = []
+      }
+    },
 
+
+    async fetchCategorySales(categoryIdx, page = 0, size = 5) {
+      const res = await axios.get(`/api/sale/category/${categoryIdx}`, { params: { page, size } })
+      this.categorySales[categoryIdx] = res.data.result.content || []
+    },
 
   }
 })
