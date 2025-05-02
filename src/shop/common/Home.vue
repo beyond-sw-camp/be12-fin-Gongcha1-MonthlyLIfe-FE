@@ -82,10 +82,10 @@ function goToCategory(idx) {
   <div>
     <Recommend class="home-main-banner"></Recommend>
   </div>
-  <div class="home-main-banner">
+  <div class="container py-5">
     <NewArrival />
   </div>
-  <div class="home-main-banner">
+  <div class="container py-5">
     <BestSales />
   </div>
   <div>
@@ -101,7 +101,7 @@ function goToCategory(idx) {
 .home-main-banner {
   max-width: 1140px;
   margin: 0 auto;
-  height: 400px;
+  height: 300px;
   overflow: hidden;
 }
 
