@@ -14,6 +14,7 @@ export const useSaleStore = defineStore('sale', {
       priceList: []
     },
     bestSales: [],
+    categorySummaries: {},  
     packageList: { content: [], totalPages: 0 },
     categorySales: {}
   }),
@@ -177,10 +178,50 @@ export const useSaleStore = defineStore('sale', {
     },
 
 
+    // async fetchCategorySales(categoryIdx, page = 0, size = 5) {
+    //   const res = await axios.get(`/api/sale/category/${categoryIdx}`, { params: { page, size } })
+    //   this.categorySales[categoryIdx] = res.data.result.content || []
+    // },
+    /** 
+     * 카테고리별 요약 조회: 
+     * 내용 안에 productList.productImages, condition 정보를 
+     * imageUrl, condition 필드로 꺼내서 붙여 줍니다.
+     */
+    // /store/useSaleStore.js
     async fetchCategorySales(categoryIdx, page = 0, size = 5) {
-      const res = await axios.get(`/api/sale/category/${categoryIdx}`, { params: { page, size } })
-      this.categorySales[categoryIdx] = res.data.result.content || []
+      try {
+        const res = await axios.get(
+          `/api/sale/category/${categoryIdx}`,
+          { params: { page, size } }
+        );
+        // DTO(content)가 이미 imageUrl, conditionName, price, period를 갖고 있으니
+        // 그대로 할당만 합니다.
+        const summaries = res.data.result?.content || [];
+        this.categorySales[categoryIdx] = summaries;
+      } catch (err) {
+        console.error('카테고리별 요약 조회 실패', err);
+        this.categorySales[categoryIdx] = [];
+      }
     },
+
+     /**
+    * 특정 카테고리의 Best 요약 상품 조회 (GetBestSaleRes[])
+    * categorySummaries[categoryIdx] 에만 덮어씁니다.
+    */
+   async fetchCategoryBestSummaries(categoryIdx, limit = 5) {
+       try {
+         const res = await axios.get(
+           `/api/sale/${categoryIdx}/best`,
+           { params: { limit } }
+         )
+         this.categorySummaries[categoryIdx] = res.data.result || []
+       } catch (err) {
+         console.error('카테고리별 Best 요약 조회 실패', err)
+         this.categorySummaries[categoryIdx] = []
+       }
+     }
+
+
 
   }
 })
