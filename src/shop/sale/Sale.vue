@@ -17,12 +17,12 @@ const pageSize = 6
 const keyword = computed(() => route.query.keyword || '')
 
 // 상세 페이지 이동
-function goToDetail(sale) {
+const goToDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.idx}`)
 }
 
 // 최소 가격 계산
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   return sale.priceList?.reduce((min, p) => (p.price < min.price ? p : min), sale.priceList[0])
 }
 

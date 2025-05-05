@@ -2,19 +2,17 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
-import { useProductStore } from '../../store/useProductStore'
 import { useCategoryStore } from '../../store/useCategoryStore'
 import SaleSearch from './SaleSearch.vue'
 
 const route = useRoute()
 const router = useRouter()
 const saleStore = useSaleStore()
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 
 // 페이징 및 카테고리 상태
 const currentPage = ref(0)
-const pageSize = 3
+const pageSize = 30
 const categoryIdx = ref(Number(route.params.categoryIdx))
 const selectedDetailCategory = ref(null)
 
@@ -41,7 +39,6 @@ const detailIdx = computed(() => {
 // 마운트 시 카테고리·상품 로드
 onMounted(async () => {
   await categoryStore.fetchCategoryList()
-  await productStore.fetchProductList()
 })
 
 // route 변경 시 parent category 초기화 및 재로딩
@@ -83,7 +80,9 @@ watch(
 watch(
   [selectedDetailCategory, currentPage, keyword, gradeFilter],
   ([cat, page, kw, grade]) => {
-    if (!cat) return
+    console.log("hi");
+    console.log(cat);
+    if (!cat || typeof cat.idx !== 'number') return
     saleStore.fetchSaleListByCategory(
       cat.idx,
       page,
@@ -103,11 +102,6 @@ function changePage(page) {
 function goToDetail(sale) {
   const catId = sale.categoryIdx ?? categoryIdx.value
   router.push(`/sale/detail/${catId}/${sale.idx}`)
-}
-
-// 상품 코드로부터 이미지 조회
-function findProductByCode(productCode) {
-  return productStore.products.find(p => p.code === productCode)
 }
 
 // 상태별 배지 클래스
@@ -171,26 +165,34 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
           class="col-md-4"
         >
           <div class="card h-100 shadow-sm">
+<!--            이미지-->
             <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
               <img
-                v-for="(product, pIdx) in sale.productList"
-                :key="pIdx"
-                :src="findProductByCode(product.productCode)?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'"
+                :src="sale.imageUrl || '/assets/images/placeholder.png'"
                 class="img-thumbnail"
                 style="width: 120px; height: 120px; object-fit: cover;"
               />
             </div>
+
+<!--            내용-->
             <div class="card-body text-center">
+
+
+<!--              이름-->
               <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
                 {{ sale.name }}
+
+<!--                등급 태그-->
                 <span
-                  v-if="findProductByCode(sale.productList[0]?.productCode)?.condition"
+                  v-if="sale.conditionName !== null"
                   class="badge ms-2"
-                  :class="conditionColorClass(findProductByCode(sale.productList[0]?.productCode)?.condition)"
+                  :class="conditionColorClass(sale.conditionName)"
                 >
-                  {{ findProductByCode(sale.productList[0]?.productCode)?.condition }}
+                  {{ sale.conditionName }}
                 </span>
               </h6>
+
+<!--              가격-->
               <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
               <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
                 월 {{ getMinPrice(sale).price.toLocaleString() }}원 /

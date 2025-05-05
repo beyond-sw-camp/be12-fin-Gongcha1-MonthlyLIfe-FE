@@ -35,6 +35,9 @@ export const useSaleStore = defineStore('sale', {
           res = await axios.get(`/api/sale/category/${categoryIdx}`, {
             params: { page, size }
           })
+
+          console.log("반환값", res);
+
         } else {
           // 검색용 엔드포인트 호출
           res = await axios.get(`/api/sale/search`, {
@@ -42,6 +45,7 @@ export const useSaleStore = defineStore('sale', {
           })
         }
         this.saleList = res.data.result || { content: [], totalPages: 0 }
+
       } catch (err) {
         console.error('판매 목록 조회 실패', err)
         this.saleList = { content: [], totalPages: 0 }
