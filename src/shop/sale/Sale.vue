@@ -17,17 +17,17 @@ const pageSize = 6
 const keyword = computed(() => route.query.keyword || '')
 
 // 상세 페이지 이동
-function goToDetail(sale) {
+const goToDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.idx}`)
 }
 
 // 최소 가격 계산
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   return sale.priceList?.reduce((min, p) => (p.price < min.price ? p : min), sale.priceList[0])
 }
 
 // 등급 배지 색 클래스
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
@@ -42,7 +42,7 @@ const saleContent = computed(() => saleStore.saleList.content || [])
 const totalPages  = computed(() => saleStore.saleList.totalPages || 0)
 
 // 데이터 불러오기 공통
-function loadData(page, kw) {
+const loadData = (page, kw) => {
   if (kw) {
     saleStore.fetchSalesByKeyword(page, pageSize, kw)
   } else {
@@ -62,7 +62,7 @@ watch([currentPage, keyword], ([page, kw]) => {
 }, { immediate: true })
 
 // 페이지 버튼 클릭 핸들러
-function goPage(page) {
+const goPage = (page) => {
   currentPage.value = page
 }
 
