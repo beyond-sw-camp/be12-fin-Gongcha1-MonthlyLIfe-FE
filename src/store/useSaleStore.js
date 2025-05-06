@@ -24,28 +24,38 @@ export const useSaleStore = defineStore('sale', {
      * @param {Number} categoryIdx 
      * @param {Number} page 
      * @param {Number} size 
-     * @param {{keyword?: string, grade?: string}} filter 
+     * @param {{keyword: string, grade: string}} filter
      */
     async fetchSaleListByCategory(categoryIdx, page = 0, size = 3, filter = {}) {
       const { keyword, grade } = filter
       try {
         let res
-        if (!keyword && !grade) {
+
+        if (keyword==='' && grade==='') {
           // 기본 카테고리 조회
           res = await axios.get(`/api/sale/category/${categoryIdx}`, {
             params: { page, size }
           })
 
-          console.log("반환값", res);
+          // console.log("반환값", res);
+          return res.data.result;
 
         } else {
+          const params = {
+            categoryIdx,
+            page,
+            size
+          }
+
+          if (keyword) params.keyword = keyword
+          if (grade) params.grade = grade
           // 검색용 엔드포인트 호출
           res = await axios.get(`/api/sale/search`, {
-            params: { categoryIdx, page, size, keyword, grade }
+            params:params
           })
+          return res.data.result;
         }
-        this.saleList = res.data.result || { content: [], totalPages: 0 }
-
+        // this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch (err) {
         console.error('판매 목록 조회 실패', err)
         this.saleList = { content: [], totalPages: 0 }
@@ -178,13 +188,5 @@ export const useSaleStore = defineStore('sale', {
         this.saleList = { content: [], totalPages: 0 }
       }
     }
-
-
-
-
-
-
-
-
   }
 })
