@@ -16,7 +16,8 @@ export const useSaleStore = defineStore('sale', {
     bestSales: [],
     categorySummaries: {},  
     packageList: { content: [], totalPages: 0 },
-    categorySales: {}
+    categorySales: {},
+    newArrivals: [],
   }),
 
   actions: {
@@ -219,7 +220,18 @@ export const useSaleStore = defineStore('sale', {
          console.error('카테고리별 Best 요약 조회 실패', err)
          this.categorySummaries[categoryIdx] = []
        }
-     }
+     },
+
+
+     async fetchNewArrivals(limit = 10) {
+      try {
+        const res = await axios.get('/api/sale/new-arrivals', { params: { limit } });
+        this.newArrivals = res.data.result || [];
+      } catch (e) {
+        console.error('신규 상품 조회 실패', e);
+        this.newArrivals = [];
+      }
+    }
 
 
 
