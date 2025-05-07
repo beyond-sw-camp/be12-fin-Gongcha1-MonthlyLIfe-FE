@@ -49,7 +49,7 @@ onMounted(async () => {
 const submitCheckout = async () => {
 
   const { postcode, address1, address2 } = addressInputRef.value;
-
+console.log(cartItems.value)
   const sales = cartItems.value.map(item => ({
     saleIdx: item.saleIdx,
     period: item.period

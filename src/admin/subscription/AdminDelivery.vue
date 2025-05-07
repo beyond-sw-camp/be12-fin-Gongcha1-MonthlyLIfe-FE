@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 
 // 오늘 날짜
@@ -54,6 +54,15 @@ async function fetchOrders() {
   }
 }
 
+//요청완료 버튼
+function markAsCompleted(item) {
+  axios.get(`/api/admin/delivery/reparing-complete/${item.deliveryIdx}`
+)
+      .then(() => fetchOrders())
+      .catch(err => console.error('상태 변경 실패', err))
+}
+
+
 
 // 페이지 이동
 function goToPage(page) {
@@ -84,7 +93,7 @@ function filterList() {
 
 // 주문 클릭 시 모달 열기
 function openOrderModal(order) {
-  alert('주문 상세 보기: ' + order.subscribeIdx)
+  alert('주문 상세 보기: ' + order.deliveryIdx)
 }
 
 // 초기 로딩
@@ -120,7 +129,15 @@ onMounted(fetchOrders)
                         <li><a class="dropdown-item" href="#" @click.prevent="search.searchType = '주문상태'">주문상태</a></li>
                       </ul>
                     </div>
-                    <input type="text" class="form-control form-control-sm" v-model="search.searchQuery" placeholder="검색어" style="max-width: 200px;">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        v-model="search.searchQuery"
+                        placeholder="검색어"
+                        style="max-width: 200px;"
+                        @keyup.enter="filterList"
+                    />
+
                   </div>
                 </div>
               </div>
@@ -153,25 +170,30 @@ onMounted(fetchOrders)
           <table v-if="!loading" class="table table-bordered table-hover subscribe-table">
             <thead class="table-header custom-thead">
             <tr style="background-color: #4ea8de">
-              <th>주문번호</th>
+              <th>배송번호</th>
               <th>주문자명</th>
               <th>주문금액</th>
-              <th>주문상태</th>
               <th>연락처</th>
               <th>주문일시</th>
+              <th>주문상태</th>
+              <th>처리</th>
             </tr>
             </thead>
             <tbody>
             <tr v-if="orders.length === 0">
               <td colspan="6">데이터가 없습니다.</td>
             </tr>
-            <tr v-for="order in orders" :key="order.subscribeIdx" style="cursor: pointer;" @click="openOrderModal(order)">
-              <td>{{ order.subscribeIdx }}</td>
+            <tr v-for="order in orders" :key="order.deliveryIdx">
+              <td>{{ order.deliveryIdx }}</td>
               <td>{{ order.userName }}</td>
               <td>{{ order.subscribePrice.toLocaleString() }}</td>
-              <td>{{ order.deliveryStatus }}</td>
               <td>{{ order.userPhone }}</td>
               <td>{{ order.subscribeDetailCreatedAt.split('T')[0] }}</td>
+              <td>{{ order.deliveryStatus }}</td>
+              <td>
+                <button v-if="(order.deliveryStatus === 'PREPARING')" class="btn btn-success btn-sm" @click="markAsCompleted(order)">완료 처리</button>
+                <p v-else>처리완료</p>
+              </td>
             </tr>
             </tbody>
           </table>
