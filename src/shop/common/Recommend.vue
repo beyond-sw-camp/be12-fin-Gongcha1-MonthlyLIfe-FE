@@ -44,8 +44,8 @@ watch(selectedCategoryIdx, async idx => {
   }
 })
 const bestSales = computed(() => {
-   return saleStore.categorySummaries[selectedCategoryIdx.value] || []
- })
+  return saleStore.categorySummaries[selectedCategoryIdx.value] || []
+})
 
 const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.saleIdx}`)
@@ -57,7 +57,7 @@ const conditionColorClass = (cond) => {
     case 'A급': return 'bg-primary'
     case 'B급': return 'bg-warning text-dark'
     case 'C급': return 'bg-danger'
-    default:    return 'bg-secondary'
+    default: return 'bg-secondary'
   }
 }
 </script>
@@ -69,11 +69,11 @@ const conditionColorClass = (cond) => {
       <ul class="category-buttons">
         <div class="best-header">
           <div class="best-text">
-          <h4>Best</h4>
-          <p>지금 가장 인기 있는 건 뭘까?</p>
+            <h4>Best</h4>
+            <p>지금 가장 인기 있는 건 뭘까?</p>
+          </div>
         </div>
-        </div>
-        
+
 
         <li v-for="cat in categories" :key="cat.idx">
           <button :class="{ active: cat.idx === selectedCategoryIdx }" @click="selectedCategoryIdx = cat.idx">
@@ -96,40 +96,17 @@ const conditionColorClass = (cond) => {
               <div class="product-card" @click="goDetail(sale)">
                 <em class="slide-num">{{ String(i + 1).padStart(2, '0') }}</em>
                 <div class="img-wrap">
-                  <img 
-           :src="sale.imageUrl || '/assets/images/placeholder.png'" 
-           alt="상품 이미지" 
-         />
-                  <img 
-           :src="sale.imageUrl || '/assets/images/placeholder.png'" 
-           alt="상품 이미지" 
-         />
+                  <img :src="sale.imageUrl || '/assets/images/placeholder.png'" alt="상품 이미지" />
                   <div class="info-overlay">
                     <em>{{ sale.manufacturer }}</em>
-                    <em>{{ sale.manufacturer }}</em>
                     <p>{{ sale.name }}</p>
-                    <span 
-               v-if="sale.conditionName" 
-               class="badge ms-2" 
-               :class="conditionColorClass(sale.conditionName)"
-             >
-               {{ sale.conditionName }}
-             </span>
-             <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
-           <div class="monthly">
-             월 <span>{{ sale.period }}</span>개월
-          </div>
-                    <span 
-               v-if="sale.conditionName" 
-               class="badge ms-2" 
-               :class="conditionColorClass(sale.conditionName)"
-             >
-               {{ sale.conditionName }}
-             </span>
-             <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
-           <div class="monthly">
-             월 <span>{{ sale.period }}</span>개월
-          </div>
+                    <span v-if="sale.conditionName" class="badge ms-2" :class="conditionColorClass(sale.conditionName)">
+                      {{ sale.conditionName }}
+                    </span>
+                    <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
+                    <div class="monthly">
+                      월 <span>{{ sale.period }}</span>개월
+                    </div>
                   </div>
                 </div>
               </div>
@@ -160,6 +137,7 @@ const conditionColorClass = (cond) => {
   gap: 2rem;
   align-items: flex-start;
 }
+
 /* 헤더: 제목 + 카테고리 */
 .best-header {
   display: flex;
@@ -183,7 +161,8 @@ const conditionColorClass = (cond) => {
 .best-text p {
   margin: 0.3rem 0 0;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
+  /* 18px */
   font-weight: 400;
   color: #666;
   line-height: 1.4;

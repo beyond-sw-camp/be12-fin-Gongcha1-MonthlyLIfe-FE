@@ -18,7 +18,6 @@ const conditionColorClass = (cond) => {
     case 'B급': return 'bg-warning text-dark'
     case 'C급': return 'bg-danger'
     default:    return 'bg-secondary'
-    default:    return 'bg-secondary'
   }
 }
 
@@ -69,43 +68,6 @@ onMounted(async () => {
     상품 로딩 중…
   </div>
 </template>
-<template>
-  <section class="full-width-banner" v-if="sales.length">
-    <div class="banner-text">
-      <h1>여름 특가</h1>
-      <p>시원한 상품 만나보세요</p>
-      <div class="summer-items">
-        <div
-          class="item-card"
-          v-for="sale in sales"
-          :key="sale.idx"
-          @click="goDetail(sale)"
-        >
-          <img :src="sale.imageUrl || '/assets/images/placeholder.png'" />
-          <h3>
-            {{ sale.name }}
-            <span
-              v-if="sale.conditionName"
-              class="badge ms-2"
-              :class="conditionColorClass(sale.conditionName)"
-            >
-              {{ sale.conditionName }}
-            </span>
-          </h3>
-          <p v-if="sale.price">
-            월 {{ sale.price.toLocaleString() }}원 /
-            {{ sale.period }}개월
-          </p>
-          <button class="buy-btn">자세히 보기 →</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div v-else class="text-center py-5 text-muted">
-    상품 로딩 중…
-  </div>
-</template>
 
 <style scoped>
 .full-width-banner {
@@ -114,29 +76,6 @@ onMounted(async () => {
   background-image: url('../../../assets/images/summer.png');
   background-size: cover;
   background-position: center;
-.full-width-banner {
-  width: 100vw;
-  padding: 4rem 0;
-  background-image: url('../../../assets/images/summer.png');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-}
-.banner-text {
-  width: 1140px;
-  text-align: center;
-}
-.banner-text h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-.banner-text p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-.summer-items {
-  display: flex;
 }
 .banner-text {
   width: 1140px;
