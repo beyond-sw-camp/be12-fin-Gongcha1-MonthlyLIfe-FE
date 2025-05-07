@@ -52,7 +52,7 @@ body {
   flex-direction: column;
   align-items: center; /* 콘텐츠 가운데 정렬 */
   justify-content: flex-start;
-  padding-top: 60px; /* 고정 header 공간 확보 */
+  padding-top: 20px; 
 }
 
 header {
