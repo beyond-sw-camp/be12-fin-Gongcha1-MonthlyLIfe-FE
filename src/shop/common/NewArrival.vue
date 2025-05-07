@@ -20,19 +20,19 @@ const newArrivals = computed(() => saleStore.newArrivals)
 onMounted(() => {
   saleStore.fetchNewArrivals(10)
 })
-function onSwiper(swiper) {
+const onSwiper = (swiper) => {
   swiper.params.navigation.prevEl = prevEl.value
   swiper.params.navigation.nextEl = nextEl.value
   swiper.navigation.init()
   swiper.navigation.update()
 }
 
-function goToDetail(sale) {
+const goToDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.idx}`)
 }
 
 // 등급 배지 색
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'

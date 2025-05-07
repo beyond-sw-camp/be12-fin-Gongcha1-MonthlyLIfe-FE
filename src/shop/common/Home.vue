@@ -27,11 +27,11 @@ const banners = ref([
   { title: 'Stove', subtitle: '신선하게!<br>한정 수량 특가', img: 'https://rentalcdn.lghellovision.net/uploads/product/J6DSh7anMa.png', link: '/sale/4?detail=14' }
 ])
 
-function goTo(path) {
+const goTo = (path) => {
   router.push(path)
 }
 
-function goToCategory(idx) {
+const goToCategory = (idx) => {
   router.push(`/sale/${idx}`)
 }
 </script>

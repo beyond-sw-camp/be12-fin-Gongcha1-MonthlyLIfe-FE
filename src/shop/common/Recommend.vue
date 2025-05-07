@@ -45,11 +45,11 @@ const bestSales = computed(() => {
    return saleStore.categorySummaries[selectedCategoryIdx.value] || []
  })
 
-function goDetail(sale) {
+const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.saleIdx}`)
 }
 // 조건 배지용
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
@@ -57,12 +57,6 @@ function conditionColorClass(cond) {
     case 'C급': return 'bg-danger'
     default:    return 'bg-secondary'
   }
-}
-function getMinPrice(sale) {
-  return sale.priceList?.reduce(
-    (min, p) => (p.price < min.price ? p : min),
-    sale.priceList[0]
-  )
 }
 </script>
 

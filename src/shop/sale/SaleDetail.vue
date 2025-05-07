@@ -42,14 +42,14 @@ onMounted(async () => {
   await saleStore.fetchSaleDetail(categoryIdx, saleIdx)
 })
 
-function nextSlide() {
+const nextSlide = () => {
   activeIndex.value = (activeIndex.value + 1) % images.value.length
 }
-function prevSlide() {
+const prevSlide = () => {
   activeIndex.value = (activeIndex.value - 1 + images.value.length) % images.value.length
 }
 
-function addToCart() {
+const addToCart = () => {
   // 1) 선택된 기간의 price 객체 찾기
   const sel = saleStore.saleDetail.priceList
     .find(p => p.period === selectedTerm.value)
@@ -69,7 +69,7 @@ function addToCart() {
 
 
 
-function subscribe() {
+const subscribe = () => {
   // 1) 선택된 기간(개월) 찾아서
   const sel = saleStore.saleDetail.priceList.find(p => p.period === selectedTerm.value)
   if (!sel?.salePriceIdx) {
@@ -90,15 +90,6 @@ function subscribe() {
     }
   })
 }
-
-
-
-
-
-
-
-
-
 
 </script>
 

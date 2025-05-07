@@ -21,7 +21,7 @@ const keyword = ref('')
 const gradeFilter = ref(null)
 
 // 검색 이벤트 핸들러
-function onSearch({ keyword: kw, grade }) {
+const onSearch = ({ keyword: kw, grade }) => {
   keyword.value = kw
   gradeFilter.value = grade
   currentPage.value = 0
@@ -94,18 +94,18 @@ watch(
 )
 
 // 페이지 변경 핸들러
-function changePage(page) {
+const changePage = (page) => {
   currentPage.value = page
 }
 
 // 상세 페이지 이동
-function goToDetail(sale) {
+const goToDetail = (sale) => {
   const catId = sale.categoryIdx ?? categoryIdx.value
   router.push(`/sale/detail/${catId}/${sale.idx}`)
 }
 
 // 상태별 배지 클래스
-function conditionColorClass(condition) {
+const conditionColorClass = (condition) => {
   switch (condition) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
@@ -116,7 +116,7 @@ function conditionColorClass(condition) {
 }
 
 // 최저가 조회
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   if (!sale.priceList || sale.priceList.length === 0) return null
   return sale.priceList.reduce((min, p) => p.price < min.price ? p : min, sale.priceList[0])
 }

@@ -18,12 +18,12 @@ const packageContent = computed(() => saleStore.packageList.content || [])
 const totalPages = computed(() => saleStore.packageList.totalPages || 0)
 
 // 상세 페이지 이동
-function goToDetail(pkg) {
+const goToDetail = (pkg) => {
   router.push(`/sale/detail/${pkg.categoryIdx}/${pkg.saleIdx}`)
 }
 
 // 최소 가격·기간 계산 (Sale.vue와 동일)
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   return sale.priceList?.reduce(
     (min, p) => (p.price < min.price ? p : min),
     sale.priceList[0]
@@ -31,7 +31,7 @@ function getMinPrice(sale) {
 }
 
 // 등급 배지 색 클래스
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'

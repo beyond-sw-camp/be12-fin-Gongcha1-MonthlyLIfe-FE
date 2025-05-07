@@ -7,11 +7,11 @@ const router = useRouter()
 const saleStore = useSaleStore()
 const sales = ref([])
 
-function goDetail(sale) {
+const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.idx}`)
 }
 
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
