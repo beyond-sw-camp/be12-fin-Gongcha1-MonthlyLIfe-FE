@@ -11,7 +11,8 @@ export const useSaleStore = defineStore('sale', {
       categoryIdx: null,
       saleIdx: null,
       productList: [],
-      priceList: []
+      priceList: [],
+      descriptionImageUrls: [],
     },
     bestSales: [],
     allBestSales: [],
@@ -71,7 +72,8 @@ export const useSaleStore = defineStore('sale', {
           categoryIdx: result.categoryIdx,
           saleIdx: result.saleIdx,
           productList: result.productList,
-          priceList: result.priceList
+          priceList: result.priceList,
+          descriptionImageUrls: result.descriptionImageUrls || [],
         }
       } catch (err) {
         console.error('판매 상세 정보 조회 실패', err)
@@ -81,7 +83,8 @@ export const useSaleStore = defineStore('sale', {
           categoryIdx: null,
           saleIdx: null,
           productList: [],
-          priceList: []
+          priceList: [],
+          descriptionImageUrls: [],
         }
       }
     },
