@@ -76,7 +76,15 @@ onMounted(fetchSubscribes)
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
               <div class="d-flex align-items-center gap-1">
                 <label class="form-label mb-0 text-nowrap">통합 검색</label>
-                <input v-model="search.keyword" type="text" class="form-control form-control-sm" placeholder="이름, ID 등" style="max-width: 200px;">
+                <input
+                    v-model="search.keyword"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="이름, ID 등"
+                    style="max-width: 200px;"
+                    @keyup.enter="searchSubmit"
+                />
+
               </div>
               <div class="d-flex align-items-center gap-1">
                 <label class="form-label mb-0 text-nowrap">구독 상태</label>

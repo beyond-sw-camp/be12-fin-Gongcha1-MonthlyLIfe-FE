@@ -50,7 +50,7 @@ const pagedSales = computed(() => {
 })
 
 // 2) 페이지 이동 함수
-function goToPage(page) {
+const goToPage = (page) => {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
 }
@@ -164,7 +164,7 @@ function handleEdit(sale) {
 * 모달에서 저장 완료 시 발생시키는 이벤트
 */
 function onSaleUpdated() {
-  saleStore.fetchSaleProductList()
+  saleStore.fetchSaleProductsList(0,5)
   showSuccessToast('수정이 완료되었습니다!')
 }
 
@@ -181,10 +181,25 @@ async function handleDelete(saleIdx) {
 }
 
 
-onMounted(async () => {
-  await saleStore.fetchSaleProductList()
-  fetchStockDetails()
-})
+// onMounted(async () => {
+//   await saleStore.fetchSaleProductList()
+//   fetchStockDetails()
+// })
+
+ onMounted(async () => {
+   loading.value = true
+   try {
+     // ① 전체 판매상품(넉넉한 사이즈) 불러오기
+     await saleStore.fetchSaleProductsList(0, 1000)
+     // ② 재고/상품 상세 불러오기
+     await fetchStockDetails()
+   } catch (e) {
+     console.error(e)
+     error.value = '초기 데이터 로드 중 오류가 발생했습니다.'
+   } finally {
+     loading.value = false
+   }
+ })
 </script>
 
 <template>
