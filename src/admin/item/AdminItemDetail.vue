@@ -50,7 +50,7 @@ const pagedSales = computed(() => {
 })
 
 // 2) 페이지 이동 함수
-function goToPage(page) {
+const goToPage = (page) => {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
 }

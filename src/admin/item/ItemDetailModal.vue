@@ -92,7 +92,7 @@ watch(() => props.sale, s => {
   }
 }, { immediate: true })
 
-function close() {
+const close = () => {
   emit('update:show', false)
 }
 
