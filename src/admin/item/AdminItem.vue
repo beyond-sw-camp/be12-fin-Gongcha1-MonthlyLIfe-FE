@@ -140,7 +140,14 @@ function goToDetailPage(item) {
                     </select>
 
                   </div>
-                  <input type="text" v-model="search.searchQuery" class="form-control form-control-sm" placeholder="검색어" style="max-width: 200px;">
+                  <input
+                      type="text"
+                      v-model="search.searchQuery"
+                      @keyup.enter="fetchProducts"
+                      class="form-control form-control-sm"
+                      placeholder="검색어"
+                      style="max-width: 200px;"
+                  >
                 </div>
               </div>
             </div>

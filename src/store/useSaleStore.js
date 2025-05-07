@@ -11,10 +11,15 @@ export const useSaleStore = defineStore('sale', {
       categoryIdx: null,
       saleIdx: null,
       productList: [],
-      priceList: []
+      priceList: [],
+      descriptionImageUrls: [],
     },
     bestSales: [],
-    packageList: {content: [], totalPages: 0}
+    allBestSales: [],
+    categorySummaries: {},  
+    packageList: { content: [], totalPages: 0 },
+    categorySales: {},
+    newArrivals: [],
   }),
 
   actions: {
@@ -24,24 +29,38 @@ export const useSaleStore = defineStore('sale', {
      * @param {Number} categoryIdx 
      * @param {Number} page 
      * @param {Number} size 
-     * @param {{keyword?: string, grade?: string}} filter 
+     * @param {{keyword: string, grade: string}} filter
      */
     async fetchSaleListByCategory(categoryIdx, page = 0, size = 3, filter = {}) {
       const { keyword, grade } = filter
       try {
         let res
-        if (!keyword && !grade) {
+
+        if (keyword==='' && grade==='') {
           // 기본 카테고리 조회
           res = await axios.get(`/api/sale/category/${categoryIdx}`, {
             params: { page, size }
           })
+
+          // console.log("반환값", res);
+          return res.data.result;
+
         } else {
+          const params = {
+            categoryIdx,
+            page,
+            size
+          }
+
+          if (keyword) params.keyword = keyword
+          if (grade) params.grade = grade
           // 검색용 엔드포인트 호출
           res = await axios.get(`/api/sale/search`, {
-            params: { categoryIdx, page, size, keyword, grade }
+            params:params
           })
+          return res.data.result;
         }
-        this.saleList = res.data.result || { content: [], totalPages: 0 }
+        // this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch (err) {
         console.error('판매 목록 조회 실패', err)
         this.saleList = { content: [], totalPages: 0 }
@@ -78,7 +97,8 @@ export const useSaleStore = defineStore('sale', {
           categoryIdx: result.categoryIdx,
           saleIdx: result.saleIdx,
           productList: result.productList,
-          priceList: result.priceList
+          priceList: result.priceList,
+          descriptionImageUrls: result.descriptionImageUrls || [],
         }
       } catch (err) {
         console.error('판매 상세 정보 조회 실패', err)
@@ -88,15 +108,16 @@ export const useSaleStore = defineStore('sale', {
           categoryIdx: null,
           saleIdx: null,
           productList: [],
-          priceList: []
+          priceList: [],
+          descriptionImageUrls: [],
         }
       }
     },
+
     /** 판매상품 삭제 */
     async deleteSale(saleIdx) {
       try {
         await axios.post(`/api/sale/${saleIdx}/delete`)
-        // 삭제하고 나면 로컬 saleProducts에서도 제거
         this.saleProducts = this.saleProducts.filter(s => s.saleIdx !== saleIdx)
       } catch (err) {
         console.error('판매상품 삭제 실패', err)
@@ -108,7 +129,6 @@ export const useSaleStore = defineStore('sale', {
     async updateSale(categoryIdx, saleIdx, payload) {
       try {
         const res = await axios.post(`/api/sale/${saleIdx}/update`, payload)
-        // 성공 시, store의 saleProducts 갱신(간단히 전체 다시 로드)
         await this.fetchSaleProductList()
         return res.data.result
       } catch (err) {
@@ -117,70 +137,141 @@ export const useSaleStore = defineStore('sale', {
       }
     },
 
-    /**
-     * 전체 상품 조회 (카테고리 구분 없이 페이징)
-     * @param {Number} page 
-     * @param {Number} size 
-     * @param {String} keyword 
-     */
+    /** 전체 상품 조회 (페이징) */
     async fetchAllSales(page = 0, size = 6) {
       try {
-        const res = await axios.get('/api/sale/list', {
-          params: { page, size }
-        })
-        // 백엔드가 { result: { content: [...], totalPages: n } } 형태로 내려준다고 가정
+        const res = await axios.get('/api/sale/list', { params: { page, size } })
         this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch (err) {
         console.error('전체 판매 목록 조회 실패', err)
         this.saleList = { content: [], totalPages: 0 }
       }
     },
-        // ★ 베스트 상품 조회 액션 추가
-    /**
-     * 구독 수 기준 Best 상품 조회
-     * @param {Number} limit - 상위 N개
-     */
+
+    /** 구독 수 기준 Best 상품 조회 (전체) */
     async fetchBestSales(limit = 5) {
       try {
-        const res = await axios.get('/api/sale/best', {
-          params: { limit }
-        })
-        // 백엔드에서 BaseResponse<List<BestSaleRes>> 형태로 내려줌
+        const res = await axios.get('/api/sale/best', { params: { limit } })
         this.bestSales = res.data.result || []
       } catch (err) {
         console.error('베스트 상품 조회 실패', err)
         this.bestSales = []
       }
     },
-
-    async fetchPackageSales(page = 0, size = 6) {
-      const res = await axios.get('/api/sale/packages', { params: { page, size } })
-      this.packageList = res.data.result
+    /**
+     * 전체 판매상품 중 구독수 기준 Top N개 조회
+     */
+    async fetchAllBestSales(limit = 8) {
+      try {
+        const res = await axios.get('/api/sale/best/all', { params: { limit } })
+        this.allBestSales = res.data.result || []
+      } catch (err) {
+        console.error('전체 Best 상품 조회 실패', err)
+        this.allBestSales = []
+      }
     },
 
-    /**
-     * 키워드 검색 조회
-     * @param {Number} page 
-     * @param {Number} size 
-     * @param {String} keyword 
-     */
+    /** 카테고리별 베스트 상품 조회 */
+    async fetchCategoryBestSales(categoryIdx, limit = 5) {
+      try {
+        const res = await axios.get(`/api/sale/${categoryIdx}/best`, { params: { limit } })
+        this.bestSales = res.data.result || []
+      } catch (err) {
+        console.error('카테고리별 베스트 상품 조회 실패', err)
+        this.bestSales = []
+      }
+    },
+
+    async fetchPackageSales(page = 0, size = 6) {
+      try {
+        const res = await axios.get('/api/sale/packages', { params: { page, size } })
+        this.packageList = res.data.result
+      } catch (err) {
+        console.error('패키지 특가 조회 실패', err)
+        this.packageList = { content: [], totalPages: 0 }
+      }
+    },
+
+    /** 키워드 검색 조회 */
     async fetchSalesByKeyword(page = 0, size = 6, keyword = '') {
       try {
-        const res = await axios.get('/api/sale/searchall', {
-          params: { page, size, keyword }
-        })
+        const res = await axios.get('/api/sale/searchall', { params: { page, size, keyword } })
         this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch {
         this.saleList = { content: [], totalPages: 0 }
       }
+    },
+
+    /**
+        * 전체 판매상품(페이징 응답) 조회
+        * @param {number} page 0-based 페이지
+        * @param {number} size 한 페이지당 아이템 수
+        */
+    async fetchSaleProductsList(page = 0, size = 6) {
+      try {
+        const res = await axios.get('/api/sale/list', { params: { page, size } })
+        // res.data.result === { content: [...], totalPages: N }
+        const pageData = res.data.result || { content: [], totalPages: 0 }
+        this.saleProducts = pageData.content
+      } catch (error) {
+        console.error('판매 상품 목록 조회 실패', error)
+        this.saleProducts = []
+      }
+    },
+
+
+    // async fetchCategorySales(categoryIdx, page = 0, size = 5) {
+    //   const res = await axios.get(`/api/sale/category/${categoryIdx}`, { params: { page, size } })
+    //   this.categorySales[categoryIdx] = res.data.result.content || []
+    // },
+    /** 
+     * 카테고리별 요약 조회: 
+     * 내용 안에 productList.productImages, condition 정보를 
+     * imageUrl, condition 필드로 꺼내서 붙여 줍니다.
+     */
+    // /store/useSaleStore.js
+    async fetchCategorySales(categoryIdx, page = 0, size = 5) {
+      try {
+        const res = await axios.get(
+          `/api/sale/category/${categoryIdx}`,
+          { params: { page, size } }
+        );
+        // DTO(content)가 이미 imageUrl, conditionName, price, period를 갖고 있으니
+        // 그대로 할당만 합니다.
+        const summaries = res.data.result?.content || [];
+        this.categorySales[categoryIdx] = summaries;
+      } catch (err) {
+        console.error('카테고리별 요약 조회 실패', err);
+        this.categorySales[categoryIdx] = [];
+      }
+    },
+
+     /**
+    * 특정 카테고리의 Best 요약 상품 조회 (GetBestSaleRes[])
+    * categorySummaries[categoryIdx] 에만 덮어씁니다.
+    */
+   async fetchCategoryBestSummaries(categoryIdx, limit = 5) {
+       try {
+         const res = await axios.get(
+           `/api/sale/${categoryIdx}/best`,
+           { params: { limit } }
+         )
+         this.categorySummaries[categoryIdx] = res.data.result || []
+       } catch (err) {
+         console.error('카테고리별 Best 요약 조회 실패', err)
+         this.categorySummaries[categoryIdx] = []
+       }
+     },
+
+
+     async fetchNewArrivals(limit = 10) {
+      try {
+        const res = await axios.get('/api/sale/new-arrivals', { params: { limit } });
+        this.newArrivals = res.data.result || [];
+      } catch (e) {
+        console.error('신규 상품 조회 실패', e);
+        this.newArrivals = [];
+      }
     }
-
-
-
-
-
-
-
-
   }
 })

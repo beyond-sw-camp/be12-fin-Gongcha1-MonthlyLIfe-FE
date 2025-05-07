@@ -10,19 +10,19 @@ const selectedGrade = ref(null)
 const grades = ['S급', 'A급', 'B급', 'C급']
 
 // 검색 버튼 클릭 시
-function onSearch() {
+const onSearch = () => {
   emit('search', { keyword: searchInput.value, grade: selectedGrade.value })
 }
 
 // 초기화 버튼 클릭 시
-function resetAll() {
+const resetAll = () => {
   searchInput.value = ''
   selectedGrade.value = null
   emit('search', { keyword: '', grade: null })
 }
 
 // 등급 토글 및 자동 검색
-function selectGrade(g) {
+const selectGrade = (g) => {
   selectedGrade.value = selectedGrade.value === g ? null : g
   emit('search', { keyword: searchInput.value, grade: selectedGrade.value })
 }

@@ -116,7 +116,14 @@ onMounted(() => {
                         <li><a class="dropdown-item" href="#" @click.prevent="search.searchType = '주소'">주소</a></li>
                       </ul>
                     </div>
-                    <input type="text" class="form-control" v-model="search.searchQuery" placeholder="검색어">
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="search.searchQuery"
+                        placeholder="검색어"
+                        @keyup.enter="searchSubmit"
+                    />
+
                   </div>
                 </div>
 
@@ -159,7 +166,7 @@ onMounted(() => {
                           </div>
                         </li>
                       </ul>
-                      <button class="btn btn-sm btn-secondory">초기화</button>
+                      <button class="btn btn-sm btn-secondary">초기화</button>
                     </div>
 
                     <input class="form-check-input" type="checkbox" id="check4" v-model="search.overdueOnly">
