@@ -2,12 +2,10 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
-import { useProductStore } from '../../store/useProductStore'
 
 const router = useRouter()
 const route = useRoute()
 const saleStore = useSaleStore()
-const productStore = useProductStore()
 
 // 초기 페이지 & 사이즈
 const currentPage = ref(route.query.page ? Number(route.query.page) : 0)
@@ -33,13 +31,13 @@ const conditionColorClass = (cond) => {
     case 'A급': return 'bg-primary'
     case 'B급': return 'bg-warning text-dark'
     case 'C급': return 'bg-danger'
-    default:    return 'bg-secondary'
+    default: return 'bg-secondary'
   }
 }
 
 // 스토어 데이터
 const saleContent = computed(() => saleStore.saleList.content || [])
-const totalPages  = computed(() => saleStore.saleList.totalPages || 0)
+const totalPages = computed(() => saleStore.saleList.totalPages || 0)
 
 // 데이터 불러오기 공통
 const loadData = (page, kw) => {
@@ -65,102 +63,63 @@ watch([currentPage, keyword], ([page, kw]) => {
 const goPage = (page) => {
   currentPage.value = page
 }
+const getImages = (sale) => {
+  sale.productList.flatMap(p => p.imageUrls || [])
+}
 
-// 미리 상품 리스트 로드
-onMounted(() => {
-  productStore.fetchProductList()
-})
 </script>
 
 <template>
-  <!-- <div class="container-fluid p-0"> -->
-    <section class="banner-section">
-      <img
-        src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg"
-        alt="배너 이미지"
-        class="banner-image"
-      />
-      <div class="text-area">
-        <div class="text02"><strong>원하는 모든 제품, 렌탈로 쉽게</strong></div>
-      </div>
-    </section>
+  <section class="banner-section">
+    <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지" class="banner-image" />
+    <div class="text-area">
+      <div class="text02"><strong>원하는 모든 제품, 렌탈로 쉽게</strong></div>
+    </div>
+  </section>
 
-    <div class="container py-5">
-      <h4 class="fw-bold mb-3">
-        {{ keyword ? `"${keyword}" 검색 결과` : '모든 상품을 한눈에' }}
-      </h4>
+  <div class="container py-5">
+    <h4 class="fw-bold mb-3">
+      {{ keyword ? `"${keyword}" 검색 결과` : '모든 상품을 한눈에' }}
+    </h4>
 
-      <div v-if="saleContent.length" class="row g-4">
-        <div
-          v-for="sale in saleContent"
-          :key="sale.idx"
-          class="col-md-4"
-          @click="goToDetail(sale)"
-          style="cursor:pointer"
-        >
-          <div class="card h-100 shadow-sm">
-            <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img
-                v-for="(prod, i) in sale.productList"
-                :key="i"
-                :src="
-                  productStore.products.find(p => p.code === prod.productCode)
-                    ?.productImages?.[0]?.productImgUrl ||
-                  '/assets/images/placeholder.png'
-                "
-                class="img-thumbnail"
-                style="width:120px; height:120px; object-fit:cover;"
-              />
-            </div>
-            <div class="card-body text-center">
-              <h6 class="card-title fw-bold d-flex justify-content-center align-items-center">
-                {{ sale.name }}
-                <span
-                  v-if="
-                    productStore.products.find(p => p.code === sale.productList[0]?.productCode)
-                      ?.condition
-                  "
-                  class="badge ms-2"
-                  :class="
-                    conditionColorClass(
-                      productStore.products.find(p => p.code === sale.productList[0]?.productCode)
-                        .condition
-                    )
-                  "
-                >
-                  {{
-                    productStore.products.find(p => p.code === sale.productList[0]?.productCode)
-                      .condition
-                  }}
-                </span>
-              </h6>
-              <p class="text-muted text-nowrap">{{ sale.description }}</p>
-              <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
-                월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
-                {{ getMinPrice(sale).period }}개월
-              </p>
-            </div>
+    <div v-if="saleContent.length" class="row g-4">
+      <div v-for="sale in saleContent" :key="sale.idx" class="col-md-4" @click="goToDetail(sale)"
+        style="cursor:pointer">
+        <div class="card h-100 shadow-sm">
+          <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
+            <img v-for="(imgUrl, i) in sale.productList" :key="i"
+              :src="imgUrl.imageUrls?.[0] || '/assets/images/placeholder.png'" class="img-thumbnail"
+              style="width:120px; height:120px; object-fit:cover;" />
+          </div>
+          <div class="card-body text-center">
+            <h6 class="card-title fw-bold d-flex justify-content-center align-items-center">
+              {{ sale.name }}
+              <span v-if="sale.productList[0]?.conditionName" class="badge ms-2"
+                :class="conditionColorClass(sale.productList[0].conditionName)">
+                {{ sale.productList[0].conditionName }}
+              </span>
+            </h6>
+            <p class="text-muted text-nowrap">{{ sale.description }}</p>
+            <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
+              월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
+              {{ getMinPrice(sale).period }}개월
+            </p>
           </div>
         </div>
       </div>
-
-      <div v-else class="text-center text-muted py-5">
-        등록된 상품이 없습니다.
-      </div>
-
-      <div class="text-center mt-4" v-if="totalPages > 1">
-        <button
-          v-for="n in totalPages"
-          :key="n"
-          class="btn btn-outline-secondary mx-1"
-          :class="{ 'btn-dark': n - 1 === currentPage }"
-          @click="goPage(n - 1)"
-        >
-          {{ n }}
-        </button>
-      </div>
     </div>
-  <!-- </div> -->
+
+    <div v-else class="text-center text-muted py-5">
+      등록된 상품이 없습니다.
+    </div>
+
+    <div class="text-center mt-4" v-if="totalPages > 1">
+      <button v-for="n in totalPages" :key="n" class="btn btn-outline-secondary mx-1"
+        :class="{ 'btn-dark': n - 1 === currentPage }" @click="goPage(n - 1)">
+        {{ n }}
+      </button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -170,12 +129,14 @@ onMounted(() => {
   background-color: #c4c9c3;
   overflow: hidden;
 }
+
 .banner-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 }
+
 .text-area {
   position: absolute;
   top: 50%;
@@ -183,10 +144,12 @@ onMounted(() => {
   transform: translateY(-50%);
   color: #000;
 }
+
 .text02 {
   font-size: 2rem;
   font-weight: bold;
 }
+
 /* 기본 트랜지션 설정 */
 .card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
