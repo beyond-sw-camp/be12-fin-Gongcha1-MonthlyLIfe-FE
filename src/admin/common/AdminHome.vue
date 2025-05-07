@@ -73,7 +73,7 @@
           </thead>
           <tbody>
           <tr v-for="(order, idx) in orders.slice(0, 5)" :key="idx" style="cursor: pointer;" @click="openOrderModal(order)">
-            <td>{{ order.subscribeIdx }}</td>
+            <td>{{ order.deliveryIdx }}</td>
             <td>{{ order.userName }}</td>
             <td>{{ order.subscribePrice }}</td>
             <td>{{ order.deliveryStatus }}</td>
