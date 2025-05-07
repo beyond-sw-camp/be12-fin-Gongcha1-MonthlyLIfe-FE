@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import {ref, onMounted, watch, computed, onBeforeUnmount} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
 import { useCategoryStore } from '../../store/useCategoryStore'
@@ -12,13 +12,15 @@ const categoryStore = useCategoryStore()
 
 // 페이징 및 카테고리 상태
 const currentPage = ref(0)
-const pageSize = 30
+const pageSize = 4
 const categoryIdx = ref(Number(route.params.categoryIdx))
 const selectedDetailCategory = ref(null)
+const displayList = ref([])
+const scrollEnd = ref(false)
 
 // 검색어 + 등급 필터 상태
 const keyword = ref('')
-const gradeFilter = ref(null)
+const gradeFilter = ref('')
 
 // 검색 이벤트 핸들러
 const onSearch = ({ keyword: kw, grade }) => {
@@ -36,9 +38,44 @@ const detailIdx = computed(() => {
   const d = route.query.detail
   return d != null ? Number(d) : null
 })
+
+const loadMore = async () => {
+  const cat = selectedDetailCategory.value;
+  if (!cat || typeof cat.idx !== 'number') return
+  const next = await saleStore.fetchSaleListByCategory(cat.idx, currentPage.value, pageSize,
+      {keyword: keyword.value, grade: gradeFilter.value})
+  console.log(currentPage.value);
+  console.log(next)
+  console.log(displayList.value);
+  if (!next.empty) {
+    displayList.value.push(...next.content)
+    currentPage.value++
+  }
+  else {
+    scrollEnd.value = true;
+  }
+}
+
+const onScroll = async () => {
+  if(scrollEnd.value) return;
+  const scrollTop = window.scrollY
+  const windowHeight = window.innerHeight
+  const docHeight = document.documentElement.scrollHeight
+
+  if (scrollTop + windowHeight >= docHeight - document.querySelector('.footer-wrapper').offsetHeight) {
+    await loadMore()
+  }
+}
+
+
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 // 마운트 시 카테고리·상품 로드
 onMounted(async () => {
   await categoryStore.fetchCategoryList()
+  window.addEventListener('scroll', onScroll)
 })
 
 // route 변경 시 parent category 초기화 및 재로딩
@@ -47,6 +84,8 @@ watch(
   async newVal => {
     categoryIdx.value = Number(newVal)
     currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
     selectedDetailCategory.value = null
     await categoryStore.fetchCategoryList()
   }
@@ -73,22 +112,25 @@ watch(
       : cats[0].idx
     selectedDetailCategory.value =
       cats.find(c => c.idx === target) || cats[0]
+    currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
   },
   { immediate: true }
 )
-// 선택 카테고리, 페이지, 검색어, 등급 필터 변경 시 목록 조회
+// 선택 카테고리, 검색어, 등급 필터 변경 시 목록 조회
 watch(
-  [selectedDetailCategory, currentPage, keyword, gradeFilter],
-  ([cat, page, kw, grade]) => {
+  [selectedDetailCategory, keyword, gradeFilter],
+  async ([cat, kw, grade]) => {
     console.log("hi");
     console.log(cat);
     if (!cat || typeof cat.idx !== 'number') return
-    saleStore.fetchSaleListByCategory(
-      cat.idx,
-      page,
-      pageSize,
-      { keyword: kw, grade }
-    )
+
+    currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
+    await loadMore()
+
   },
   { immediate: true }
 )
@@ -156,51 +198,52 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
       <SaleSearch @search="onSearch" />
       <h4 class="fw-bold mb-3">많은 고객님들이 선택한 상품이에요</h4>
 
-      <div v-if="saleContent.length > 0" class="row g-4">
-        <div
-          v-for="sale in saleContent"
-          :key="sale.saleIdx"
-          @click="goToDetail(sale)"
-          style="cursor:pointer"
-          class="col-md-4"
-        >
-          <div class="card h-100 shadow-sm">
-<!--            이미지-->
-            <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img
-                :src="sale.imageUrl || '/assets/images/placeholder.png'"
-                class="img-thumbnail"
-                style="width: 120px; height: 120px; object-fit: cover;"
-              />
-            </div>
+      <div v-if="displayList.length > 0" class="row g-4">
+          <div
+              v-for="sale in displayList"
+              :key="sale.saleIdx"
+              @click="goToDetail(sale)"
+              style="cursor:pointer"
+              class="col-md-4"
+          >
+            <div class="card h-100 shadow-sm">
+              <!--            이미지-->
+              <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
+                <img
+                    :src="sale.imageUrl || '/assets/images/placeholder.png'"
+                    class="img-thumbnail"
+                    style="width: 120px; height: 120px; object-fit: cover;"
+                />
+              </div>
 
-<!--            내용-->
-            <div class="card-body text-center">
+              <!--            내용-->
+              <div class="card-body text-center">
 
 
-<!--              이름-->
-              <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
-                {{ sale.name }}
+                <!--              이름-->
+                <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
+                  {{ sale.name }}
 
-<!--                등급 태그-->
-                <span
-                  v-if="sale.conditionName !== null"
-                  class="badge ms-2"
-                  :class="conditionColorClass(sale.conditionName)"
-                >
+                  <!--                등급 태그-->
+                  <span
+                      v-if="sale.conditionName !== null"
+                      class="badge ms-2"
+                      :class="conditionColorClass(sale.conditionName)"
+                  >
                   {{ sale.conditionName }}
                 </span>
-              </h6>
+                </h6>
 
-<!--              가격-->
-              <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
-              <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
-                월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
-                {{ getMinPrice(sale).period }}개월
-              </p>
+                <!--              가격-->
+                <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
+                <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
+                  월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
+                  {{ getMinPrice(sale).period }}개월
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+
       </div>
 
       <div v-else class="text-center text-muted py-5">

@@ -24,18 +24,43 @@ export const useSaleStore = defineStore('sale', {
 
   actions: {
     /**
-     * 카테고리 상품 조회 or 검색(키워드/등급) 조회를 하나로 합침
+     * 카테고리 조회 or 검색(키워드/등급) 조회를 하나로 합침
+     *
+     * @param {Number} categoryIdx 
+     * @param {Number} page 
+     * @param {Number} size 
+     * @param {{keyword: string, grade: string}} filter
      */
     async fetchSaleListByCategory(categoryIdx, page = 0, size = 3, filter = {}) {
       const { keyword, grade } = filter
       try {
         let res
-        if (!keyword && !grade) {
-          res = await axios.get(`/api/sale/category/${categoryIdx}`, { params: { page, size } })
+
+        if (keyword==='' && grade==='') {
+          // 기본 카테고리 조회
+          res = await axios.get(`/api/sale/category/${categoryIdx}`, {
+            params: { page, size }
+          })
+
+          // console.log("반환값", res);
+          return res.data.result;
+
         } else {
-          res = await axios.get(`/api/sale/search`, { params: { categoryIdx, page, size, keyword, grade } })
+          const params = {
+            categoryIdx,
+            page,
+            size
+          }
+
+          if (keyword) params.keyword = keyword
+          if (grade) params.grade = grade
+          // 검색용 엔드포인트 호출
+          res = await axios.get(`/api/sale/search`, {
+            params:params
+          })
+          return res.data.result;
         }
-        this.saleList = res.data.result || { content: [], totalPages: 0 }
+        // this.saleList = res.data.result || { content: [], totalPages: 0 }
       } catch (err) {
         console.error('판매 목록 조회 실패', err)
         this.saleList = { content: [], totalPages: 0 }
@@ -248,8 +273,5 @@ export const useSaleStore = defineStore('sale', {
         this.newArrivals = [];
       }
     }
-
-
-
   }
 })
