@@ -104,7 +104,14 @@ onMounted(() => {
                 <li><a class="dropdown-item" href="#" @click.prevent="filter.searchType = 'Payment ID'">Payment ID</a></li>
                 <li><a class="dropdown-item" href="#" @click.prevent="filter.searchType = '사용자명'">사용자명</a></li>
               </ul>
-              <input type="text" class="form-control" v-model="filter.searchQuery" placeholder="검색어">
+              <input
+                  type="text"
+                  class="form-control"
+                  v-model="filter.searchQuery"
+                  placeholder="검색어"
+                  @keyup.enter="filterList"
+              />
+
             </div>
           </div>
           <div class="col-auto form-check">

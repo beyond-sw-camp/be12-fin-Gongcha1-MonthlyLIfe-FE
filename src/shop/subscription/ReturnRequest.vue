@@ -109,7 +109,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { useSubscribeStore } from '../../store/useSubcribeStore.js'
@@ -157,8 +157,7 @@ async function submitReturn() {
     const res = await axios.post('/api/subscribe/return', payload)
     if (res.data.isSuccess) {
       alert('반납 신청이 완료되었습니다!')
-      // 원하는 경우, 완료 후 다른 페이지로 이동
-      // router.push('/user/detail')
+       router.push('/user/subscription')
     } else {
       alert('실패: ' + res.data.message)
     }
