@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 
 // 오늘 날짜
@@ -71,7 +71,7 @@ function goToPage(page) {
   fetchOrders()
 }
 
-function prevPage() {배
+function prevPage() {
   if (currentPage.value > 1) {
     currentPage.value--
     fetchOrders()
@@ -129,7 +129,15 @@ onMounted(fetchOrders)
                         <li><a class="dropdown-item" href="#" @click.prevent="search.searchType = '주문상태'">주문상태</a></li>
                       </ul>
                     </div>
-                    <input type="text" class="form-control form-control-sm" v-model="search.searchQuery" placeholder="검색어" style="max-width: 200px;">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        v-model="search.searchQuery"
+                        placeholder="검색어"
+                        style="max-width: 200px;"
+                        @keyup.enter="filterList"
+                    />
+
                   </div>
                 </div>
               </div>
