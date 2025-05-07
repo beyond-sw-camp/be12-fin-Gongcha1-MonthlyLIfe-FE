@@ -3,11 +3,9 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
-import { useProductStore } from '../../store/useProductStore'
 
 const router = useRouter()
 const saleStore = useSaleStore()
-const productStore = useProductStore()
 
 // 페이징
 const currentPage = ref(0)
@@ -42,9 +40,6 @@ const conditionColorClass = (cond) => {
 }
 
 // 마운트 시 상품과 패키지 데이터 로드
-onMounted(() => {
-  productStore.fetchProductList()
-})
 watch(currentPage, page => {
   saleStore.fetchPackageSales(page, pageSize)
 }, { immediate: true })
@@ -70,18 +65,30 @@ watch(currentPage, page => {
         <div class="card h-100 shadow-sm">
           <!-- 이미지 래퍼: Sale.vue와 동일하게 -->
           <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-            <img v-for="(prod, i) in pkg.productList" :key="i"
+            <!-- <img v-for="(prod, i) in pkg.productList" :key="i"
               :src="productStore.products.find(p => p.code === prod.productCode)?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'"
-              class="img-thumbnail" style="width:120px; height:120px; object-fit:cover;" />
+              class="img-thumbnail" style="width:120px; height:120px; object-fit:cover;" /> -->
+              <img
+           v-for="(prod, i) in pkg.productList"
+           :key="i"
+           :src="prod.imageUrls?.[0] || '/assets/images/placeholder.png'"
+           class="img-thumbnail"
+           style="width:120px; height:120px; object-fit:cover;"
+         />
           </div>
           <!-- 이하 동일 -->
           <div class="card-body text-center">
             <h6 class="card-title fw-bold d-flex justify-content-center align-items-center">
               {{ pkg.name }}
-              <span v-if="productStore.products.find(p => p.code === pkg.productList[0]?.productCode)?.condition"
+              <!-- <span v-if="productStore.products.find(p => p.code === pkg.productList[0]?.productCode)?.condition"
                 class="badge ms-2"
                 :class="conditionColorClass(productStore.products.find(p => p.code === pkg.productList[0]?.productCode).condition)">
                 {{productStore.products.find(p => p.code === pkg.productList[0]?.productCode).condition}}
+                 -->
+                 <span v-if="pkg.productList[0]?.conditionName"
+           class="badge ms-2"
+           :class="conditionColorClass(pkg.productList[0].conditionName)">
+           {{ pkg.productList[0].conditionName }}
               </span>
             </h6>
             <p class="text-muted text-nowrap">{{ pkg.description }}</p>
