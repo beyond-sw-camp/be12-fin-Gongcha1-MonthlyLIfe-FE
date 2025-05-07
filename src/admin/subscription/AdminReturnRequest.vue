@@ -64,7 +64,7 @@ function goToPage(page) {
 }
 
 function markAsCompleted(item) {
-  axios.post(`/api/admin/${getTypePath(search.type)}/${item.id}`
+  axios.post(`/api/admin/${getTypePath(search.status)}/${item.id}`
       ,{
     status: item.status,
     returnLocation: item.returnLocation

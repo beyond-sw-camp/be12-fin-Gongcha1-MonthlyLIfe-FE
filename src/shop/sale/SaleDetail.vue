@@ -77,11 +77,12 @@ function subscribe() {
   }
 
   const payload = [{
-    saleIdx:      saleStore.saleDetail.saleIdx,  // 판매 상품 ID
+    saleIdx:      parseInt(route.params.saleIdx,10),  // 판매 상품 ID
     salePriceIdx: sel.salePriceIdx,              // 선택된 옵션의 PK
     period:       sel.period,                    // 개월 수
     price:        sel.price,                     // 월 가격
   }]
+
   router.push({
     name: 'subscription',
     query: {
