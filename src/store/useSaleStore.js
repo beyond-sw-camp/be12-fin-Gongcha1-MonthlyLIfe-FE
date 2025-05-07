@@ -14,6 +14,7 @@ export const useSaleStore = defineStore('sale', {
       priceList: []
     },
     bestSales: [],
+    allBestSales: [],
     categorySummaries: {},  
     packageList: { content: [], totalPages: 0 },
     categorySales: {},
@@ -127,6 +128,18 @@ export const useSaleStore = defineStore('sale', {
       } catch (err) {
         console.error('베스트 상품 조회 실패', err)
         this.bestSales = []
+      }
+    },
+    /**
+     * 전체 판매상품 중 구독수 기준 Top N개 조회
+     */
+    async fetchAllBestSales(limit = 8) {
+      try {
+        const res = await axios.get('/api/sale/best/all', { params: { limit } })
+        this.allBestSales = res.data.result || []
+      } catch (err) {
+        console.error('전체 Best 상품 조회 실패', err)
+        this.allBestSales = []
       }
     },
 
