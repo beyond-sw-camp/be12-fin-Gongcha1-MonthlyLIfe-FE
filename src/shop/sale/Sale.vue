@@ -17,8 +17,8 @@ const loading = ref(false)
 const keyword = ref(route.query.keyword || '')
 const displayList = ref([])
 
-// 상세 페이지로 이동
-function goToDetail(sale) {
+// 상세 페이지 이동
+const goToDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.idx}`)
 }
 

@@ -33,11 +33,13 @@ onMounted(async () => {
   if (first) {
     selectedCategoryIdx.value = first.idx
     await saleStore.fetchCategoryBestSummaries(first.idx, 10)
+    await saleStore.fetchCategoryBestSummaries(first.idx, 10)
   }
 })
 
 watch(selectedCategoryIdx, async idx => {
   if (idx !== null) {
+    await saleStore.fetchCategoryBestSummaries(idx, 10)
     await saleStore.fetchCategoryBestSummaries(idx, 10)
   }
 })
@@ -98,9 +100,25 @@ const conditionColorClass = (cond) => {
            :src="sale.imageUrl || '/assets/images/placeholder.png'" 
            alt="상품 이미지" 
          />
+                  <img 
+           :src="sale.imageUrl || '/assets/images/placeholder.png'" 
+           alt="상품 이미지" 
+         />
                   <div class="info-overlay">
                     <em>{{ sale.manufacturer }}</em>
+                    <em>{{ sale.manufacturer }}</em>
                     <p>{{ sale.name }}</p>
+                    <span 
+               v-if="sale.conditionName" 
+               class="badge ms-2" 
+               :class="conditionColorClass(sale.conditionName)"
+             >
+               {{ sale.conditionName }}
+             </span>
+             <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
+           <div class="monthly">
+             월 <span>{{ sale.period }}</span>개월
+          </div>
                     <span 
                v-if="sale.conditionName" 
                class="badge ms-2" 
