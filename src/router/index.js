@@ -126,7 +126,7 @@ const routes = [
     {
         path: '/admin',
         component: () => import("../admin/common/AdminLayout.vue"),
-        // beforeEnter: adminCheck, // 원하면 활성화
+        beforeEnter: adminCheck,
         children: [
             { path: '', component: () => import("../admin/common/AdminHome.vue") },
             { path: 'product-by-page', component: () => import("../admin/item/AdminItem.vue") },
