@@ -104,7 +104,8 @@ const handleRegister = async () => {
     // 초기화
     saleProducts.splice(0, saleProducts.length, { productCode: '', condition: '' })
   } catch (e) {
-    alert('등록 실패')
+    const message = e.response?.data?.message || '등록 실패'
+    alert(`${message}`)
   }
 }
 
