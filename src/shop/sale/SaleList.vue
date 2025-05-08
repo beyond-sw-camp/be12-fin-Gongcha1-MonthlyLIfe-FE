@@ -12,7 +12,7 @@ const categoryStore = useCategoryStore()
 
 // 페이징 및 카테고리 상태
 const currentPage = ref(0)
-const pageSize = 4
+const pageSize = 15
 const categoryIdx = ref(Number(route.params.categoryIdx))
 const selectedDetailCategory = ref(null)
 const displayList = ref([])
@@ -55,15 +55,22 @@ const loadMore = async () => {
     scrollEnd.value = true;
   }
 }
-
+let isLoading = false;
 const onScroll = async () => {
-  if(scrollEnd.value) return;
+
+  if(scrollEnd.value|| isLoading) return;
   const scrollTop = window.scrollY
   const windowHeight = window.innerHeight
   const docHeight = document.documentElement.scrollHeight
 
   if (scrollTop + windowHeight >= docHeight - document.querySelector('.footer-wrapper').offsetHeight) {
-    await loadMore()
+    isLoading = true;
+    try {
+      await loadMore();
+    }
+    finally {
+      isLoading = false;
+    }
   }
 }
 
