@@ -71,11 +71,12 @@ const handleRegister = async () => {
   //   !selectedProductCode.value ||
   //   !selectedSubSubCategoryIdx.value
   // ) 
+  const invalidPrice = price3.value < 0 || price6.value < 0 || price12.value < 0
   const incomplete = saleProducts.some(p => !p.productCode || !p.condition)
-  if (!saleName.value || incomplete || !selectedSubSubCategoryIdx.value) {
-    alert('❗ 모든 항목을 입력해주세요.')
-    return
-  }
+  if (!saleName.value || incomplete || !selectedSubSubCategoryIdx.value || invalidPrice) {
+  alert('❗ 모든 항목을 입력해주세요. 가격은 0 이상이어야 합니다.')
+  return
+}
 
   const dto = {
     name: saleName.value,
@@ -235,17 +236,17 @@ watch(selectedSubSubCategoryIdx, async (idx) => {
           <div class="col-9">
             <div class="input-group mb-2" style="max-width: 250px;">
               <span class="input-group-text">3개월</span>
-              <input type="number" class="form-control" v-model="price3" />
+              <input type="number" class="form-control" v-model="price3"  min="0" />
               <span class="input-group-text">원</span>
             </div>
             <div class="input-group mb-2" style="max-width: 250px;">
               <span class="input-group-text">6개월</span>
-              <input type="number" class="form-control" v-model="price6" />
+              <input type="number" class="form-control" v-model="price6"  min="0" />
               <span class="input-group-text">원</span>
             </div>
             <div class="input-group" style="max-width: 250px;">
               <span class="input-group-text">12개월</span>
-              <input type="number" class="form-control" v-model="price12" />
+              <input type="number" class="form-control" v-model="price12"  min="0" />
               <span class="input-group-text">원</span>
             </div>
           </div>
