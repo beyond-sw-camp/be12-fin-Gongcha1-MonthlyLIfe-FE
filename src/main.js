@@ -6,17 +6,67 @@ import {createPinia} from "pinia";
 import axios from "axios";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { far } from "@fortawesome/free-regular-svg-icons";
-import { fab } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-import 'bootstrap/dist/css/bootstrap.min.css'; // ✅ 기본 CSS 추가
+ // ✅ 기본 CSS 추가
 import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // ✅ 기본 CSS 추가
 
-library.add(fas);
-library.add(far);
-library.add(fab);
+import {
+    faCartShopping,
+    faRotateRight,
+    faUser,
+    faWonSign,
+    faComments,
+    faQ,
+    faTableColumns,
+    faBoxOpen,
+    faClipboardCheck,
+    faChartSimple,
+    faGlobe,
+    faHeadset,
+    faWallet,
+    faShoppingCart,
+    faTruck,
+    faBox,
+    faAngleLeft,
+    faAngleRight,
+    faMagnifyingGlass,
+    faX,
+} from '@fortawesome/free-solid-svg-icons'
+import {
+    faFacebook,
+    faSquareInstagram,
+    faYoutube,
+    faGithub
+} from '@fortawesome/free-brands-svg-icons'
+
+library.add(
+    faCartShopping,
+    faRotateRight,
+    faMagnifyingGlass,
+    faUser,
+    faWonSign,
+    faComments,
+    faQ,
+    faTableColumns,
+    faBoxOpen,
+    faClipboardCheck,
+    faChartSimple,
+    faGlobe,
+    faHeadset,
+    faWallet,
+    faShoppingCart,
+    faTruck,
+    faBox,
+    faAngleLeft,
+    faAngleRight,
+    faX,
+    faFacebook,
+    faSquareInstagram,
+    faYoutube,
+    faGithub
+)
+
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)
