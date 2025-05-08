@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import axios from "axios";
 import {createPersistedState} from "pinia-plugin-persistedstate";
-import {Exception} from "sass";
+
 
 export const usePaymentMethodStore = defineStore("paymentMethod", {
     state: () => ({ page: {}, methods: [] }),
@@ -19,7 +19,7 @@ export const usePaymentMethodStore = defineStore("paymentMethod", {
                 );
 
             if(!response.data.isSuccess)
-                throw new Exception(response.data.message);
+                return response.data.message;
 
             this.page = response.data.result;
             this.methods = response.data.result.content;
