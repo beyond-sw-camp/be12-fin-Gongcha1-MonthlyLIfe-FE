@@ -18,9 +18,6 @@ const cartItems = ref(
 
 const addressInputRef = ref(null)
 
-// const promoCode = ref("EXAMPLECODE");
-// const promoDiscount = ref(5);
-// const promoInput = ref("");
 
 const isDefaultAddress = ref(true);
 const receiver = reactive({
