@@ -15,18 +15,18 @@ onMounted(() => {
 
 const bestSales = computed(() => saleStore.bestSales)
 
-function goDetail(sale) {
+const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.saleIdx}`)
 }
 // 최소 가격·기간 계산
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   return sale.priceList?.reduce(
     (min, p) => (p.price < min.price ? p : min),
     sale.priceList[0]
   )
 }
 // 상태 배지 색
-function conditionColorClass(cond) {
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'

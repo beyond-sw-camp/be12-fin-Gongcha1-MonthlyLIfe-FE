@@ -1,29 +1,29 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import {ref, onMounted, watch, computed, onBeforeUnmount} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
-import { useProductStore } from '../../store/useProductStore'
 import { useCategoryStore } from '../../store/useCategoryStore'
 import SaleSearch from './SaleSearch.vue'
 
 const route = useRoute()
 const router = useRouter()
 const saleStore = useSaleStore()
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 
 // 페이징 및 카테고리 상태
 const currentPage = ref(0)
-const pageSize = 3
+const pageSize = 15
 const categoryIdx = ref(Number(route.params.categoryIdx))
 const selectedDetailCategory = ref(null)
+const displayList = ref([])
+const scrollEnd = ref(false)
 
 // 검색어 + 등급 필터 상태
 const keyword = ref('')
-const gradeFilter = ref(null)
+const gradeFilter = ref('')
 
 // 검색 이벤트 핸들러
-function onSearch({ keyword: kw, grade }) {
+const onSearch = ({ keyword: kw, grade }) => {
   keyword.value = kw
   gradeFilter.value = grade
   currentPage.value = 0
@@ -38,10 +38,51 @@ const detailIdx = computed(() => {
   const d = route.query.detail
   return d != null ? Number(d) : null
 })
+
+const loadMore = async () => {
+  const cat = selectedDetailCategory.value;
+  if (!cat || typeof cat.idx !== 'number') return
+  const next = await saleStore.fetchSaleListByCategory(cat.idx, currentPage.value, pageSize,
+      {keyword: keyword.value, grade: gradeFilter.value})
+  console.log(currentPage.value);
+  console.log(next)
+  console.log(displayList.value);
+  if (!next.empty) {
+    displayList.value.push(...next.content)
+    currentPage.value++
+  }
+  else {
+    scrollEnd.value = true;
+  }
+}
+let isLoading = false;
+const onScroll = async () => {
+
+  if(scrollEnd.value|| isLoading) return;
+  const scrollTop = window.scrollY
+  const windowHeight = window.innerHeight
+  const docHeight = document.documentElement.scrollHeight
+
+  if (scrollTop + windowHeight >= docHeight - document.querySelector('.footer-wrapper').offsetHeight) {
+    isLoading = true;
+    try {
+      await loadMore();
+    }
+    finally {
+      isLoading = false;
+    }
+  }
+}
+
+
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 // 마운트 시 카테고리·상품 로드
 onMounted(async () => {
   await categoryStore.fetchCategoryList()
-  await productStore.fetchProductList()
+  window.addEventListener('scroll', onScroll)
 })
 
 // route 변경 시 parent category 초기화 및 재로딩
@@ -50,6 +91,8 @@ watch(
   async newVal => {
     categoryIdx.value = Number(newVal)
     currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
     selectedDetailCategory.value = null
     await categoryStore.fetchCategoryList()
   }
@@ -76,42 +119,42 @@ watch(
       : cats[0].idx
     selectedDetailCategory.value =
       cats.find(c => c.idx === target) || cats[0]
+    currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
   },
   { immediate: true }
 )
-// 선택 카테고리, 페이지, 검색어, 등급 필터 변경 시 목록 조회
+// 선택 카테고리, 검색어, 등급 필터 변경 시 목록 조회
 watch(
-  [selectedDetailCategory, currentPage, keyword, gradeFilter],
-  ([cat, page, kw, grade]) => {
-    if (!cat) return
-    saleStore.fetchSaleListByCategory(
-      cat.idx,
-      page,
-      pageSize,
-      { keyword: kw, grade }
-    )
+  [selectedDetailCategory, keyword, gradeFilter],
+  async ([cat, kw, grade]) => {
+    console.log("hi");
+    console.log(cat);
+    if (!cat || typeof cat.idx !== 'number') return
+
+    currentPage.value = 0
+    displayList.value = []
+    scrollEnd.value = false
+    await loadMore()
+
   },
   { immediate: true }
 )
 
 // 페이지 변경 핸들러
-function changePage(page) {
+const changePage = (page) => {
   currentPage.value = page
 }
 
 // 상세 페이지 이동
-function goToDetail(sale) {
+const goToDetail = (sale) => {
   const catId = sale.categoryIdx ?? categoryIdx.value
   router.push(`/sale/detail/${catId}/${sale.idx}`)
 }
 
-// 상품 코드로부터 이미지 조회
-function findProductByCode(productCode) {
-  return productStore.products.find(p => p.code === productCode)
-}
-
 // 상태별 배지 클래스
-function conditionColorClass(condition) {
+const conditionColorClass = (condition) => {
   switch (condition) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
@@ -122,7 +165,7 @@ function conditionColorClass(condition) {
 }
 
 // 최저가 조회
-function getMinPrice(sale) {
+const getMinPrice = (sale) => {
   if (!sale.priceList || sale.priceList.length === 0) return null
   return sale.priceList.reduce((min, p) => p.price < min.price ? p : min, sale.priceList[0])
 }
@@ -138,8 +181,8 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
       <img src="https://rentalcdn.lghellovision.net/uploads/category/l2nml1EqiU.jpg" alt="배너 이미지"
         class="banner-image" />
       <div class="text-area">
-        <div class="text01">온 가족이 함께 더 생생한 화질로</div>
-        <div class="text02"><strong>TV 렌탈&amp;구독</strong></div>
+        <div class="text01">필요할 때, 필요한 만큼</div>
+        <div class="text02"><strong>렌탈&amp;구독</strong></div>
       </div>
     </section>
 
@@ -162,43 +205,52 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
       <SaleSearch @search="onSearch" />
       <h4 class="fw-bold mb-3">많은 고객님들이 선택한 상품이에요</h4>
 
-      <div v-if="saleContent.length > 0" class="row g-4">
-        <div
-          v-for="sale in saleContent"
-          :key="sale.saleIdx"
-          @click="goToDetail(sale)"
-          style="cursor:pointer"
-          class="col-md-4"
-        >
-          <div class="card h-100 shadow-sm">
-            <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
-              <img
-                v-for="(product, pIdx) in sale.productList"
-                :key="pIdx"
-                :src="findProductByCode(product.productCode)?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'"
-                class="img-thumbnail"
-                style="width: 120px; height: 120px; object-fit: cover;"
-              />
-            </div>
-            <div class="card-body text-center">
-              <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
-                {{ sale.name }}
-                <span
-                  v-if="findProductByCode(sale.productList[0]?.productCode)?.condition"
-                  class="badge ms-2"
-                  :class="conditionColorClass(findProductByCode(sale.productList[0]?.productCode)?.condition)"
-                >
-                  {{ findProductByCode(sale.productList[0]?.productCode)?.condition }}
+      <div v-if="displayList.length > 0" class="row g-4">
+          <div
+              v-for="sale in displayList"
+              :key="sale.saleIdx"
+              @click="goToDetail(sale)"
+              style="cursor:pointer"
+              class="col-md-4"
+          >
+            <div class="card h-100 shadow-sm">
+              <!--            이미지-->
+              <div class="d-flex flex-nowrap justify-content-center gap-2 flex-wrap p-2">
+                <img
+                    :src="sale.imageUrl || '/assets/images/placeholder.png'"
+                    class="img-thumbnail"
+                    style="width: 120px; height: 120px; object-fit: cover;"
+                />
+              </div>
+
+              <!--            내용-->
+              <div class="card-body text-center">
+
+
+                <!--              이름-->
+                <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
+                  {{ sale.name }}
+
+                  <!--                등급 태그-->
+                  <span
+                      v-if="sale.conditionName !== null"
+                      class="badge ms-2"
+                      :class="conditionColorClass(sale.conditionName)"
+                  >
+                  {{ sale.conditionName }}
                 </span>
-              </h6>
-              <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
-              <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
-                월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
-                {{ getMinPrice(sale).period }}개월
-              </p>
+                </h6>
+
+                <!--              가격-->
+                <p class="card-text text-muted text-nowrap">{{ sale.description }}</p>
+                <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
+                  월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
+                  {{ getMinPrice(sale).period }}개월
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+
       </div>
 
       <div v-else class="text-center text-muted py-5">

@@ -2,12 +2,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute,useRouter } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
-import { useProductStore } from '../../store/useProductStore'
 import { useSubscribeStore } from '../../store/useSubcribeStore'
 const router = useRouter()
 const route = useRoute()
 const saleStore = useSaleStore()
-const productStore = useProductStore()
 const subscribeStore = useSubscribeStore()
 
 const categoryIdx = Number(route.params.categoryIdx)
@@ -17,10 +15,8 @@ const activeIndex = ref(0)
 const selectedTerm = ref(3)
 
 const images = computed(() =>
-  saleStore.saleDetail.productList.map(p => {
-    const prod = productStore.products.find(prod => prod.code === p.productCode)
-    return prod?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'
-  })
+  saleStore.saleDetail.productList
+    .flatMap(p => p.imageUrls || [])
 )
 
 const terms = computed(() => saleStore.saleDetail.priceList.map(p => p.period))
@@ -35,21 +31,23 @@ const currentProduct = computed(() => {
 })
 
 // 설명 이미지 URL
-const descriptionImage = computed(() => currentProduct.value.descriptionImageUrl)
+// const descriptionImage = computed(() => currentProduct.value.descriptionImageUrl)
+const descriptionImages = computed(
+  () => saleStore.saleDetail.descriptionImageUrls || []
+);
 
 onMounted(async () => {
-  await productStore.fetchProductList()
   await saleStore.fetchSaleDetail(categoryIdx, saleIdx)
 })
 
-function nextSlide() {
+const nextSlide = () => {
   activeIndex.value = (activeIndex.value + 1) % images.value.length
 }
-function prevSlide() {
+const prevSlide = () => {
   activeIndex.value = (activeIndex.value - 1 + images.value.length) % images.value.length
 }
 
-function addToCart() {
+const addToCart = () => {
   // 1) 선택된 기간의 price 객체 찾기
   const sel = saleStore.saleDetail.priceList
     .find(p => p.period === selectedTerm.value)
@@ -69,7 +67,7 @@ function addToCart() {
 
 
 
-function subscribe() {
+const subscribe = () => {
   // 1) 선택된 기간(개월) 찾아서
   const sel = saleStore.saleDetail.priceList.find(p => p.period === selectedTerm.value)
   if (!sel?.salePriceIdx) {
@@ -90,15 +88,6 @@ function subscribe() {
     }
   })
 }
-
-
-
-
-
-
-
-
-
 
 </script>
 
@@ -127,14 +116,17 @@ function subscribe() {
                   ></button>
                 </div>
                 <div class="carousel-inner">
-                  <div
+                  <!-- <div
                     v-for="(img, index) in images"
                     :key="index"
                     class="carousel-item"
                     :class="{ active: index === activeIndex }"
                   >
                     <img :src="img" class="d-block w-100" alt="제품 이미지" />
-                  </div>
+                  </div> -->
+                  <div v-for="(img, i) in images" :key="i" class="carousel-item" :class="{ active: i === activeIndex }">
+      <img :src="img" class="d-block w-100" alt="제품 이미지" />
+    </div>
                 </div>
                 <button class="carousel-control-prev" type="button" @click="prevSlide">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -192,14 +184,31 @@ function subscribe() {
           <div class="card shadow-sm description-card">
             <div class="card-body">
               <h4 class="mb-3">상품 설명</h4>
-              <p>{{ currentProduct.description }}</p>
+              <!-- <p>{{ currentProduct.description }}</p>
               <div v-if="descriptionImage" class="mt-3">
                 <img
                   :src="descriptionImage"
                   alt="상품 설명 이미지"
                   class="w-100 description-image"
                 />
-              </div>
+              </div> -->
+              <!-- 백엔드에서 내려준 description 필드 -->
+             <p>{{ saleStore.saleDetail.description }}</p>
+
+             <!-- descriptionImageUrls 배열이 있을 때만 반복 렌더링 -->
+             <div v-if="descriptionImages.length" class="mt-3">
+               <div
+                 v-for="(url, i) in descriptionImages"
+                 :key="i"
+                 class="mb-3"
+               >
+                 <img
+                   :src="url"
+                   alt="상품 설명 이미지 {{ i + 1 }}"
+                   class="w-100 description-image"
+                 />
+               </div>
+             </div>
             </div>
           </div>
         </div>

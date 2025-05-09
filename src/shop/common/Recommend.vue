@@ -6,13 +6,11 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import { useCategoryStore } from '../../store/useCategoryStore'
-import { useProductStore } from '../../store/useProductStore'
 import { useSaleStore } from '../../store/useSaleStore'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const categoryStore = useCategoryStore()
-const productStore = useProductStore()
 const saleStore = useSaleStore()
 
 const prevEl = ref(null)
@@ -30,32 +28,37 @@ const selectedCategoryIdx = ref(null)
 
 onMounted(async () => {
   await categoryStore.fetchCategoryList()
-  await productStore.fetchProductList()
 
   const first = categories.value[0]
   if (first) {
     selectedCategoryIdx.value = first.idx
-    await saleStore.fetchCategoryBestSales(first.idx, 10)
+    await saleStore.fetchCategoryBestSummaries(first.idx, 10)
+    await saleStore.fetchCategoryBestSummaries(first.idx, 10)
   }
 })
 
 watch(selectedCategoryIdx, async idx => {
   if (idx !== null) {
-    await saleStore.fetchCategoryBestSales(idx, 10)
+    await saleStore.fetchCategoryBestSummaries(idx, 10)
+    await saleStore.fetchCategoryBestSummaries(idx, 10)
   }
 })
+const bestSales = computed(() => {
+  return saleStore.categorySummaries[selectedCategoryIdx.value] || []
+})
 
-const bestSales = computed(() => saleStore.bestSales)
-
-function goDetail(sale) {
+const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.saleIdx}`)
 }
-
-function getMinPrice(sale) {
-  return sale.priceList?.reduce(
-    (min, p) => (p.price < min.price ? p : min),
-    sale.priceList[0]
-  )
+// 조건 배지용
+const conditionColorClass = (cond) => {
+  switch (cond) {
+    case 'S급': return 'bg-success'
+    case 'A급': return 'bg-primary'
+    case 'B급': return 'bg-warning text-dark'
+    case 'C급': return 'bg-danger'
+    default: return 'bg-secondary'
+  }
 }
 </script>
 
@@ -66,11 +69,11 @@ function getMinPrice(sale) {
       <ul class="category-buttons">
         <div class="best-header">
           <div class="best-text">
-          <h4>Best</h4>
-          <p>지금 가장 인기 있는 건 뭘까?</p>
+            <h4>Best</h4>
+            <p>지금 가장 인기 있는 건 뭘까?</p>
+          </div>
         </div>
-        </div>
-        
+
 
         <li v-for="cat in categories" :key="cat.idx">
           <button :class="{ active: cat.idx === selectedCategoryIdx }" @click="selectedCategoryIdx = cat.idx">
@@ -89,27 +92,20 @@ function getMinPrice(sale) {
           </div>
           <Swiper :modules="[Navigation]" :navigation="{ nextEl, prevEl }" :slides-per-view="'auto'" :space-between="28"
             :observer="true" :observe-parents="true">
-            <SwiperSlide v-for="(sale, i) in bestSales" :key="sale.idx" class="custom-slide">
+            <SwiperSlide v-for="(sale, i) in bestSales" :key="sale.saleIdx" class="custom-slide">
               <div class="product-card" @click="goDetail(sale)">
                 <em class="slide-num">{{ String(i + 1).padStart(2, '0') }}</em>
                 <div class="img-wrap">
-                  <img :src="productStore.products
-                    .find(p => p.code === sale.productList[0]?.productCode)
-                    ?.productImages?.[0]?.productImgUrl || '/assets/images/placeholder.png'" alt="상품 이미지" />
+                  <img :src="sale.imageUrl || '/assets/images/placeholder.png'" alt="상품 이미지" />
                   <div class="info-overlay">
-                    <em>
-                      {{
-                        productStore.products
-                          .find(p => p.code === sale.productList[0]?.productCode)
-                          ?.manufacturer
-                      }}
-                    </em>
+                    <em>{{ sale.manufacturer }}</em>
                     <p>{{ sale.name }}</p>
-                    <strong>
-                      {{ getMinPrice(sale).price.toLocaleString() }}<span>원</span>
-                    </strong>
+                    <span v-if="sale.conditionName" class="badge ms-2" :class="conditionColorClass(sale.conditionName)">
+                      {{ sale.conditionName }}
+                    </span>
+                    <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
                     <div class="monthly">
-                      월 <span>{{ getMinPrice(sale).price.toLocaleString() }}</span>원
+                      월 <span>{{ sale.period }}</span>개월
                     </div>
                   </div>
                 </div>
@@ -141,6 +137,7 @@ function getMinPrice(sale) {
   gap: 2rem;
   align-items: flex-start;
 }
+
 /* 헤더: 제목 + 카테고리 */
 .best-header {
   display: flex;
@@ -164,7 +161,8 @@ function getMinPrice(sale) {
 .best-text p {
   margin: 0.3rem 0 0;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
+  /* 18px */
   font-weight: 400;
   color: #666;
   line-height: 1.4;

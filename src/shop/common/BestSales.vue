@@ -1,9 +1,8 @@
 <!-- src/components/BestSales.vue -->
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-import { useProductStore } from '../../store/useProductStore'
+import { useSaleStore } from '../../store/useSaleStore'
 
 // Swiper 관련
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -11,51 +10,36 @@ import { Navigation }           from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-const router       = useRouter()
-const productStore = useProductStore()
+const router     = useRouter()
+const saleStore  = useSaleStore()
 
-// 1) 로컬 상태로 Best 5 목록 관리
-const top5 = ref([])
-
-// 2) 네비 버튼 ref
+// 네비 버튼 ref
 const prevEl = ref(null)
 const nextEl = ref(null)
 
 // Swiper 인스턴스 초기화
-function onSwiper(swiper) {
+const onSwiper = (swiper) => {
   swiper.params.navigation.prevEl = prevEl.value
   swiper.params.navigation.nextEl = nextEl.value
   swiper.navigation.init()
   swiper.navigation.update()
 }
 
-// 3) 마운트 시 API 호출 & 상품 리스트도 미리 로드
+// 마운트 시 store에서 전체 Best 5개 로드
 onMounted(async () => {
-  try {
-    await productStore.fetchProductList()
-    // 기존 로딩 방식 유지
-    const { data } = await axios.get('api/sale/best', { params: { limit: 5 } })
-    top5.value = data.result || []
-  } catch (err) {
-    console.error('BestSales fetch error ▶', err)
-  }
+  await saleStore.fetchAllBestSales(5)
 })
 
-// 4) 상세 페이지 이동
-function goDetail(sale) {
+// store에 저장된 전체 Best
+const top5 = computed(() => saleStore.allBestSales)
+
+// 상세 페이지 이동
+const goDetail = (sale) => {
   router.push(`/sale/detail/${sale.categoryIdx}/${sale.saleIdx}`)
 }
 
-// 5) 최소 가격·기간 계산
-function getMinPrice(sale) {
-  return sale.priceList?.reduce(
-    (min, p) => (p.price < min.price ? p : min),
-    sale.priceList[0]
-  )
-}
-
-// 6) 등급 배지 색상
-function conditionColorClass(cond) {
+// 등급 배지 색상
+const conditionColorClass = (cond) => {
   switch (cond) {
     case 'S급': return 'bg-success'
     case 'A급': return 'bg-primary'
@@ -92,41 +76,27 @@ function conditionColorClass(cond) {
             <em class="slide-num">{{ String(i + 1).padStart(2, '0') }}</em>
             <div class="img-wrap">
               <img
-                :src="
-                  productStore.products
-                    .find(p => p.code === sale.productList[0]?.productCode)
-                    ?.productImages?.[0]?.productImgUrl
-                  || '/assets/images/placeholder.png'"
+                :src="sale.imageUrl || '/assets/images/placeholder.png'"
                 alt="상품 이미지"
               />
               <div class="info-overlay">
-                <em>
-                  {{
-                    productStore.products
-                      .find(p => p.code === sale.productList[0]?.productCode)
-                      ?.manufacturer
-                  }}
-                </em>
-                <p>
-                  {{ sale.name }}
-                  <span
-                    v-if="productStore.products.find(p => p.code === sale.productList[0]?.productCode)?.condition"
-                    class="badge ms-2"
-                    :class="conditionColorClass(
-                      productStore.products.find(p => p.code === sale.productList[0].productCode).condition
-                    )"
-                  >
-                    {{
-                      productStore.products.find(p => p.code === sale.productList[0].productCode)
-                        .condition
-                    }}
-                  </span>
-                </p>
+                <em>{{ sale.manufacturer }}</em>
+                <p>{{ sale.name }}</p>
+                <span
+                  v-if="sale.conditionName"
+                  class="badge ms-2"
+                  :class="conditionColorClass(sale.conditionName)"
+                >
+                  {{ sale.conditionName }}
+                </span>
                 <strong>
-                  {{ getMinPrice(sale).price.toLocaleString() }}<span>원</span>
+                  {{ sale.price.toLocaleString() }}<span>원</span>
                 </strong>
                 <div class="monthly">
-                  월 <span>{{ getMinPrice(sale).price.toLocaleString() }}</span>원
+                  월 {{ sale.period }}개월
+                </div>
+                <div class="subscribe-count text-end mt-1">
+                  구독 {{ sale.subscribeCount }}
                 </div>
               </div>
             </div>
@@ -144,6 +114,7 @@ function conditionColorClass(cond) {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .custom-slide {
