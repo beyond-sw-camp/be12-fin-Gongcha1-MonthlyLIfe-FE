@@ -2,13 +2,22 @@
 import Navbar from "./component/Navbar.vue";
 import Footer from "./component/Footer.vue";
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import axios from 'axios';
+import { useUserStore } from '/src/store/useUserStore'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const userStore = useUserStore()
 
 const showChat = ref(false)
-const messages = ref([])
+const showAIChat = ref(false)
+const messagesChat = ref([])
+const messagesAI = ref([])
 const input = ref('')
 const chatBoxRef = ref(null)
 let socket = null
 const unreadCount = ref(0)
+
 const getUserIdFromSession = () => {
   try {
     const stored = sessionStorage.getItem('user')
@@ -20,7 +29,6 @@ const getUserIdFromSession = () => {
 
 const userId = ref(getUserIdFromSession())
 
-
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -30,17 +38,92 @@ const scrollToBottom = () => {
     chatBoxRef.value?.scrollTo({ top: chatBoxRef.value.scrollHeight, behavior: 'smooth' })
   })
 }
+const handleAiButtonClick = (choice, msg) => {
+  if (msg.type === 'confirm-subscription') {
+    if (choice === '예') {
+      const payload = [{
+        saleIdx: msg.meta.saleIdx,
+        salePriceIdx: msg.meta.salePriceIdx,
+        period: msg.meta.period,
+        price: msg.meta.price
+      }];
 
-
-
+      router.push({
+        name: 'subscription',
+        query: {
+          items: encodeURIComponent(JSON.stringify(payload))
+        }
+      });
+    } else {
+      messagesAI.value.push({ from: 'AI', text: '구독이 취소되었습니다.' });
+    }
+    scrollToBottom();
+  }
+}
 const sendMessage = () => {
-  if (!input.value.trim()) return
-  const msg = { from: userId.value, to: 'admin', text: input.value }
-  socket.send(JSON.stringify(msg))
-  console.log(msg)
-  messages.value.push({ from: 'me', text: msg.text })
-  input.value = ''
-  scrollToBottom()
+  if (!input.value.trim()) return;
+
+  const msg = { from: userId.value, to: 'admin', text: input.value };
+
+  if (showAIChat.value) {
+    msg.from = 'me';
+    messagesAI.value.push({ from: 'me', text: msg.text });
+    scrollToBottom();
+
+    axios.post('/api/mcp2/chat', { message: msg.text })
+        .then(response => {
+          const res = response.data.result;
+
+          if (Array.isArray(res)) {
+            messagesAI.value.push({
+              from: 'AI',
+              text: `추천 상품: \n- ${res.join('\n- ')}`
+            });
+
+          } else if (typeof res === 'string') {
+            messagesAI.value.push({ from: 'AI', text: res });
+
+          } else if (res?.saleIdx && res?.price) {
+            messagesAI.value.push({
+              from: 'AI',
+              text: `✅ 구독 정보 확인 \n 상품 이름 : ${res.name} \n기간: ${res.period}개월\n가격: ${res.price.toLocaleString()}원`,
+              buttons: ['예', '아니오'],
+              type: 'confirm-subscription',
+              meta: res
+            });
+
+          } else {
+            messagesAI.value.push({ from: 'AI', text: '응답 형식을 이해하지 못했어요.' });
+          }
+
+          scrollToBottom();
+        })
+        .catch(error => {
+          console.error('AI 요청 실패:', error);
+          alert('AI 처리에 실패했습니다. 다시 시도해주세요.');
+        });
+
+  } else {
+    socket.send(JSON.stringify(msg));
+    messagesChat.value.push({ from: 'me', text: msg.text });
+    scrollToBottom();
+  }
+
+  input.value = '';
+}
+
+const toggleChatMode = () => {
+  if (showAIChat.value) {
+    showAIChat.value = false;
+    showChat.value = true;
+  } else {
+    showChat.value = false;
+    showAIChat.value = true;
+    if (messagesAI.value.length === 0 || !messagesAI.value.some(message => message.from === 'AI')) {
+      messagesAI.value.push({ from: 'AI', text: 'AI가 무엇을 도와드릴까요? (상품검색, 상품구독, 상품추천)' });
+      scrollToBottom();
+    }
+  }
 }
 
 const setupSocket = () => {
@@ -52,29 +135,27 @@ const setupSocket = () => {
 
   socket.onmessage = (event) => {
     const msg = JSON.parse(event.data)
-    messages.value.push(msg)
-    if (msg.from === 'admin' && !showChat.value) unreadCount.value++
-    scrollToBottom()
+    if (showChat.value) {
+      messagesChat.value.push(msg);
+      scrollToBottom();
+    }
   }
 
   socket.onclose = () => console.warn('❌ WebSocket 연결 종료')
   socket.onerror = err => console.error('WebSocket 에러:', err)
 }
 
-onMounted(() => {
-})
+onMounted(() => { })
 
-// WebSocket 연결 전에 userId가 비어있으면 연결 안 하게
 const toggleChat = () => {
-  userId.value = getUserIdFromSession() // ⭐ 최신값 동기화
+  userId.value = getUserIdFromSession()
 
-  console.log(userId.value)
   if (!userId.value) {
     alert("유저 정보 불러오는 중입니다. 잠시 후 다시 시도해주세요.")
     return
   }
 
-  if (!showChat.value && (!socket || socket.readyState !== WebSocket.OPEN)) {
+  if (!showChat.value && !showAIChat.value && (!socket || socket.readyState !== WebSocket.OPEN)) {
     setupSocket()
   }
   unreadCount.value = 0
@@ -82,12 +163,7 @@ const toggleChat = () => {
 }
 
 onUnmounted(() => socket?.close())
-
-
 </script>
-
-
-
 
 <template>
   <div class="user-layout">
@@ -96,25 +172,19 @@ onUnmounted(() => socket?.close())
       <router-view />
     </main>
 
-    <!-- Floating Buttons -->
     <div class="position-fixed bottom-0 end-0 p-3 d-flex flex-column align-items-center gap-2">
-      <button class="btn btn-outline-secondary rounded-circle position-relative" @click="toggleChat">
+      <button v-if="userStore.isLogin" class="btn btn-outline-secondary rounded-circle position-relative" @click="toggleChat">
         💬
-        <span v-if="unreadCount > 0"
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        <span v-if="unreadCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {{ unreadCount }}
         </span>
       </button>
       <button class="btn btn-dark rounded-circle" @click="scrollToTop">TOP</button>
     </div>
 
-    <!-- Chat Area -->
     <div v-if="showChat" class="chat-container">
       <div class="chat-box" ref="chatBoxRef">
-        <div
-            v-for="(msg, index) in messages"
-            :key="index"
-            :class="['chat-message', msg.from === 'me' ? 'me' : msg.from === 'admin' ? 'admin' : 'other']">
+        <div v-for="(msg, index) in messagesChat" :key="index" :class="['chat-message', msg.from === 'me' ? 'me' : msg.from === 'admin' ? 'admin' : 'other']">
           <template v-if="msg.from === 'me'">{{ msg.text }}</template>
           <template v-else><span class="sender">{{ msg.from }}:</span> {{ msg.text }}</template>
         </div>
@@ -123,27 +193,40 @@ onUnmounted(() => socket?.close())
         <input v-model="input" @keyup.enter="sendMessage" placeholder="메시지를 입력하세요..." />
         <button @click="sendMessage">전송</button>
       </div>
+      <button @click="toggleChatMode" class="btn btn-secondary mt-2">AI 채팅으로 전환</button>
+    </div>
+
+    <div v-if="showAIChat" class="chat-container">
+      <div class="chat-box" ref="chatBoxRef">
+        <div v-for="(msg, index) in messagesAI" :key="index" :class="['chat-message', msg.from === 'me' ? 'me' : msg.from === 'AI' ? 'admin' : 'other']">
+          <template v-if="msg.from === 'me'">{{ msg.text }}</template>
+          <template v-else>
+            <span class="sender">{{ msg.from }}:</span> {{ msg.text }}
+            <div v-if="msg.buttons && msg.buttons.length" class="mt-2">
+              <button
+                  v-for="btn in msg.buttons"
+                  :key="btn"
+                  class="btn btn-sm me-2"
+                  @click="handleAiButtonClick(btn, msg)"
+              >
+                {{ btn }}
+              </button>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input v-model="input" @keyup.enter="sendMessage" placeholder="메시지를 입력하세요..." />
+        <button @click="sendMessage">전송</button>
+      </div>
+      <button @click="toggleChatMode" class="btn btn-secondary mt-2">상담 채팅으로 전환</button>
     </div>
 
     <Footer />
   </div>
 </template>
 
-
 <style scoped>
-.user-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.main-content {
-  text-align: center;
-  flex: 1;
-   
-  margin: 0 auto;
-}
-
 .chat-container {
   position: fixed;
   bottom: 80px;
@@ -163,6 +246,7 @@ onUnmounted(() => socket?.close())
   border: 1px solid #eee;
   margin-bottom: 10px;
   border-radius: 8px;
+  width: 300px;
 }
 
 .chat-message {
@@ -218,5 +302,9 @@ onUnmounted(() => socket?.close())
   background-color: #007bff;
   color: white;
   cursor: pointer;
+}
+
+button {
+  padding: 8px 16px;
 }
 </style>

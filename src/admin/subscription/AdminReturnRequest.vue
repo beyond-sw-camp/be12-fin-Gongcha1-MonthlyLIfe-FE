@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, onMounted, watch} from 'vue'
+import {ref, reactive, onMounted, watch, computed} from 'vue'
 import axios from 'axios'
 
 const today = new Date().toISOString().split('T')[0]
@@ -57,6 +57,19 @@ watch(() => search.status, (newStatus) => {
     search.type = ''
   }
 })
+
+const visiblePageCount = 10
+
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
 function goToPage(page) {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
@@ -193,7 +206,7 @@ onMounted(() => {
           <li class="page-item" :class="{ disabled: currentPage === 1 }">
             <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">‹</a>
           </li>
-          <li v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }" class="page-item">
+          <li v-for="page in paginatedPages" :key="page" :class="{ active: page === currentPage }" class="page-item">
             <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
           </li>
           <li class="page-item" :class="{ disabled: currentPage === totalPages }">

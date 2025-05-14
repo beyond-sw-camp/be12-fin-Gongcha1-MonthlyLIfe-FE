@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, onMounted} from 'vue'
+import {ref, reactive, onMounted, computed} from 'vue'
 import axios from 'axios'
 
 const payments = ref([])
@@ -38,6 +38,18 @@ function fetchPayments() {
         console.error('결제 목록 조회 실패:', err)
       })
 }
+
+const visiblePageCount = 10
+
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
 
 function goToPage(page) {
   currentPage.value = page
@@ -158,12 +170,12 @@ onMounted(() => {
         </table>
 
         <!-- 페이지네이션 -->
-        <nav>
+        <nav v-if="!loading && paginatedPages.length > 1" >
           <ul class="pagination justify-content-center mb-0">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
               <a class="page-link" href="#" @click.prevent="prevPage">‹</a>
             </li>
-            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+            <li class="page-item" v-for="page in paginatedPages" :key="page" :class="{ active: page === currentPage }">
               <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
             </li>
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
