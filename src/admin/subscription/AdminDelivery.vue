@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import {ref, reactive, onMounted, computed} from 'vue'
 import axios from 'axios'
 
 // 오늘 날짜
@@ -62,7 +62,17 @@ function markAsCompleted(item) {
       .catch(err => console.error('상태 변경 실패', err))
 }
 
+const visiblePageCount = 10
 
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
 
 // 페이지 이동
 function goToPage(page) {
@@ -204,7 +214,7 @@ onMounted(fetchOrders)
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link" href="#" @click.prevent="prevPage">‹</a>
               </li>
-              <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+              <li class="page-item" v-for="page in paginatedPages" :key="page" :class="{ active: page === currentPage }">
                 <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
               </li>
               <li class="page-item" :class="{ disabled: currentPage === totalPages }">

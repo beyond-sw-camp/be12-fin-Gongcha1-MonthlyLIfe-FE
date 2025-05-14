@@ -29,7 +29,17 @@ const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize
   return filteredData.value.slice(start, start + pageSize)
 })
+const visiblePageCount = 10
 
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
 const totalPages = computed(() =>
   Math.ceil(filteredData.value.length / pageSize)
 )
@@ -109,7 +119,7 @@ function goToPage(page) {
               </li>
               <li
                 class="page-item"
-                v-for="page in totalPages"
+                v-for="page in paginatedPages"
                 :key="page"
                 :class="{ active: page === currentPage }"
               >

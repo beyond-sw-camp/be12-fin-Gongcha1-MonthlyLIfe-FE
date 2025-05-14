@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import {ref, reactive, onMounted, computed} from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -46,6 +46,18 @@ const fetchSubscribes = async () => {
     loading.value = false
   }
 }
+
+const visiblePageCount = 10
+
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
 
 
 function goToDetail(subscribeId) {
@@ -147,12 +159,12 @@ onMounted(fetchSubscribes)
           </tbody>
         </table>
 
-        <nav v-if="totalPages > 1" class="d-flex justify-content-center">
+        <nav v-if="!loading && paginatedPages.length > 1" class="d-flex justify-content-center">
           <ul class="pagination">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
               <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">‹</a>
             </li>
-            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+            <li class="page-item" v-for="page in paginatedPages" :key="page" :class="{ active: currentPage === page }">
               <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
             </li>
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
