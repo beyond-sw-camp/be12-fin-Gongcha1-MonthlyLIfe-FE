@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref, onMounted, reactive} from "vue";
+import {ref, onMounted, reactive, computed} from "vue";
 import axios from 'axios';
 
 const today = new Date().toISOString().split("T")[0]
@@ -46,7 +46,17 @@ const fetchUsers = async () => {
     console.error("유저 목록 가져오기 실패", err);
   }
 };
+const visiblePageCount = 10
 
+const paginatedPages = computed(() => {
+  const pages = []
+  const start = Math.floor((currentPage.value - 1) / visiblePageCount) * visiblePageCount + 1
+  const end = Math.min(start + visiblePageCount - 1, totalPages.value)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
 
 // 페이지 이동
 const goToPage = (page) => {
@@ -227,7 +237,7 @@ onMounted(() => {
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link" href="#" @click.prevent="currentPage--">‹</a>
               </li>
-              <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+              <li class="page-item" v-for="page in paginatedPages" :key="page" :class="{ active: page === currentPage }">
                 <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
               </li>
               <li class="page-item" :class="{ disabled: currentPage === totalPages }">
