@@ -1,7 +1,7 @@
 
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSaleStore } from '../../store/useSaleStore'
 
@@ -76,8 +76,9 @@ async function loadMore() {
   loading.value = false
 }
 
+
 // 스크롤 바닥 감지
-function onScroll() {
+const onScroll = () => {
   const scrollBottom = window.innerHeight + window.scrollY
   const docHeight = document.documentElement.scrollHeight
   if (scrollBottom >= docHeight - 200) {
@@ -92,6 +93,18 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
 })
+
+// 검색어 변화 감지해서 다시 로드
+watch(() => route.query.keyword, async (newKeyword, oldKeyword) => {
+  if (newKeyword !== oldKeyword) {
+    keyword.value = newKeyword
+    currentPage.value = 0
+    endReached.value = false
+    displayList.value = []
+    await loadMore()
+  }
+})
+
 </script>
 
 <template>
