@@ -102,43 +102,7 @@ const withdraw = () => {
           </div>
         </div>
       </div>
-
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <h6 class="fw-bold text-lg-start">소셜 로그인</h6>
-        </div>
-
-        <div class="mb-4 border p-3 rounded">
-          <div class="p-3">
-            <ul>
-              <li class="d-flex align-items-center mb-2">
-                <p class="mb-1">네이버</p>
-                <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
-                </div>
-              </li>
-
-              <li class="d-flex align-items-center mb-2">
-                <p class="mb-1">카카오</p>
-                <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
-                </div>
-              </li>
-
-              <li class="d-flex align-items-center mb-2">
-                <p class="mb-1">구글</p>
-                <div class="ms-auto d-flex flex-column">
-                  <button class="btn btn-outline-primary btn-sm me-2 mb-1">등록</button>
-                </div>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-
-      </div>
-
-
+      
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <h6 class="fw-bold text-lg-start">태그</h6>
