@@ -32,9 +32,9 @@ const currentProduct = computed(() => {
 
 // 설명 이미지 URL
 // const descriptionImage = computed(() => currentProduct.value.descriptionImageUrl)
-const descriptionImages = computed(
-  () => saleStore.saleDetail.descriptionImageUrls || []
-);
+const descriptionImages = computed(() =>
+  (saleStore.saleDetail.descriptionImageUrls || []).filter(url => url && url.length > 5)
+)
 
 onMounted(async () => {
   await saleStore.fetchSaleDetail(categoryIdx, saleIdx)
