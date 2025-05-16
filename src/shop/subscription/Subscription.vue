@@ -231,14 +231,15 @@ const addPaymentMethod = async () => {
               <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold mb-0">받는사람정보</h5>
-                  <div class="d-flex justify-content-end align-items-center">             
+                  <div class="d-flex justify-content-end align-items-center">
+
                     <div class="form-check">
                       <input
                           type="radio"
                           class="form-check-input"
                           id="manualInput"
                           v-model="isDefaultAddress"
-                          value="false"
+                          value="true"
                           @change="toggleAddressFields"
                       />
                       <label class="form-check-label" for="manualInput">직접 입력하기</label>
