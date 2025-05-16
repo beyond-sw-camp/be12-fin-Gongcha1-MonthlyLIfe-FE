@@ -13,9 +13,6 @@
       <p>원활한 대여를 위해 본인인증을 진행해주시기 바랍니다.</p>
     </div>
 
-    <div class="mt-5 mb-5">
-      <button>휴대폰 인증하기</button>
-    </div>
     <router-link to="/auth/signup/input" class="btn btn-primary rounded-pill w-100">
       다음
     </router-link>

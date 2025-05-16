@@ -185,16 +185,6 @@ const signup = async () => {
 
     </div>
 
-    <div class="pb-3 d-flex justify-content-between">
-      <small class="text-start d-block">소셜로그인 연동</small>
-      <div class="d-flex">
-        <div class="p-1">Naver</div>
-        <div class="p-1">Kakao</div>
-        <div class="p-1">Google</div>
-
-      </div>
-    </div>
-
     <div class="pb-3">
       <small class="text-start d-block">비밀번호</small>
       <input type="password" v-model="password" class="underline-input">

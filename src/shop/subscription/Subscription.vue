@@ -242,17 +242,6 @@ const addPaymentMethod = async () => {
                           value="true"
                           @change="toggleAddressFields"
                       />
-                      <label class="form-check-label" for="manualInput">기본 정보</label>
-                    </div>
-                    <div class="form-check">
-                      <input
-                          type="radio"
-                          class="form-check-input"
-                          id="manualInput"
-                          v-model="isDefaultAddress"
-                          value="false"
-                          @change="toggleAddressFields"
-                      />
                       <label class="form-check-label" for="manualInput">직접 입력하기</label>
                     </div>
                   </div>

@@ -175,6 +175,7 @@ async function handleDelete(saleIdx) {
   try {
     await saleStore.deleteSale(saleIdx)
     showSuccessToast('삭제되었습니다!')
+    await saleStore.fetchSaleProductsList(0, 1000)
   } catch {
     showSuccessToast('삭제 중 오류가 발생했습니다.')
   }
