@@ -173,7 +173,7 @@ watch(() => route.query.keyword, async (newKeyword, oldKeyword) => {
 
 
             </h6>
-            <p class="text-muted text-nowrap">{{ sale.description }}</p>
+            <p class="text-muted description-truncate">{{ sale.description }}</p>
             <p v-if="getMinPrice(sale)" class="fw-bold mt-2 text-nowrap">
               월 {{ getMinPrice(sale).price.toLocaleString() }}원 /
               {{ getMinPrice(sale).period }}개월
@@ -236,5 +236,13 @@ watch(() => route.query.keyword, async (newKeyword, oldKeyword) => {
   transform: scale(1.03) translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   z-index: 2;
+}
+.description-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 최대 줄 수 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 </style>
