@@ -17,7 +17,7 @@ const prevEl = ref(null)
 const nextEl = ref(null)
 
 // 허용된 카테고리 인덱스
-const allowedIdx = [4, 5, 7, 9, 12, 16, 25, 29, 34, 38]
+const allowedIdx = [12, 16, 17, 19, 25, 29, 34, 38, 44, 45]
 
 // 필터링된 카테고리
 const categories = computed(() =>
