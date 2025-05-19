@@ -85,12 +85,17 @@ onMounted(async () => {
 }
 
 .banner-text h1 {
-  font-size: 3rem;
+  font-size: 7em; /* 기존보다 큼 */
+  font-weight: 900; /* 훨씬 두껍게 */
+  color: #ffffff;
+  -webkit-text-stroke: 0.5px black; /* 흰색 테두리 */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
   margin-bottom: 1rem;
 }
 .banner-text p {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
+  color: #ffffff;
 }
 .summer-items {
   display: flex;

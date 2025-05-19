@@ -17,7 +17,7 @@ const prevEl = ref(null)
 const nextEl = ref(null)
 
 // 허용된 카테고리 인덱스
-const allowedIdx = [4, 5, 7, 9, 12, 16, 25, 29, 34, 38]
+const allowedIdx = [12, 16, 17,  29, 34, 25, 38, 44, 45]
 
 // 필터링된 카테고리
 const categories = computed(() =>
@@ -136,13 +136,13 @@ const conditionColorClass = (cond) => {
 
 <style scoped>
 .custom-slide {
-  width: 280px !important;
+  width: 270px !important;
   flex-shrink: 0;
 }
 
 .best-banner {
   padding: 2rem;
-  min-height: 500px;
+  min-height: 600px;
 }
 
 .best-layout {
@@ -191,7 +191,7 @@ const conditionColorClass = (cond) => {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  max-width: 6000px;
+  max-width: 500px;
 }
 
 .category-buttons button {
