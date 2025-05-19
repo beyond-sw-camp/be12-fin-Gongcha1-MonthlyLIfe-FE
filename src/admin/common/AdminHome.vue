@@ -194,9 +194,9 @@ const chartOptions = {
 const cards = ref([
   { icon: ['fas', 'user'], value: 0, label: '회원수', color: '#4ea8de' },
   { icon: ['fas', 'won-sign'], value: 0, label: '이번달 예상 매출', color: '#57c478' },
-  { icon: ['fas', 'comments'], value: 45, label: '문의 답변', color: '#f6b93b' },
-  { icon: ['fas', 'q'], value: 10, label: '고객 문의', color: '#ff9f43' }
 ])
+// { icon: ['fas', 'comments'], value: 45, label: '문의 답변', color: '#f6b93b' },
+//   { icon: ['fas', 'q'], value: 10, label: '고객 문의', color: '#ff9f43' }
 const products = ref([])
 const orders = ref([])
 const selectedOrder = ref({})

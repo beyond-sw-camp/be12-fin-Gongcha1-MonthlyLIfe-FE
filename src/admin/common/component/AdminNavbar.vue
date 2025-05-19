@@ -83,7 +83,7 @@
 
         <!-- 상담 채팅 관리 -->
         <li>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/adminchat">
             <font-awesome-icon :icon="['fas', 'headset']" /> 상담 채팅 관리
           </a>
         </li>
