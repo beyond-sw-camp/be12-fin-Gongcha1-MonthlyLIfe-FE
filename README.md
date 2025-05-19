@@ -49,8 +49,6 @@
 - [데모 사이트 링크](#demo-site)
 - [서비스 소개](#service-intro)
 - [시스템 아키텍처](#system-architecture)
-- [소프트웨어 아키텍처](#software-architecture)
-- [API 명세서](#api)
 - [주요 기능 설명](#features)
 
 <br><br>
@@ -87,6 +85,7 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
 
 <br>
+
 ---
 
 ## <a name="demo-site"></a>데모 사이트 링크
@@ -111,6 +110,7 @@
 <br>
 
 ## <a name="system-architecture"></a>시스템 아키텍처
+![System](https://github.com/user-attachments/assets/53ae5733-78bb-4c92-abe7-1f428dc18615)
 
 
 ## 📈 프로젝트 설계
