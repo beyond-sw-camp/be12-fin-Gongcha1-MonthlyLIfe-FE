@@ -172,7 +172,8 @@
 - AI 채팅 ( 구독 , 상품 추천 )
 </details>
 
- 
+ [기능테스트 WIKI](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-FE/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5)
+
 ---
 
 ## 📂 프로젝트 폴더 바로가기
