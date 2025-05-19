@@ -146,7 +146,7 @@ const fullAddress = computed(() => {
 const infoItems = computed(() => [
   { icon: 'user',        label: '수령인',       value: deliveryInfo.value.recipientName,      colClass: 'col-md-6' },
   { icon: 'phone-alt',   label: '전화번호',     value: deliveryInfo.value.recipientPhone,      colClass: 'col-md-6' },
-  { icon: 'truck-loading',label: '택배사/운송장', value: `${deliveryInfo.value.courierCompany} / ${deliveryInfo.value.trackingNumber}`, colClass: 'col-md-12' },
+  // { icon: 'truck-loading',label: '택배사/운송장', value: `${deliveryInfo.value.courierCompany} / ${deliveryInfo.value.trackingNumber}`, colClass: 'col-md-12' },
   { icon: 'map-marker-alt',label: '받는 주소',    value: fullAddress.value,                     colClass: 'col-12' },
   { icon: 'sticky-note',  label: '배송 메모',    value: deliveryInfo.value.deliveryMemo || '없음', colClass: 'col-12' }
 ])

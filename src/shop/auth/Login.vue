@@ -63,25 +63,6 @@ const login = async () => {
           <p class="m-0">아이디/비밀번호 찾기</p>
         </div>
       </div>
-
-      <div class="bg-black m-3" style="height: 200px; width: 1px">      </div>
-
-      <div style="width: 20em">
-        <p class="fs-5">Social Login</p>
-
-        <div class="d-flex justify-content-center mt-4 mb-4">
-          <div class="m-3">Naver</div>
-          <div class="m-3">Kakao</div>
-          <div class="m-3">Google</div>
-        </div>
-
-        <div class="d-flex justify-content-start">
-          <router-link to="/auth/signup/identify" class="text-decoration-none text-black">
-            <p class="fs-6">회원가입</p>
-
-          </router-link>
-        </div>
-      </div>
     </div>
   </div>
 </template>
