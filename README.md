@@ -1,241 +1,182 @@
-# be12-fin-Gongcha1-MonthlyLife
-
-
-## 프로젝트 주제
-
-### 월정액 인생: 1인 가구를 위한 렌탈 구독 서비스
-
-1인 가구 증가와 합리적인 소비 트렌드에 맞춰 개발된 "월정액 인생"은 가전제품부터 생활용품까지 필요한 물품을 월정액으로 간편하게 구독하고 관리할 수 있는 서비스입니다. 기존의 단순 렌탈 개념을 넘어 다양한 제품을 맞춤형 구독 방식으로 제공하여 사용자의 편의성과 경제성을 극대화합니다.
-
-### 프로젝트 목표
-
-- 다양한 상품을 간편히 구독 및 관리할 수 있는 백엔드 시스템 구축
-- ?
-- ?
-
-
+<img src="https://capsule-render.vercel.app/api?type=waving&height=250&color=gradient&text=%EC%9B%94%EC%A0%95%EC%95%A1%20%EC%9D%B8%EC%83%9D&fontSize=60&fontAlignY=30&animation=fadeIn&desc=1%EC%9D%B8%20%EA%B0%80%EA%B5%AC%EB%A5%BC%20%EC%9C%84%ED%95%9C%20%EB%A0%8C%ED%83%88%20%EA%B5%AC%EB%8F%85%20%EC%84%9C%EB%B9%84%EC%8A%A4&descSize=30" width="120%" />
 
 
 <br>
 
+##  팀원 소개
+> **[한화시스템 BEYOND SW캠프 12기] Final Project**
 
-## TEAM
+> **공차1팀 월정액 인생 프로젝트**
 
-<div align="center">
-  <img src="./assets/images/월정액%20인생.gif" alt="팀 이미지" />
-</div>
-
-
-##  월 정 액 인 생
-<div style="display: flex; justify-content: center;">
-  <table align="center">
-    <tbody>
-      <tr>
-        <td align="center">
-          <a href="https://github.com/museongkim0" style="text-decoration: none; color: lightgray;">
-            <img src="https://mblogthumb-phinf.pstatic.net/MjAxNzA0MTNfMTQ2/MDAxNDkyMDg4OTU0NzU2.X-Ise8QGLx6BeA7f6y1lStSFaxdMRMNieJK_sB2sdokg.ll6BBI3GcX8hmiVP10LOy9b2rAZ2hHKnZFncXmzexsgg.JPEG.swhyun98/downloadfile.jpg?type=w420" width="100px;" height="120px;" background-size="cover;" alt=""/><br />
-            <sub><b>  김경준</b></sub>
-          </a><br />
-        </td>
-        <td align="center">
-          <a href="https://github.com/kuj7882" style="text-decoration: none; color: lightgray;">
-            <img src="https://i.namu.wiki/i/8wUNYOFiU0KQem2XbLBTkTmgGg4knQ1_xAxhTh2Yl6E0OUbwJKCNXuO32wS48LTPfXT1U3hzEmclYUhu0kOg3GBu7VFfhN-larrInwpPz2Bc6OIplUQSvQy2sMz4gMUmPxcxCsZZ_XFaOLpXsp363Q.webp" height="120px" width="100px;" alt=""/><br />
-            <sub><b>  신지현</b></sub>
-          </a><br />
-        </td>
-        <td align="center">
-          <a href="https://github.com/leewoojin12" style="text-decoration: none; color: lightgray;">
-            <img src="https://i.namu.wiki/i/OOrcrlumPF7y0fWMNwJGrUw29c5kJ9qtpPbLsKlKOV2OVBH3Y3j3hg9FWPNy3kCvTUMgHD68wTF2k3OscKuTtw.webp"  height="120px" width="100px;" alt=""/><br />
-            <sub><b>  이우진</b></sub>
-          </a><br />
-        </td>
-        <td align="center">
-          <a href="https://github.com/gunha0405" style="text-decoration: none; color: lightgray;">
-            <img src="https://i.namu.wiki/i/GlPkp9Dy4UIg4_LiRXKtZ2g5V-NsjY3LZi8k6WT6N3lQIHIKz8EaNESQLfZfV7lDi4E7k-VloLwSHDr21bQxVg.webp" height="120px" width="100px;" alt=""/><br />
-            <sub><b>  김재구</b></sub>
-          </a><br />
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-## ⭐ 접속 주소
-
-**서비스 접속 주소**
-- 백엔드
-
-- 프론트 엔드 https://monthlylife.kro.kr
-
-    - 사용자: test01
-    - 관리자:  admin1
-    - 비밀번호: qwer1234
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/celarim">
+        <img src="https://mblogthumb-phinf.pstatic.net/MjAxNzA0MTNfMTQ2/MDAxNDkyMDg4OTU0NzU2.X-Ise8QGLx6BeA7f6y1lStSFaxdMRMNieJK_sB2sdokg.ll6BBI3GcX8hmiVP10LOy9b2rAZ2hHKnZFncXmzexsgg.JPEG.swhyun98/downloadfile.jpg?type=w420"
+             width="120" height="150" style="object-fit: cover; border-radius: 8px;" />
+        <br /><sub><b>김경준</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Shin-JiHyun">
+        <img src="https://i.namu.wiki/i/8wUNYOFiU0KQem2XbLBTkTmgGg4knQ1_xAxhTh2Yl6E0OUbwJKCNXuO32wS48LTPfXT1U3hzEmclYUhu0kOg3GBu7VFfhN-larrInwpPz2Bc6OIplUQSvQy2sMz4gMUmPxcxCsZZ_XFaOLpXsp363Q.webp"
+             width="120" height="150" style="object-fit: cover; border-radius: 8px;" />
+        <br /><sub><b>신지현</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/leewoojin12">
+        <img src="https://i.namu.wiki/i/OOrcrlumPF7y0fWMNwJGrUw29c5kJ9qtpPbLsKlKOV2OVBH3Y3j3hg9FWPNy3kCvTUMgHD68wTF2k3OscKuTtw.webp"
+             width="120" height="150" style="object-fit: cover; border-radius: 8px;" />
+        <br /><sub><b>이우진</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/wkdlrn">
+        <img src="https://i.namu.wiki/i/GlPkp9Dy4UIg4_LiRXKtZ2g5V-NsjY3LZi8k6WT6N3lQIHIKz8EaNESQLfZfV7lDi4E7k-VloLwSHDr21bQxVg.webp"
+             width="120" height="150" style="object-fit: cover; border-radius: 8px;" />
+        <br /><sub><b>김재구</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
 <br>
 
+### 목차
+### 목차
+- [기술 스택](#tech-stack)
+- [데모 사이트 링크](#demo-site)
+- [서비스 소개](#service-intro)
+- [시스템 아키텍처](#system-architecture)
+- [소프트웨어 아키텍처](#software-architecture)
+- [API 명세서](#api)
+- [주요 기능 설명](#features)
 
-<br>
-
-<br>
+<br><br>
 
 
-<br>
+## <a name="tech-stack"></a>기술 스택
 
-## 기술 스택
-
-프론트엔드  
+#### &nbsp;　[ Frontend ]
 ![Vue.js](https://img.shields.io/badge/vue.js-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
 
+#### &nbsp;　[ Backend ]
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=Spring-Boot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-%232F7D32.svg?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+<img src="https://img.shields.io/badge/Spring Batch-6DB33F?style=for-the-badge&logo=Spring&logoColor=white" style="border-radius: 5px;">
 
-백엔드  
-![](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=Spring-Boot&logoColor=white) ![](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-%232F7D32.svg?style=for-the-badge&logo=json-web-tokens&logoColor=white)
 
-DB<br>
+#### &nbsp;　[ DB ]
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/elasticsearch-%230377CC.svg?style=for-the-badge&logo=elasticsearch&logoColor=white)
+![Longhorn](https://img.shields.io/badge/Longhorn-FF6600?style=for-the-badge&logo=rancher&logoColor=white)
 
-협업 툴
+#### &nbsp;　[ CI/CD ]
+![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 
+#### &nbsp;　[ Communication ]
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
-<br>
 
-
-<br>
-
-<br>
-
+#### &nbsp;　[ Monitoring ]
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
 
 <br>
+---
 
-## 🖥️ 시스템 아키텍처
-
-### 🛠️ ① CI/CD 파이프라인 (Jenkins 기반)
-
-- GitHub 저장소에서 소스코드 관리.
-
-    - 개발자가 GitHub에 코드를 push하면, Webhook을 통해 Jenkins가 자동으로 빌드 실행.
-
-    - Jenkins Master 노드는 작업을 두 가지 Agent로 나누어 처리:
-
-    - 빌드 에이전트: GitHub에서 클론, Docker 이미지 빌드, DockerHub에 푸시.
-
-    - 배포 에이전트: 빌드된 이미지를 Kubernetes 클러스터에 배포.
-
-
-
-### 📦 Kubernetes 클러스터
-- 서비스 영역	세부 구성 및 역할
-
-    - Ingress (Nginx)	Load Balancer를 통해 외부 클라이언트 요청을 받아 내부 서비스(Spring Boot    앱)로 라우팅
-
-    - Spring Boot 애플리케이션	Cluster IP 서비스로 내부 네트워크를 통해 접근 가능하며, 다중    Pod로 - 구성되어 안정성과 확장성 확보
-
-    - MariaDB (Master-Slave)	데이터베이스 클러스터로 Master와 Slave를 구성하여 고가용성 및   안정성 - 보장
-
-    - Persistent Volume (PV)	MariaDB 데이터의 영속성을 보장하며 Longhorn 기반으로 스토리지   관리
-
-    - Longhorn	Persistent Volume 관리 및 데이터 복제, 자동 백업 등 데이터 안전성을 제공
+## <a name="demo-site"></a>데모 사이트 링크
+### 🔗 https://monthlylife.kro.kr  
+> - 사용자 계정: `test01` / `qwer1234`  
+> - 관리자 계정: `admin1` / `qwer1234`  
 
 <br>
 
+## <a name="service-intro"></a>서비스 소개
+
+#### 🧩 프로젝트 배경
+1인 가구의 증가와 렌탈 소비 트렌드에 맞춰 가전/생활용품 등을 **월정액 기반 구독형 상품**으로 편리하게 이용할 수 있도록 한 서비스입니다.
+
+#### ✅ 주요 특징
+- 다양한 생활용품을 구독으로 간편하게 신청
+- AI 기반 상품 추천 및 구독 지원 기능 제공
+- 관리자 페이지를 통한 상품/회원/결제 관리
+- 장바구니 기반 결제 및 재고 관리 로직
+- 반납/수리/연체 관리 기능
 
 <br>
 
-<br>
+## <a name="system-architecture"></a>시스템 아키텍처
 
 
-<br>
+## 📈 프로젝트 설계
+
+### [1. 기획서 바로가기](https://docs.google.com/document/d/1S5pfITLqqDCIop5Io-dq3erEEs1rubz7M1q3DYilqFg/edit?tab=t.0)
+
+### [2. 요구사항 정의서](https://docs.google.com/spreadsheets/d/1EtZBZOIuHVj2c4CbhtKNAfVmMSwQfEDYWAfI29FrQ7o/edit?gid=1790637635#gid=1790637635)
+
+### [3. WBS](https://docs.google.com/spreadsheets/d/1EtZBZOIuHVj2c4CbhtKNAfVmMSwQfEDYWAfI29FrQ7o/edit?gid=1159274132#gid=1159274132)
+
+### [4. 화면설계서 바로가기](https://www.figma.com/design/t1k8zoIFly0Hyxt0dJplNP/Gongcha1?node-id=71-86&p=f)
+
+### [5. ERD ](https://media.discordapp.net/attachments/1354007770218893405/1356832191954550955/erd_2025_04_02.png?ex=6826b073&is=68255ef3&hm=2206536880e9b15ad3911b2f02249afad7022ca60014843505e543ad6b925788&=&format=webp&quality=lossless&width=953&height=704)
 
 
-## 👩‍💻 소프트웨어 아키텍처
-
-
-- 뭐 적죵
-<!-- - 효율적이고 독립적인 마이크로서비스 설계
-- GPT API를 연동한 챗봇 기능 구현(MCP 서버 적용) -->
-
-## 📃 API 명세서
-
-API 명세서 준비중
-- Swagger https://monthlylife.kro.kr/api/swagger-ui/index.html
-
-## 🚀 향후 계획
-
-- AI 챗봇 기능 고도화 및 자연어 처리(NLP) 성능 향상
-- 구독 상품 확대 및 추천 알고리즘 개발
-- 서비스 안정성 및 성능 개선
+ 
 
 
 
+## <a name="features"></a>주요 기능 설명
 
+<details>
+<summary>🧑‍💻 회원 기능</summary>
 
+- 회원가입/로그인/비밀번호 찾기
+- 마이페이지에서 비밀번호 변경 가능
+</details>
 
+<details>
+<summary>🛒 장바구니 및 결제</summary>
 
-#📦 서비스 기능 개요
--
-## ✅ 회원가입 및 로그인
+- 장바구니 추가/삭제
+- 장바구니 내 일괄 결제
+- 결제 성공 시 재고 차감, 실패 시 롤백
+</details>
 
-- 일반 회원가입 가능
-  
-- 마이페이지에서 비밀번호 변경, 아이디/비밀번호 찾기 가능
-  
-- 로그인 및 로그아웃 기능 제공
-  
-## 👤 마이페이지 기능
+<details>
+<summary>📦 제품</summary>
 
-- 내 기기 정보: 등록된 구독 상품 조회
-  
-- 구독 상품 수리 신청 및 반납 신청 기능
-  
-## 🛍 제품 기능
+- 전체 상품 목록 조회
+- 카테고리별 필터 조회
+- 상품 상세 정보 확인
+</details>
 
-- 전체 제품 목록 조회
-  
-- 카테고리별 상세 조회 기능
-  
-- 상세 페이지에서 제품 정보 확인 가능
-  
-##  🛒 장바구니 기능
+<details>
+<summary>🛠 관리자 기능</summary>
 
-- 제품 상세/목록에서 장바구니 추가 가능
-  
-- 장바구니 목록 조회
-  
-- 장바구니 항목 삭제 기능
-  
-## 💳 구매 기능
-- 
-- 장바구니 내 제품을 즉시 구매 가능
-  
-- 결제 성공 시 재고 차감, 실패 시 롤백 처리
-  
-- 결제 검증 및 사용자 배송 정보 저장
-- 
-##  🗣 채팅 기능
+- 상품 등록/수정/삭제
+- 사용자 구독/결제/반납 내역 관리
+- 반납/수리 요청 상태 변경
+- 월간/분기 통계 리포트
+</details>
 
--  관리자와 유저 간 1:1 실시간 채팅 기능 (휘발성)
+<details>
+<summary>💬 채팅</summary>
 
--   -> 채팅 관리자 접속되어 있어야 채팅 가능합니다 ㅠ 끊겨있을시
--   -> /adminchat
-  
-- 🔍 추천 기능
-  
-- [미구현] 개인화 추천 및 유사 상품 비교 기능
-  
-## 📊 관리자 기능 (대시보드 및 운영)
-  
-- 전체 구독 조회 (결제 및 연체 관리)
-  
-- 반납/배송 스케줄 관리
-- 
-- 월간/분기별 통계 리포트 제공
-  
-- 상품 목록 및 상태 관리, 상품 등록/수정/삭제 기능
-  
-- 사용자 관리: 회원 정보, 주문/렌탈 내역, 연체 내역 확인
-  
-- 수리/분실 신고 목록 관리 및 처리 상태 변경
-  
-- 홈페이지 카테고리 추가/수정/삭제 가능
+- 관리자와 1:1 채팅 기능 (WebSocket 기반)
+- 실시간 메시징 (관리자 접속 상태 필요)
+- AI 채팅 ( 구독 , 상품 추천 )
+</details>
 
+ 
+---
+
+## 📂 프로젝트 폴더 바로가기
+- [📃 Backend Repository](https://github.com/공차1팀-backend)
+- [📃 Devops/Infra](https://github.com/공차1팀-infra)
+
+---
