@@ -56,6 +56,12 @@
           <router-link to="/admin/delivery-by-page" class="text-primary text-decoration-none">상세보기 →</router-link>
         </div>
 
+        <div v-if="loading" class="text-center my-3">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
         <div v-if="orders.length === 0" class="text-center text-muted py-3">
           배송 데이터가 없습니다.
         </div>
@@ -121,6 +127,11 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
+
+        <div v-if="orders.length === 0" class="text-center text-muted py-3">
+          배송 데이터가 없습니다.
+        </div>
+
 
         <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
 
@@ -194,9 +205,9 @@ const chartOptions = {
 const cards = ref([
   { icon: ['fas', 'user'], value: 0, label: '회원수', color: '#4ea8de' },
   { icon: ['fas', 'won-sign'], value: 0, label: '이번달 예상 매출', color: '#57c478' },
-  { icon: ['fas', 'comments'], value: 45, label: '문의 답변', color: '#f6b93b' },
-  { icon: ['fas', 'q'], value: 10, label: '고객 문의', color: '#ff9f43' }
 ])
+// { icon: ['fas', 'comments'], value: 45, label: '문의 답변', color: '#f6b93b' },
+//   { icon: ['fas', 'q'], value: 10, label: '고객 문의', color: '#ff9f43' }
 const products = ref([])
 const orders = ref([])
 const selectedOrder = ref({})

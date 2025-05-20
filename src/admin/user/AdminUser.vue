@@ -138,21 +138,21 @@ onMounted(() => {
                 </div>
 
                 <!-- 2행 -->
-                <div class="d-flex flex-nowrap align-items-center gap-2">
-                  <div class="d-flex align-items-center gap-1">
+                 <div class="d-flex flex-nowrap align-items-center gap-2">
+                  <!-- <div class="d-flex align-items-center gap-1">
                     <label class="form-label mb-0">태그 검색</label>
                     <div class="dropdown">
                       <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         태그
                       </button>
 
-<!-- TODO: 이거 추후 추가 -->
-<!--                      <input class="form-check-input" type="checkbox" id="check1" value="1인 사무실" v-model="search.tags">-->
-<!--                      <label class="form-check-label" for="check1">1인 사무실</label>-->
-<!--                      <input class="form-check-input" type="checkbox" id="check2" value="2인가구" v-model="search.tags">-->
-<!--                      <label class="form-check-label" for="check2">2인가구</label>-->
-<!--                      <input class="form-check-input" type="checkbox" id="check3" value="1인사무실" v-model="search.tags">-->
-<!--                      <label class="form-check-label" for="check3">1인사무실</label>-->
+TODO: 이거 추후 추가
+                     <input class="form-check-input" type="checkbox" id="check1" value="1인 사무실" v-model="search.tags">
+                     <label class="form-check-label" for="check1">1인 사무실</label>
+                     <input class="form-check-input" type="checkbox" id="check2" value="2인가구" v-model="search.tags">
+                     <label class="form-check-label" for="check2">2인가구</label>
+                     <input class="form-check-input" type="checkbox" id="check3" value="1인사무실" v-model="search.tags">
+                     <label class="form-check-label" for="check3">1인사무실</label>
 
 
 
@@ -179,10 +179,11 @@ onMounted(() => {
                       <button class="btn btn-sm btn-secondary">초기화</button>
                     </div>
 
-                    <input class="form-check-input" type="checkbox" id="check4" v-model="search.overdueOnly">
-                    <label class="form-check-label" for="check4">연체된 사용자</label>
+                    
 
-                  </div>
+                  </div>-->
+                  <input class="form-check-input" type="checkbox" id="check4" v-model="search.overdueOnly">
+                    <label class="form-check-label" for="check4">연체된 사용자</label>
                 </div>
               </div>
 
@@ -210,7 +211,6 @@ onMounted(() => {
               <th>이름</th>
               <th>주소</th>
               <th>현재 구독 중</th>
-              <th>보유태그</th>
               <th>연체여부</th>
               <th>누적구독횟수</th>
               <th>가입일자</th>
@@ -223,7 +223,6 @@ onMounted(() => {
               <td>{{ item.name }}</td>
               <td>{{ item.address1 }}</td>
               <td>{{ item.overdue }}</td>
-              <td>{{ item.tags }}</td>
               <td>{{ item.isDelayed }}</td>
               <td>{{ item.subscriptionCount }}</td>
               <td>{{ item.joined }}</td>

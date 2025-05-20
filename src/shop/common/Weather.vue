@@ -78,45 +78,55 @@ onMounted(async () => {
   background-position: center;
 }
 .banner-text {
-  width: 1140px;
+  max-width: 1140px;
+  margin: 0 auto; /* 중앙 정렬 */
   text-align: center;
+  padding: 0 1rem; /* 반응형 여유 */
 }
+
 .banner-text h1 {
-  font-size: 3rem;
+  font-size: 7em; /* 기존보다 큼 */
+  font-weight: 900; /* 훨씬 두껍게 */
+  color: #ffffff;
+  -webkit-text-stroke: 0.5px black; /* 흰색 테두리 */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
   margin-bottom: 1rem;
 }
 .banner-text p {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
+  color: #ffffff;
 }
 .summer-items {
   display: flex;
-  gap: 2rem;
   flex-wrap: wrap;
-  justify-content: center;
+  gap: 2rem;
   justify-content: center;
   margin-top: 2rem;
 }
+
 .item-card {
   width: 250px;
-  background: rgba(255,255,255,0.9);
-  background: rgba(255,255,255,0.9);
+  height: 400px; /* 고정 높이 추가 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 버튼을 하단으로 밀어줌 */
+  background: rgba(255, 255, 255, 0.9);
   padding: 1.2rem;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
-  cursor: pointer;
 }
+
 .item-card:hover {
   transform: translateY(-8px);
 }
 .item-card img {
   width: 100%;
   height: 160px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 1rem;
 }

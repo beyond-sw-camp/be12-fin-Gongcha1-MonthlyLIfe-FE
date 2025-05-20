@@ -75,7 +75,7 @@
           </a>
           <ul class="nav flex-column ms-4 small">
             <li><router-link to="/admin/sale/register" class="nav-link text-white-50" >- 판매 관리</router-link></li>
-            <li><router-link to="/admin/category" class="nav-link text-white-50" >- 카테고리 관리</router-link></li>
+            <!-- <li><router-link to="/admin/category" class="nav-link text-white-50" >- 카테고리 관리</router-link></li> -->
 <!--            <li><a class="nav-link text-white-50" href="#">- FAQ 관리</a></li>-->
 <!--            <li><a class="nav-link text-white-50" href="#">- 공지사항 관리</a></li>-->
           </ul>
@@ -83,7 +83,7 @@
 
         <!-- 상담 채팅 관리 -->
         <li>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/adminchat">
             <font-awesome-icon :icon="['fas', 'headset']" /> 상담 채팅 관리
           </a>
         </li>

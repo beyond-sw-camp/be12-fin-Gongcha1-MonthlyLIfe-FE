@@ -91,9 +91,9 @@ const logout   = async () => { await userStore.getLogout(); router.go(0) }
           <li class="nav-item">
             <router-link to="/sale/list" class="nav-link text-dark fw-semibold">전체 렌탈 상품</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/sale/best" class="nav-link text-dark fw-semibold">베스트 상품</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link to="/sale/package" class="nav-link text-dark fw-semibold">패키지 특가</router-link>
           </li>

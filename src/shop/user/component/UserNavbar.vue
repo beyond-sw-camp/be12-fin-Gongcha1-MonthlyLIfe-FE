@@ -15,9 +15,9 @@
         <li class="nav-item">
           <router-link to="/user/subscription" class="nav-link" style="font-size: 13px;">내 구독 보기</router-link>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link to="/user/delivery" class="nav-link" style="font-size: 13px;">배송정보 확인</router-link>
-        </li>
+        </li> -->
         <li class="nav-item">
           <router-link to="/user/detail" class="nav-link" style="font-size: 13px;">개인정보확인/수정</router-link>
         </li>

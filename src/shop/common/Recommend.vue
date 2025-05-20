@@ -17,7 +17,7 @@ const prevEl = ref(null)
 const nextEl = ref(null)
 
 // 허용된 카테고리 인덱스
-const allowedIdx = [4, 5, 7, 9, 12, 16, 25, 29, 34, 38]
+const allowedIdx = [12, 16, 17,  29, 34, 25, 38, 44, 45]
 
 // 필터링된 카테고리
 const categories = computed(() =>
@@ -98,16 +98,29 @@ const conditionColorClass = (cond) => {
                 <div class="img-wrap">
                   <img :src="sale.imageUrl || '/assets/images/placeholder.png'" alt="상품 이미지" />
                   <div class="info-overlay">
-                    <em>{{ sale.manufacturer }}</em>
-                    <p>{{ sale.name }}</p>
-                    <span v-if="sale.conditionName" class="badge ms-2" :class="conditionColorClass(sale.conditionName)">
-                      {{ sale.conditionName }}
-                    </span>
-                    <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
-                    <div class="monthly">
-                      월 <span>{{ sale.period }}</span>개월
+                    <!-- 1. 제조사/이름 -->
+                    <div class="info-top">
+                      <em>{{ sale.manufacturer }}</em>
+                      <p>{{ sale.name }}</p>
+                    </div>
+
+                    <!-- 2. 등급 배지 -->
+                    <div class="info-middle">
+                      <span v-if="sale.conditionName" class="badge ms-2"
+                        :class="conditionColorClass(sale.conditionName)">
+                        {{ sale.conditionName }}
+                      </span>
+                    </div>
+
+                    <!-- 3. 가격/기간 -->
+                    <div class="info-bottom">
+                      <strong>{{ sale.price.toLocaleString() }}<span>원</span></strong>
+                      <div class="monthly">
+                        월 <span>{{ sale.period }}</span>개월
+                      </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </SwiperSlide>
@@ -123,13 +136,13 @@ const conditionColorClass = (cond) => {
 
 <style scoped>
 .custom-slide {
-  width: 280px !important;
+  width: 270px !important;
   flex-shrink: 0;
 }
 
 .best-banner {
   padding: 2rem;
-  min-height: 500px;
+  min-height: 600px;
 }
 
 .best-layout {
@@ -178,7 +191,7 @@ const conditionColorClass = (cond) => {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  max-width: 6000px;
+  max-width: 500px;
 }
 
 .category-buttons button {
@@ -209,7 +222,7 @@ const conditionColorClass = (cond) => {
   text-align: left;
   cursor: pointer;
   width: 280px;
-  max-width: 100%;
+  /* max-width: 100%; */
   box-sizing: border-box;
 }
 
@@ -239,41 +252,69 @@ const conditionColorClass = (cond) => {
 }
 
 .info-overlay {
-  z-index: 4;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+
+  /* 고정 높이 설정 */
+  height: 140px;      /* 필요에 따라 조정 */
+  padding: 0.7rem;
+
+  /* flex 로 3구역 사이 여백 고르게 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  padding: 0.7rem;
   font-size: 14px;
 }
 
-.info-overlay em {
+.info-top {
+  /* 제조사/이름 위쪽 정렬, 줄 넘침 방지 */
+}
+.info-top em {
   display: block;
   font-weight: bold;
   margin-bottom: 0.2rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-
-.info-overlay p {
+.info-top p {
+  margin: 0;
   font-size: 14px;
-  margin: 0.2rem 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* 2줄까지 */
+  -webkit-box-orient: vertical;
 }
 
-.info-overlay strong {
-  font-size: 16px;
+.info-middle {
+  /* 가운데 정렬 */
+  display: flex;
+  justify-content: flex-start; /* 필요에 따라 center 로도 가능 */
+}
+.info-middle .badge {
+  font-size: 0.85rem;
+}
+
+.info-bottom {
+  /* 가격/기간을 하단에 붙여줌 */
+}
+.info-bottom strong {
   display: block;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  font-size: 16px;
+  margin-bottom: 0.2rem;
 }
-
-.info-overlay .monthly {
+.info-bottom .monthly {
   font-size: 13px;
   color: #ccc;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
+
 
 /* ——— 새 네비게이션 버튼 스타일 ——— */
 .swiper-nav-btn {
