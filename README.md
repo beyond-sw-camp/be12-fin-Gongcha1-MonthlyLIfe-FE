@@ -178,7 +178,7 @@
 ---
 
 ## <a name="project-folder"></a>📂 프로젝트 폴더 바로가기
-- [📃 Backend Repository]([https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/README.md](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/README.md))
-- [📃 Devops/Infra]([https://github.com/공차1팀-infra](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/devops/README.md))
+- [📃 Backend Repository](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/README.md)
+- [📃 Devops/Infra](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/devops/README.md)
 
 ---
