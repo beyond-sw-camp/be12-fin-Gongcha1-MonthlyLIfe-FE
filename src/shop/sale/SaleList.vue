@@ -228,7 +228,7 @@ const totalPages = computed(() => saleStore.saleList.totalPages || 0)
 
 
                 <!--              이름-->
-                <h6 class="card-title fw-bold d-flex justify-content-center align-items-center text-nowrap">
+                <h6 class="card-title fw-bold text-wrap text-break text-center">
                   {{ sale.name }}
 
                   <!--                등급 태그-->
