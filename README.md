@@ -44,7 +44,6 @@
 <br>
 
 ### 목차
-### 목차
 - [기술 스택](#tech-stack)
 - [데모 사이트 링크](#demo-site)
 - [서비스 소개](#service-intro)
