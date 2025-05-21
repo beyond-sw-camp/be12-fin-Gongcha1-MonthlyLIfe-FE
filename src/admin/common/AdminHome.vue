@@ -56,6 +56,12 @@
           <router-link to="/admin/delivery-by-page" class="text-primary text-decoration-none">상세보기 →</router-link>
         </div>
 
+        <div v-if="loading" class="text-center my-3">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
         <div v-if="orders.length === 0" class="text-center text-muted py-3">
           배송 데이터가 없습니다.
         </div>
@@ -121,6 +127,11 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
+
+        <div v-if="orders.length === 0" class="text-center text-muted py-3">
+          배송 데이터가 없습니다.
+        </div>
+
 
         <div v-if="error" class="alert alert-danger text-center">{{ error }}</div>
 

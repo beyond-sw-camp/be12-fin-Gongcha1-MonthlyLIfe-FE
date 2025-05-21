@@ -44,12 +44,12 @@
 <br>
 
 ### 목차
-### 목차
 - [기술 스택](#tech-stack)
 - [데모 사이트 링크](#demo-site)
 - [서비스 소개](#service-intro)
 - [시스템 아키텍처](#system-architecture)
 - [주요 기능 설명](#features)
+- [프로젝트 폴더 바로가기](#project-folder)
 
 <br><br>
 
@@ -176,8 +176,8 @@
 
 ---
 
-## 📂 프로젝트 폴더 바로가기
+## <a name="project-folder"></a>📂 프로젝트 폴더 바로가기
 - [📃 Backend Repository](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/README.md)
-- [📃 Devops/Infra](https://github.com/공차1팀-infra)
+- [📃 Devops/Infra](https://github.com/beyond-sw-camp/be12-fin-Gongcha1-MonthlyLIfe-BE/blob/develop/devops/README.md)
 
 ---
