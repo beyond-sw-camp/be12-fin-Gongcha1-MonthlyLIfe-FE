@@ -111,8 +111,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute ,useRouter } from 'vue-router'
 import { useSubscribeStore } from '../../store/useSubcribeStore.js'
+
+
+const router = useRouter()
 
 const route = useRoute()
 const store = useSubscribeStore()

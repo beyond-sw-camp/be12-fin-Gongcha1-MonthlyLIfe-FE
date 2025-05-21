@@ -120,7 +120,7 @@ const toggleChatMode = () => {
     showChat.value = false;
     showAIChat.value = true;
     if (messagesAI.value.length === 0 || !messagesAI.value.some(message => message.from === 'AI')) {
-      messagesAI.value.push({ from: 'AI', text: 'AI가 무엇을 도와드릴까요? (상품검색, 상품구독, 상품추천)' });
+      messagesAI.value.push({ from: 'AI', text: 'AI가 무엇을 도와드릴까요? (상품검색, 상품구독 ex) 삼성전자 상품 검색해줘)' });
       scrollToBottom();
     }
   }
