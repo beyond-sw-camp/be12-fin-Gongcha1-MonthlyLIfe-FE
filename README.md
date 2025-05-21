@@ -126,8 +126,8 @@
 ### [5. ERD ]
 
 
- ![Uploading erd_2025_04_02.png…]()
-
+  
+![erd_2025_04_02](https://github.com/user-attachments/assets/3656eb13-4c9e-4665-8d27-0c52520cb89a)
 
 
 
