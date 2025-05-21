@@ -123,10 +123,11 @@
 
 ### [4. 화면설계서 바로가기](https://www.figma.com/design/t1k8zoIFly0Hyxt0dJplNP/Gongcha1?node-id=71-86&p=f)
 
-### [5. ERD ](https://media.discordapp.net/attachments/1354007770218893405/1356832191954550955/erd_2025_04_02.png?ex=682df0b3&is=682c9f33&hm=12b39ef1d0da2d538239dfb1df16d11361315efe4a518cb70b04819203291af5&=&format=webp&quality=lossless&width=901&height=666)
+### [5. ERD ]
 
 
- 
+ ![Uploading erd_2025_04_02.png…]()
+
 
 
 
