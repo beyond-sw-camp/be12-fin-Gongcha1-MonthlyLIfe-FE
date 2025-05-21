@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
       >
         <div class="card h-100 shadow-sm">
           <!-- 이미지 래퍼 -->
-          <div class="d-flex flex-wrap justify-content-center gap-2 p-2">
+          <!-- <div class="d-flex flex-wrap justify-content-center gap-2 p-2">
             <img
               v-for="(url, i) in getImages(pkg)"
               :key="i"
@@ -124,7 +124,14 @@ onBeforeUnmount(() => {
               class="img-thumbnail"
               style="width:120px; height:120px; object-fit:cover;"
             />
-          </div>
+          </div> -->
+          <div class="text-center p-2">
+  <img
+    :src="getImages(pkg)?.[0] || '/assets/images/placeholder.png'"
+    class="img-thumbnail"
+    style="width: 120px; height: 120px; object-fit: cover;"
+  />
+</div>
           <div class="card-body text-center">
             <h6 class="card-title fw-bold">
               {{ pkg.name }}

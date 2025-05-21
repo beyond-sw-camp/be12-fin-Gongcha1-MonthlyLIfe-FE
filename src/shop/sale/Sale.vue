@@ -153,7 +153,7 @@ watch(() => route.query.keyword, async (newKeyword, oldKeyword) => {
       <div v-for="sale in displayList" :key="sale.idx" class="col-md-4" @click="goToDetail(sale)"
         style="cursor:pointer">
         <div class="card h-100 shadow-sm">
-          <div class="d-flex flex-wrap justify-content-center gap-2 p-2">
+          <!-- <div class="d-flex flex-wrap justify-content-center gap-2 p-2">
             <img
   v-for="(url, i) in getImages(sale)"
   :key="i"
@@ -161,7 +161,15 @@ watch(() => route.query.keyword, async (newKeyword, oldKeyword) => {
   class="img-thumbnail"
   style="width: 120px; height: 120px; object-fit: cover;"
 />
-          </div>
+          </div> -->
+          <div class="text-center p-2">
+  <img
+    :src="getImages(sale)?.[0] || '/assets/images/placeholder.png'"
+    class="img-thumbnail"
+    style="width: 120px; height: 120px; object-fit: cover;"
+  />
+</div>
+
           <div class="card-body text-center">
             <h6 class="card-title fw-bold">
               {{ sale.name }}
