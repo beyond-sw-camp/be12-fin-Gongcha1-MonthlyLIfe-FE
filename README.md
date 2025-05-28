@@ -89,7 +89,7 @@
 ---
 
 ## <a name="demo-site"></a>데모 사이트 링크
-### 🔗 https://monthlylife.kro.kr  
+### 🔗 http://monthlylife-demo.kro.kr  
 > - 사용자 계정: `test01` / `qwer1234`  
 > - 관리자 계정: `admin1` / `qwer1234`  
 
