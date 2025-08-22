@@ -32,11 +32,11 @@ const login = async () => {
   <div class="container">
 
     <div class="mb-5">
-      <p class="fs-1 fw-bold">로그인</p>
+      <p class="fs-1 fw-bold text-center">로그인</p>
       <div class="d-flex justify-content-center">
         <div class="bg-primary mb-2" style="width: 80px; height: 5px;"> </div>
       </div>
-      <p class="fs-6 text-primary">로그인 후, 이용이 가능합니다.</p>
+      <p class="fs-6 text-primary text-center">로그인 후, 이용이 가능합니다.</p>
     </div>
 
     <div class="d-flex justify-content-center" >
